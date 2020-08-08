@@ -1,7 +1,7 @@
-class FeatureCheater : public IFeature
+class FeatureCheater : public INode
 {
 public:
     FeatureCheater();
     ~FeatureCheater();
-    int GetFeature(void);
+    int GetNode(void);
 };

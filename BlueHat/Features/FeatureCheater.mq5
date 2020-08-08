@@ -5,7 +5,7 @@ FeatureCheater::FeatureCheater(void)
 FeatureCheater::~FeatureCheater(void)
 {
 }
-int FeatureCheater::GetFeature(void)
+int FeatureCheater::GetNode(void)
 {
     return 0;
 }
