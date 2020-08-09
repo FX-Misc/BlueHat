@@ -6,7 +6,7 @@ void OnStart()
     Print("Hi there");
     INode* feature[2];
     feature[0] = new FeatureCheater;
-    feature[1] = new Neuron;
+    feature[1] = new NeuronSUM;
 
     Axon ax(feature[1], 0, 0);
     

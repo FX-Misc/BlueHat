@@ -3,8 +3,8 @@
 #include <Generic\ArrayList.mqh>
 class INeuron : public INode
 {
-private:
+protected:
     CArrayList<Axon*> axons;
-//public:
-//    virtual int GetNode(void)=0;
+public:
+    void AddAxon(Axon*);
 };
