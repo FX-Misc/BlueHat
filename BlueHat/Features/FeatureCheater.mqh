@@ -1,3 +1,4 @@
+#include "../INode.mqh"
 class FeatureCheater : public INode
 {
 public:

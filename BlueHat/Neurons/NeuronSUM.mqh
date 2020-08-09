@@ -1,4 +1,4 @@
-#include "INeuron.mqh"
+#include "../INeuron.mqh"
 class NeuronSUM : public INeuron
 {
 public:
