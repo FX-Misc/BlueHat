@@ -9,7 +9,7 @@ private:
     float growth_rate;  //should be greater than 0
 public:
     Axon(INode* pn, float deg_r, float gr_r);
-    bool active;
+    bool active;    //It will be used later, to disbale useless Axons on-the-go rather than after manual analysis
     void GainGrow();
     void GainDeGrow();
     void GainDegrade();

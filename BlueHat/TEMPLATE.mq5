@@ -10,17 +10,3 @@ void Axon::GainGrow(void)
     if(gain>1)
         gain = 1;
 }
-void Axon::GainDeGrow(void)
-{
-    gain -= growth_rate;
-    if(gain<-1)
-        gain = -1;
-}
-void Axon::GainDegrade(void)
-{
-    gain *= degradaion_rate;
-}
-float Axon::GetGainedValue()
-{
-    return pnode.GetNode();
-}
