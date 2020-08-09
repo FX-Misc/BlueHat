@@ -2,7 +2,7 @@
 class SoftMax : public INeuron
 {
 private:
-    float OutputCurve(float raw);
+    float OutputCurve(float raw) const;
 public:
     float GetNode();    
 };

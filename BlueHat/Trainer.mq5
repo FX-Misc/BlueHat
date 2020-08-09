@@ -10,15 +10,15 @@ void Trainer::Go1Epoch(float new_norm_diff)
 {
     //TODO: reform to the Absolute Agressive method, AAepoch.py
 }
-float Trainer::GetAccuracyShort(void)
+float Trainer::GetAccuracyShort(void) const
 {
     return sum_accuracy_short / ACC_SHORT_LEN;
 }
-float Trainer::GetAccuracyAllTime(void)
+float Trainer::GetAccuracyAllTime(void) const
 {
     return sum_accuracy_all_time / (epoch_counter+1);
 }
-float Trainer::GetCurrentOutput(void)
+float Trainer::GetCurrentOutput(void) const
 {
     return pSoftMax.GetNode();
 }

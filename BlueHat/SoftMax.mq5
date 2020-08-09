@@ -11,7 +11,7 @@ float SoftMax::GetNode()
     ave = ave/axons.Count();
     return OutputCurve(ave);
 }
-float SoftMax::OutputCurve(float raw)
+float SoftMax::OutputCurve(float raw) const
 {
     return raw;   //TODO: the optimum curve from simulations must be imported here
 }

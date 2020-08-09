@@ -20,7 +20,7 @@ void Axon::GainDegrade(void)
 {
     gain *= degradaion_rate;
 }
-float Axon::GetGainedValue()
+float Axon::GetGainedValue() const
 {
     return pnode.GetNode();
 }

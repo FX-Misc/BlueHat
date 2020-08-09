@@ -13,8 +13,8 @@ private:
 public:
     Trainer(INode* psm);
     void Go1Epoch(float new_norm_diff);
-    float GetAccuracyShort();
-    float GetAccuracyAllTime();
-    float GetCurrentOutput();
+    float GetAccuracyShort() const;
+    float GetAccuracyAllTime() const;
+    float GetCurrentOutput() const;
     void AddAxon(int layer, IAxonTrain* ax);
 };
