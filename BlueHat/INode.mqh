@@ -1,5 +1,5 @@
 class INode
 {
 public:
-    virtual int GetNode(void)=0;
+    virtual float GetNode(void)=0;
 };

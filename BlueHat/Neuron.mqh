@@ -1,11 +1,7 @@
-#include "INode.mqh"
-#include "Axon.mqh"
-#include <Generic\ArrayList.mqh>
-class Neuron : public INode
+#include "INeuron.mqh"
+class Neuron : public INeuron
 {
-private:
-    CArrayList<Axon*> arr;
 public:
-    float GetValue();
+    float GetNode();
     
 };

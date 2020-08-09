@@ -1,5 +1,5 @@
 #include "Neuron.mqh"
-float Neuron::GetValue()
+float Neuron::GetNode()
 {
     return 0;
 }
