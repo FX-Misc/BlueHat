@@ -8,7 +8,7 @@ Trainer::Trainer(INode* psm) : pSoftMax(psm)
 }
 void Trainer::Go1Epoch(float new_norm_diff)
 {
-    //TODO: reform to the Absolute Agressive method, AAepoch.py
+    //TODO: reform to the Absolute Aggressive method, AAepoch.py
 }
 float Trainer::GetAccuracyShort(void) const
 {
