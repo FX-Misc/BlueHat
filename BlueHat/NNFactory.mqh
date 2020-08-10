@@ -13,6 +13,10 @@
  
 class NNFactory
 {
+private:
+    SoftMax* sf;
+    Trainer* tr;
 public:
-    void CreateNNetwork(SoftMax* sf, Trainer* tr);
+    NNFactory(SoftMax* psf, Trainer* ptr);
+    void CreateNNetwork();
 };

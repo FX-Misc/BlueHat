@@ -6,5 +6,5 @@ class INeuron : public INode
 protected:
     CArrayList<Axon*> axons;
 public:
-    void AddAxon(Axon*);
+    virtual void AddAxon(Axon*)=0;
 };

@@ -1,5 +1,8 @@
 #include "NNFactory.mqh"
-void NNFactory::CreateNNetwork(/*arc_file,*/SoftMax* sf, Trainer* tr)
+NNFactory::NNFactory(SoftMax* psf, Trainer* ptr) : sf(psf),tr(ptr)
+{
+}
+void NNFactory::CreateNNetwork(/*arc_file,*/)
 {
 //Features:
     INode* f_cheater = new FeatureCheater();    

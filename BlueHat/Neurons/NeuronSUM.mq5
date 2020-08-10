@@ -11,3 +11,6 @@ float NeuronSUM::GetNode()
     ret = ret/axons.Count();
     return ret;
 }
+void NeuronSUM::AddAxon(Axon*)
+{
+}
