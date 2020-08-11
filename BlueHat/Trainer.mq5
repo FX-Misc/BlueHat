@@ -1,5 +1,23 @@
 #include "Trainer.mqh"
 #define ACC_SHORT_LEN 1000
+Trainer::~Trainer()
+{
+Print("del ",axonsL1.Count()," ",axonsL2.Count());
+    IAxonTrain* ax;
+    for(int i=axonsL1.Count()-1; i>=0; i--)
+    {
+        axonsL1.TryGetValue(i,ax);
+        delete ax;
+    }
+    for(int i=axonsL2.Count()-1; i>=0; i--)
+    {
+        axonsL2.TryGetValue(i,ax);
+        delete ax;
+    }
+    Print("d");
+//    delete axonsL1;
+//    delete axonsL2;
+}
 Trainer::Trainer(INode* psm) : pSoftMax(psm)
 {
     sum_accuracy_short = 0;
@@ -26,10 +44,10 @@ void Trainer::AddAxon(int layer, IAxonTrain* ax)
 {
     switch(layer)
     {
-        case 1:
+        case 0:
             axonsL1.Add(ax);
             break;
-        case 2:
+        case 1:
         default:
             axonsL2.Add(ax);
             break;

@@ -9,6 +9,9 @@ void OnStart()
     Trainer* trainer = new Trainer(softmax);
     NNFactory* factory = new NNFactory(softmax, trainer);
     factory.CreateNNetwork();
+    delete softmax;
+    delete trainer;
+    delete factory;
     Print("Done");
 }
 //+------------------------------------------------------------------+

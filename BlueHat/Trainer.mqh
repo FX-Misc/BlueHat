@@ -12,6 +12,7 @@ private:
     int epoch_counter;  //the number of training epochs so far 
 public:
     Trainer(INode* psm);
+    ~Trainer();
     void Go1Epoch(float new_norm_diff);
     float GetAccuracyShort() const;
     float GetAccuracyAllTime() const;

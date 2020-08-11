@@ -18,5 +18,6 @@ private:
     Trainer* tr;
 public:
     NNFactory(SoftMax* psf, Trainer* ptr);
+    ~NNFactory();
     void CreateNNetwork();
 };

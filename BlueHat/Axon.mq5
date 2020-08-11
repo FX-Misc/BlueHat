@@ -1,4 +1,11 @@
 #include "Axon.mqh"
+Axon::~Axon()
+{
+    Print("A1");
+    if(pnode!=NULL)
+        delete pnode;
+    Print("A2");
+}
 Axon::Axon(INode* pn, float deg_r, float gr_r) : degradaion_rate(deg_r), growth_rate(gr_r), pnode(pn)
 {
     gain = 0;
