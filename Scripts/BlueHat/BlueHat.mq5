@@ -13,9 +13,9 @@ void OnStart()
     arr.Add(20);
     arr.Add(30);
     Print(arr.at(1));
-    SoftMax* softmax = new SoftMax();
+//    SoftMax* softmax = new SoftMax();
 //    Trainer* trainer = new Trainer(softmax);
-    delete softmax;
+//    delete softmax;
 //    delete trainer;
     Print("Done");
 }

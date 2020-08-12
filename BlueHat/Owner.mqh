@@ -16,6 +16,7 @@ private:
     CXArrayList<INeuron*> ineourons;
     CXArrayList<IAxonTrain*> *axonsL1;
     CXArrayList<IAxonTrain*> *axonsL2;
+
 public:
     Owner();
     ~Owner();

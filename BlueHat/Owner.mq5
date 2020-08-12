@@ -2,7 +2,6 @@
 
 Owner::Owner()
 {
-    softmax = new SoftMax();
 }
 Owner::~Owner()
 {
@@ -19,25 +18,35 @@ void Owner::CreateNN()  //TODO: input file/
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
 
     axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL1.Add( new Axon(features.at(1), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL1.Add( new Axon(features.at(2), RATE_DEGRADATION, RATE_GROWTH) );
-    axonsL1.Add( new Axon(features.at(3), RATE_DEGRADATION, RATE_GROWTH) );
 
     NeuronFactory nf;
-//    nf.CreateNeuron(neurons_t.    
-    
-    
-    
+    ineourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
+    ineourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
+    ineourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
+
+    ineourons.at(0).AddAxon(axonsL1.at(0));
+    ineourons.at(0).AddAxon(axonsL1.at(1));
+    ineourons.at(1).AddAxon(axonsL1.at(2));
+    ineourons.at(2).AddAxon(axonsL1.at(3));
+       
+    axonsL2.Add( new Axon(ineourons.at(0), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL2.Add( new Axon(ineourons.at(1), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL2.Add( new Axon(ineourons.at(2), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL2.Add( new Axon(ineourons.at(3), RATE_DEGRADATION, RATE_GROWTH) );
+
+    softmax = new SoftMax(axonsL2);
     trainer = new Trainer(softmax, axonsL1, axonsL2);
+    
+//    trainer = new Trainer(softmax, axonsL1, axonsL2);
 
 //    INeuron* n = new NeuronSUM();
 //    n.AddAxon(ax_N11);
 //    trainer.AddAxon(0,
 
 /*
-    Axon* ax_N11 = new Axon(f_cheater, RATE_DEGRADATION, RATE_GROWTH);
-    Axon* ax_N21 = new Axon(f_cheater, RATE_DEGRADATION, RATE_GROWTH);
-    Axon* ax_N22 = new Axon(f_3, RATE_DEGRADATION, RATE_GROWTH);
     Axon* ax_N31 = new Axon(f_cheater, RATE_DEGRADATION, RATE_GROWTH);
     
     INeuron* N1 = new NeuronSUM();

@@ -1,10 +1,10 @@
-#include "INeuron.mqh"
-class SoftMax : public INeuron
+class SoftMax : public INode
 {
 private:
     float OutputCurve(float raw) const;
+
 public:
-    ~SoftMax();
+    CXArrayList<IAxonTrain*> *axons;
+    SoftMax(CXArrayList<IAxonTrain*> *ax);
     float GetNode();   
-    void AddAxon(Axon* ax);   
 };
