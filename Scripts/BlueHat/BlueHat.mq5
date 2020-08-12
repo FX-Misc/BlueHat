@@ -1,17 +1,22 @@
 #include "../../BlueHat/INode.mqh"
 #include "../../BlueHat/Axon.mqh"
-#include "../../BlueHat/NNFactory.mqh"
 #include "../../BlueHat/Features/FeatureCheater.mqh"
+#include "../../BlueHat/globals/assert.mqh"
+#include "../../BlueHat/globals/ExtendedArrList.mqh"
 void OnStart()
 {
     Print("Hi there");
+    assert(1>0,"test");
+    
+    CXArrayList<int> arr;
+    arr.Add(10);
+    arr.Add(20);
+    arr.Add(30);
+    Print(arr.at(1));
     SoftMax* softmax = new SoftMax();
-    Trainer* trainer = new Trainer(softmax);
-    NNFactory* factory = new NNFactory(softmax, trainer);
-    factory.CreateNNetwork();
+//    Trainer* trainer = new Trainer(softmax);
     delete softmax;
-    delete trainer;
-    delete factory;
+//    delete trainer;
     Print("Done");
 }
 //+------------------------------------------------------------------+

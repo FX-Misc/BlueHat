@@ -1,17 +1,40 @@
-#include "NNFactory.mqh"
-NNFactory::NNFactory(SoftMax* psf, Trainer* ptr) : sf(psf),tr(ptr)
+#include "Owner.mqh"
+
+Owner::Owner()
 {
+    softmax = new SoftMax();
 }
-NNFactory::~NNFactory()
+Owner::~Owner()
 {
+    delete softmax;
+    delete trainer;
 }
-void NNFactory::CreateNNetwork(/*arc_file,*/)
+void Owner::CreateNN()  //TODO: input file/
 {
-//Features:
-    INode* f_cheater = new FeatureCheater();    
-    INode* f_2 = new FeatureCheater();    
-    INode* f_3 = new FeatureCheater();    
+    FeatureFactory ff;
+
+    //based on the input file, decide on feature type
+    features.Add(ff.CreateFeature(FEATURE_CHEATER));
+    features.Add(ff.CreateFeature(FEATURE_CHEATER));
+    features.Add(ff.CreateFeature(FEATURE_CHEATER));
+
+    axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL1.Add( new Axon(features.at(1), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL1.Add( new Axon(features.at(2), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL1.Add( new Axon(features.at(3), RATE_DEGRADATION, RATE_GROWTH) );
+
+    NeuronFactory nf;
+//    nf.CreateNeuron(neurons_t.    
     
+    
+    
+    trainer = new Trainer(softmax, axonsL1, axonsL2);
+
+//    INeuron* n = new NeuronSUM();
+//    n.AddAxon(ax_N11);
+//    trainer.AddAxon(0,
+
+/*
     Axon* ax_N11 = new Axon(f_cheater, RATE_DEGRADATION, RATE_GROWTH);
     Axon* ax_N21 = new Axon(f_cheater, RATE_DEGRADATION, RATE_GROWTH);
     Axon* ax_N22 = new Axon(f_3, RATE_DEGRADATION, RATE_GROWTH);
@@ -41,4 +64,5 @@ void NNFactory::CreateNNetwork(/*arc_file,*/)
     tr.AddAxon(1, (IAxonTrain*)ax_S1);     
     tr.AddAxon(1, (IAxonTrain*)ax_S2);     
     tr.AddAxon(1, (IAxonTrain*)ax_S3);     
+*/
 }

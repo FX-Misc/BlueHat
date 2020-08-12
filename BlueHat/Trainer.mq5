@@ -18,7 +18,7 @@ Print("del ",axonsL1.Count()," ",axonsL2.Count());
 //    delete axonsL1;
 //    delete axonsL2;
 }
-Trainer::Trainer(INode* psm) : pSoftMax(psm)
+Trainer::Trainer(INode* psm, CXArrayList<IAxonTrain*> *pL1, CXArrayList<IAxonTrain*> *pL2) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2)
 {
     sum_accuracy_short = 0;
     sum_accuracy_all_time = 0;
@@ -39,17 +39,4 @@ float Trainer::GetAccuracyAllTime(void) const
 float Trainer::GetCurrentOutput(void) const
 {
     return pSoftMax.GetNode();
-}
-void Trainer::AddAxon(int layer, IAxonTrain* ax)
-{
-    switch(layer)
-    {
-        case 0:
-            axonsL1.Add(ax);
-            break;
-        case 1:
-        default:
-            axonsL2.Add(ax);
-            break;
-    }
 }
