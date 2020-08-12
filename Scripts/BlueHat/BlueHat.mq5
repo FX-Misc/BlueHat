@@ -1,3 +1,5 @@
+#include "../../BlueHat/Owner.mqh"
+
 #include "../../BlueHat/INode.mqh"
 #include "../../BlueHat/Axon.mqh"
 #include "../../BlueHat/Features/FeatureCheater.mqh"
@@ -8,15 +10,8 @@ void OnStart()
     Print("Hi there");
     assert(1>0,"test");
     
-    CXArrayList<int> arr;
-    arr.Add(10);
-    arr.Add(20);
-    arr.Add(30);
-    Print(arr.at(1));
-//    SoftMax* softmax = new SoftMax();
-//    Trainer* trainer = new Trainer(softmax);
-//    delete softmax;
-//    delete trainer;
+    Owner owner();
+    owner.CreateNN();
     Print("Done");
 }
 //+------------------------------------------------------------------+

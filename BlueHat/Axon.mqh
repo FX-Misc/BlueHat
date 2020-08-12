@@ -1,6 +1,6 @@
 #include "INode.mqh"
 #include "IAxonTrain.mqh"
-class Axon : public IAxonTrain, INode
+class Axon : public IAxonTrain
 {
 private:
     INode* pnode;

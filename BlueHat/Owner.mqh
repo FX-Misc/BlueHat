@@ -4,7 +4,7 @@
 #include "Neurons/NeuronFactory.mqh"
 #include "INeuron.mqh"
 #include "/globals/ExtendedArrList.mqh"
-//#include "Trainer"
+#include "globals/assert.mqh"
 
 #define RATE_GROWTH (float)0.01
 #define RATE_DEGRADATION (float)0.995

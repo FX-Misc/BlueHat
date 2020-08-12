@@ -2,6 +2,8 @@
 
 Owner::Owner()
 {
+    axonsL1 = new CXArrayList<IAxonTrain*>;
+    axonsL2 = new CXArrayList<IAxonTrain*>;
 }
 Owner::~Owner()
 {
@@ -17,7 +19,10 @@ void Owner::CreateNN()  //TODO: input file/
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
 
-    axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
+Axon* a = new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH);
+Print(a);
+assert(a!=NULL,"");
+    axonsL1.Add( a );
     axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL1.Add( new Axon(features.at(1), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL1.Add( new Axon(features.at(2), RATE_DEGRADATION, RATE_GROWTH) );
@@ -37,7 +42,12 @@ void Owner::CreateNN()  //TODO: input file/
     axonsL2.Add( new Axon(ineourons.at(2), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL2.Add( new Axon(ineourons.at(3), RATE_DEGRADATION, RATE_GROWTH) );
 
-    softmax = new SoftMax(axonsL2);
+    softmax = new SoftMax();
+    softmax.AddAxon(axonsL2.at(0));
+    softmax.AddAxon(axonsL2.at(1));
+    softmax.AddAxon(axonsL2.at(2));
+    softmax.AddAxon(axonsL2.at(3));
+    
     trainer = new Trainer(softmax, axonsL1, axonsL2);
     
 //    trainer = new Trainer(softmax, axonsL1, axonsL2);

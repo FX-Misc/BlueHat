@@ -11,6 +11,5 @@ class FeatureFactory
 {
 private:
 public:
-    FeatureFactory();
     INode* CreateFeature(features_t fe);
 };

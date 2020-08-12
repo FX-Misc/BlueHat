@@ -11,6 +11,5 @@ class NeuronFactory
 {
 private:
 public:
-    NeuronFactory();
     INeuron* CreateNeuron(neurons_t n);
 };
