@@ -2,21 +2,6 @@
 #define ACC_SHORT_LEN 1000
 Trainer::~Trainer()
 {
-Print("del ",axonsL1.Count()," ",axonsL2.Count());
-    IAxonTrain* ax;
-    for(int i=axonsL1.Count()-1; i>=0; i--)
-    {
-        axonsL1.TryGetValue(i,ax);
-        delete ax;
-    }
-    for(int i=axonsL2.Count()-1; i>=0; i--)
-    {
-        axonsL2.TryGetValue(i,ax);
-        delete ax;
-    }
-    Print("d");
-//    delete axonsL1;
-//    delete axonsL2;
 }
 Trainer::Trainer(INode* psm, CXArrayList<IAxonTrain*> *pL1, CXArrayList<IAxonTrain*> *pL2) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2)
 {

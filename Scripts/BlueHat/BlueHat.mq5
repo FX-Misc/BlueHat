@@ -14,12 +14,3 @@ void OnStart()
     owner.CreateNN();
     Print("Done");
 }
-//+------------------------------------------------------------------+
-/*    INode* feature[2];
-    feature[0] = new FeatureCheater;
-    feature[1] = new NeuronSUM;
-    Axon ax(feature[1], 0, 0);
-    Print(feature[1].GetNode(),"end");  
-    delete feature[0]; 
-    delete feature[1]; 
-*/

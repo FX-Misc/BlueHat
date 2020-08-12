@@ -9,6 +9,19 @@ Owner::~Owner()
 {
     delete softmax;
     delete trainer;
+    Print("deleting axons: ",axonsL1.Count(),"+",axonsL2.Count());
+    for(int i=0; i<axonsL1.Count(); i++)
+        delete axonsL1.at(i);
+    for(int i=0; i<axonsL2.Count(); i++)
+        delete axonsL2.at(i);
+    for(int i=0; i<ineourons.Count(); i++)
+        delete ineourons.at(i);
+    for(int i=0; i<features.Count(); i++)
+        delete features.at(i);
+    delete axonsL1;
+    delete axonsL2; 
+
+    Print("deleting done");
 }
 void Owner::CreateNN()  //TODO: input file/
 {
@@ -19,10 +32,7 @@ void Owner::CreateNN()  //TODO: input file/
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
 
-Axon* a = new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH);
-Print(a);
-assert(a!=NULL,"");
-    axonsL1.Add( a );
+    axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL1.Add( new Axon(features.at(1), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL1.Add( new Axon(features.at(2), RATE_DEGRADATION, RATE_GROWTH) );
