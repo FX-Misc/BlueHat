@@ -25,24 +25,3 @@ public:
     void CreateNN();//the database file as input?
     
 };
-
-/*#include "INode.mqh"
-#include "IAxonTrain.mqh"
-#include "Axon.mqh"
-
-#include "/Features/FeatureCheater.mqh"
-
-#include "/Neurons/NeuronSUM.mqh"
-
- 
-class NNFactory
-{
-private:
-    SoftMax* sf;
-    Trainer* tr;
-public:
-    NNFactory(SoftMax* psf, Trainer* ptr);
-    ~NNFactory();
-    void CreateNNetwork();
-
-*/
