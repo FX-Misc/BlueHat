@@ -1,9 +1,11 @@
 //NOTE: only for testing the NN performance. Not to be used in real training
 #include "../INode.mqh"
-class FeatureCheater : public INode
+#include "Feature.mqh"
+class FeatureCheater : public Feature
 {
 public:
     FeatureCheater();
     ~FeatureCheater();
-    float GetNode(void);
+    void Update(int index, int history_index);
 };
+    
