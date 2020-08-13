@@ -1,5 +1,5 @@
 #include "NeuronFactory.mqh"
-#include "../globals/assert.mqh"
+//#include "../globals/assert.mqh"
 INeuron* NeuronFactory::CreateNeuron(neurons_t n)
 {
     INode* neuron;
@@ -11,7 +11,7 @@ INeuron* NeuronFactory::CreateNeuron(neurons_t n)
         default:
             neuron = NULL;
             break;
-    }
-    assert(neuron != NULL, "");
+    };
+    assert(neuron != NULL, "CreateNeuron failed to create");
     return neuron;
 }

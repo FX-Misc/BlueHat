@@ -1,21 +1,12 @@
 #include "SoftMax.mqh"
 #include "INode.mqh"
-//SoftMax::SoftMax(CXArrayList<Axon*> *ax) : axons(ax)
-//{
-//}
 float SoftMax::GetNode()
 {
-    return 0;
-/*    float ave=0;
-    Axon *ax;
+    float ave=0;
     for(int i=0; i<axons.Count(); i++)
-    {
-        axons.TryGetValue(i,ax);
-        ave += ax.GetGainedValue();
-    }
+        ave += axons.at(i).GetGainedValue();
     ave = ave/axons.Count();
     return OutputCurve(ave);
-*/
 }
 float SoftMax::OutputCurve(float raw) const
 {

@@ -1,4 +1,5 @@
 #include <Generic\ArrayList.mqh>
+#include "assert.mqh"
 
 template<typename T>
 class CXArrayList : public CArrayList<T>
@@ -10,9 +11,8 @@ public:
 template<typename T>
 T CXArrayList::at(int index)
 {
+    assert( (index>=0) && (index<this.Count()), "CXArrayList::at invalid index");
     T temp;
-    if(TryGetValue(index, temp))
-        return temp;
-    else
-        return NULL;
+    assert(TryGetValue(index, temp) , "CXArrayList::at failed");
+    return temp;
 }

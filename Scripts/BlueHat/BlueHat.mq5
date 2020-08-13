@@ -12,5 +12,7 @@ void OnStart()
     
     Owner owner();
     owner.CreateNN();
-    Print("Done");
+    
+    
+    Print("Bye");
 }
