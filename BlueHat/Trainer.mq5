@@ -11,7 +11,7 @@ Trainer::Trainer(INode* psm, CXArrayList<IAxonTrain*> *pL1, CXArrayList<IAxonTra
 }
 void Trainer::Go1Epoch(float new_norm_diff)
 {
-    //TODO: reform to the Absolute Aggressive method, AAepoch.py
+    float base_value = pSoftMax.GetNode();
 }
 float Trainer::GetAccuracyShort(void) const
 {
