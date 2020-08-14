@@ -5,6 +5,7 @@
 #include "../../BlueHat/Features/FeatureCheater.mqh"
 #include "../../BlueHat/globals/assert.mqh"
 #include "../../BlueHat/globals/ExtendedArrList.mqh"
+
 void OnStart()
 {
     Print("Hi there");
