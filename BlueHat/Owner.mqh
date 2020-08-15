@@ -1,5 +1,6 @@
 #include "Trainer.mqh"
 #include "SoftMax.mqh"
+#include "DataBase.mqh"
 #include "Features/FeatureFactory.mqh"
 #include "Neurons/NeuronFactory.mqh"
 #include "INeuron.mqh"
@@ -23,12 +24,13 @@ private:
     CXArrayList<INeuron*> ineourons;
     CXArrayList<IAxonTrain*> *axonsL1;
     CXArrayList<IAxonTrain*> *axonsL2;
-
+    void SaveDebugInfo(int index);
 public:
     Owner();
     ~Owner();
+    DataBase db;
     SoftMax* softmax;
     Trainer* trainer;
     void CreateNN();//the database file as input?
-    trade_advice_t Go1Bar(int index, int history_index);
+    trade_advice_t Go1Bar(int index, int history_index, bool logging);
 };

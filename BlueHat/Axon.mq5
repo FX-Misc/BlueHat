@@ -24,3 +24,7 @@ float Axon::GetGainedValue() const
 {
     return pnode.GetNode();
 }
+float Axon::GetGain()
+{
+    return gain;
+}

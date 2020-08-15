@@ -13,5 +13,6 @@ public:
     void GainDeGrow();
     void GainDegrade();
     float GetGainedValue() const;
+    float GetGain();
     
 };

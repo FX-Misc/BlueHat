@@ -60,12 +60,18 @@ void Owner::CreateNN()  //TODO: input file/
     
     trainer = new Trainer(softmax, axonsL1, axonsL2);
 }
-trade_advice_t Owner::Go1Bar(int index, int history_index)
+trade_advice_t Owner::Go1Bar(int index, int history_index, bool logging)
 {
     for(int i=0; i<features.Count(); i++)
         ((Feature*)(features.at(i))).Update(index, history_index);
-        
+
+    if(logging)
+        SaveDebugInfo(index);        
     float new_desired = 0.5;//close[index]
     trainer.Go1Epoch(new_desired,true);
     return TRADE_NONE;
+}
+void Owner::SaveDebugInfo(int index)
+{
+
 }
