@@ -11,7 +11,7 @@ Trainer::Trainer(INode* psm, CXArrayList<IAxonTrain*> *pL1, CXArrayList<IAxonTra
 }
 void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
 {
-    float base_value = pSoftMax.GetNode();
+    float base_value = GetCurrentOutput();
 
     for(int i=0; i<axonsL1.Count(); i++)
         if(axonsL1.at(i).active)

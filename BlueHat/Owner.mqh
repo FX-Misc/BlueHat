@@ -9,6 +9,13 @@
 #define RATE_GROWTH (float)0.01
 #define RATE_DEGRADATION (float)0.995
 
+enum trade_advice_t
+{
+    TRADE_BUY,
+    TRADE_SELL,
+    TRADE_KEEP,
+    TRADE_NONE,
+};
 class Owner
 {
 private:
@@ -23,5 +30,5 @@ public:
     SoftMax* softmax;
     Trainer* trainer;
     void CreateNN();//the database file as input?
-    
+    trade_advice_t Go1Bar(int index, int history_index);
 };

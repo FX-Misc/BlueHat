@@ -50,7 +50,7 @@ void Owner::CreateNN()  //TODO: input file/
     axonsL2.Add( new Axon(ineourons.at(0), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL2.Add( new Axon(ineourons.at(1), RATE_DEGRADATION, RATE_GROWTH) );
     axonsL2.Add( new Axon(ineourons.at(2), RATE_DEGRADATION, RATE_GROWTH) );
-    axonsL2.Add( new Axon(ineourons.at(3), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL2.Add( new Axon(ineourons.at(2), RATE_DEGRADATION, RATE_GROWTH) );
 
     softmax = new SoftMax();
     softmax.AddAxon(axonsL2.at(0));
@@ -59,4 +59,13 @@ void Owner::CreateNN()  //TODO: input file/
     softmax.AddAxon(axonsL2.at(3));
     
     trainer = new Trainer(softmax, axonsL1, axonsL2);
+}
+trade_advice_t Owner::Go1Bar(int index, int history_index)
+{
+    for(int i=0; i<features.Count(); i++)
+        ((Feature*)(features.at(i))).Update(index, history_index);
+        
+    float new_desired = 0.5;//close[index]
+    trainer.Go1Epoch(new_desired,true);
+    return TRADE_NONE;
 }

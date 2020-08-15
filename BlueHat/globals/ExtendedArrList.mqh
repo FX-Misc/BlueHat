@@ -12,6 +12,7 @@ template<typename T>
 T CXArrayList::at(int index)
 {
     assert( (index>=0) && (index<this.Count()), "CXArrayList::at invalid index");
+    
     T temp;
     assert(TryGetValue(index, temp) , "CXArrayList::at failed");
     return temp;
