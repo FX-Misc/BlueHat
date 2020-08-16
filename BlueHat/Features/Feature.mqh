@@ -7,4 +7,5 @@ protected:
 public:
     virtual void Update(int index, int history_index) = 0;
     float GetNode(void);
+    string name;
 };

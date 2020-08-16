@@ -87,9 +87,8 @@ trade_advice_t Owner::GetAdvice()
 }
 bool Owner::CreateDebugDB()
 {
-    db.AddDBGTBLItem("feature0",false);
-    db.AddDBGTBLItem("feature1",false);
-    db.AddDBGTBLItem("feature2",false);
+    for(int i=0; i<features.Count(); i++)
+        db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
     db.AddDBGTBLItem("axonsL10",false);
     db.AddDBGTBLItem("axonsL11",false);
     db.AddDBGTBLItem("axonsL12",false);
@@ -127,7 +126,7 @@ bool Owner::CreateStateDB()
 void Owner::SaveDebugInfo(int index)
 {   //TODO_performance: use as transaction to speed up, rather than separate writtings
     db.Insert("ID", (float)index, false);    
-    db.Insert("feature0", (float)0.5, false);    
+    db.Insert(features.at(0).name+IntegerToString(0,2,'0'), features.at(0).GetNode(), false);    
     db.Insert("softmax", (float)0.6, true);    
 //    db.Insert(index+1, "softmax", (float)0.5);    
 }

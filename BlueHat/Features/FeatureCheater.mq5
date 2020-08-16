@@ -1,6 +1,7 @@
 #include "FeatureCheater.mqh"
 FeatureCheater::FeatureCheater(void)
 {
+    name="feCheater";
 }
 FeatureCheater::~FeatureCheater(void)
 {

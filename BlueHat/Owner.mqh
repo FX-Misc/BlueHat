@@ -20,7 +20,7 @@ enum trade_advice_t
 class Owner
 {
 private:
-    CXArrayList<INode*> features;
+    CXArrayList<Feature*> features;
     CXArrayList<INeuron*> ineourons;
     CXArrayList<IAxonTrain*> *axonsL1;
     CXArrayList<IAxonTrain*> *axonsL2;
