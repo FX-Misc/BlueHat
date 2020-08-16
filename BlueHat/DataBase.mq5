@@ -28,11 +28,13 @@ bool DataBase::OpenDB(void)
     }
     if(!DatabaseExecute(db, "CREATE TABLE DEBUG("
                        "ID INT PRIMARY KEY     NOT NULL,"
-                       "NAME           TEXT    NOT NULL,"
-                       "SECTION            INT     NOT NULL,"
-                       "VALUE         REAL );"))
+                       "feature0 REAL,""feature1 REAL,""feature2 REAL,"
+                       "axonl10 REAL,""AXONL11 REAL,""AXONL12 REAL,""AXONL13 REAL,"
+                       "neuron0 REAL,""neuron1 REAL,""neuron2 REAL,"
+                       "axonl20 REAL,""AXONL21 REAL,""AXONL22 REAL,""AXONL23 REAL,"
+                       "softmax   REAL );"))
     {
-        Print("DB: ", filename, " create table failed with code ", GetLastError());
+        Print("DB: ", filename, " create table DEBUG failed with code ", GetLastError());
         DatabaseClose(db);
         return false;
     }
@@ -60,5 +62,17 @@ bool DataBase::OpenDB(void)
         return false;
     }
     
+    return true;
+}
+bool DataBase::Insert(string name, float value)
+{
+    static int i=0;
+    i++;
+//    if(!DatabaseExecute(db, "INSERT INTO DEBUG (" +name+ ") VALUES ( 0.1 ); "))
+    if(!DatabaseExecute(db, "INSERT INTO DEBUG ( ID , softmax ) VALUES (  " +IntegerToString(i)+" , 0.2 ); "))
+    {
+        Print("DB: ", " insert failed with code ", GetLastError());
+        return false;
+    }
     return true;
 }

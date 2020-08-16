@@ -24,7 +24,6 @@ private:
     CXArrayList<INeuron*> ineourons;
     CXArrayList<IAxonTrain*> *axonsL1;
     CXArrayList<IAxonTrain*> *axonsL2;
-    void SaveDebugInfo(int index);
 public:
     Owner();
     ~Owner();
@@ -32,5 +31,9 @@ public:
     SoftMax* softmax;
     Trainer* trainer;
     void CreateNN();//the database file as input?
-    trade_advice_t Go1Bar(int index, int history_index, bool logging);
+    void UpdateInput(int index, int history_index);
+    void SaveDebugInfo(int index);
+    void Train1Epoch(float desired);
+    trade_advice_t GetAdvice();
+//    trade_advice_t Go1Bar(int index, int history_index, bool logging);
 };

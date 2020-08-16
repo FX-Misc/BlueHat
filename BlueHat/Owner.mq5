@@ -60,6 +60,7 @@ void Owner::CreateNN()  //TODO: input file/
     
     trainer = new Trainer(softmax, axonsL1, axonsL2);
 }
+/*
 trade_advice_t Owner::Go1Bar(int index, int history_index, bool logging)
 {
     for(int i=0; i<features.Count(); i++)
@@ -70,8 +71,21 @@ trade_advice_t Owner::Go1Bar(int index, int history_index, bool logging)
     float new_desired = 0.5;//close[index]
     trainer.Go1Epoch(new_desired,true);
     return TRADE_NONE;
+*/
+void Owner::UpdateInput(int index, int history_index)
+{
+    for(int i=0; i<features.Count(); i++)
+        ((Feature*)(features.at(i))).Update(index, history_index);
+}
+void Owner::Train1Epoch(float desired)
+{
+    trainer.Go1Epoch(desired,true);
+}
+trade_advice_t Owner::GetAdvice()
+{
+    return TRADE_NONE;
 }
 void Owner::SaveDebugInfo(int index)
 {
-
+    db.Insert("softmax",(float)0.5);    
 }

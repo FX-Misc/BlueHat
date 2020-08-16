@@ -5,4 +5,5 @@ private:
 public:
     bool OpenDB();
     bool CloseDB();
+    bool Insert(string name, float value);
 };

@@ -16,14 +16,18 @@ void OnStart()
     Owner owner();
     owner.CreateNN();
     owner.db.OpenDB();
-    owner.db.CloseDB();
     
     for(int i=0; i< 10; i++)
     {
-        owner.Go1Bar(i,1000, true);
+        owner.UpdateInput(i,1000);
+        owner.SaveDebugInfo(i);
+        owner.Train1Epoch(0.5);
+        owner.GetAdvice();
+    //    owner.Go1Bar(i,1000, true);
         //Print(owner.trainer.GetCurrentOutput());
     }
         
+    owner.db.CloseDB();
     Print("Bye");
 }
 
@@ -84,6 +88,7 @@ string request_text=StringFormat("INSERT INTO DEALS (ID,ORDER_ID,POSITION_ID,TIM
     int request=DatabasePrepare(db, "SELECT * FROM COMPANY WHERE SALARY>15000");
     if(request==INVALID_HANDLE)
     {
+    
         Print("DB: ", filename, " request failed with code ", GetLastError());
         DatabaseClose(db);
         return;
