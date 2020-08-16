@@ -85,6 +85,45 @@ trade_advice_t Owner::GetAdvice()
 {
     return TRADE_NONE;
 }
+bool Owner::CreateDebugDB()
+{
+    db.AddDBGTBLItem("feature0",false);
+    db.AddDBGTBLItem("feature1",false);
+    db.AddDBGTBLItem("feature2",false);
+    db.AddDBGTBLItem("axonsL10",false);
+    db.AddDBGTBLItem("axonsL11",false);
+    db.AddDBGTBLItem("axonsL12",false);
+    db.AddDBGTBLItem("axonsL13",false);
+    db.AddDBGTBLItem("ineourons0",false);
+    db.AddDBGTBLItem("ineourons1",false);
+    db.AddDBGTBLItem("ineourons2",false);
+    db.AddDBGTBLItem("axonsL20",false);
+    db.AddDBGTBLItem("axonsL21",false);
+    db.AddDBGTBLItem("axonsL22",false);
+    db.AddDBGTBLItem("axonsL23",false);
+    return db.AddDBGTBLItem("softmax",true);
+}
+bool Owner::CreateStateDB()
+{
+/*
+    db.AddDBGTBLItem("feature0",false);
+    db.AddDBGTBLItem("feature1",false);
+    db.AddDBGTBLItem("feature2",false);
+    db.AddDBGTBLItem("axonsL10",false);
+    db.AddDBGTBLItem("axonsL11",false);
+    db.AddDBGTBLItem("axonsL12",false);
+    db.AddDBGTBLItem("axonsL13",false);
+    db.AddDBGTBLItem("ineourons0",false);
+    db.AddDBGTBLItem("ineourons1",false);
+    db.AddDBGTBLItem("ineourons2",false);
+    db.AddDBGTBLItem("axonsL20",false);
+    db.AddDBGTBLItem("axonsL21",false);
+    db.AddDBGTBLItem("axonsL22",false);
+    db.AddDBGTBLItem("axonsL23",false);
+    return db.AddDBGTBLItem("softmax",true);
+    */
+    return true;
+}
 void Owner::SaveDebugInfo(int index)
 {   //TODO_performance: use as transaction to speed up, rather than separate writtings
     db.Insert("ID", (float)index, false);    

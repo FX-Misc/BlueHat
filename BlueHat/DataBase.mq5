@@ -26,7 +26,7 @@ bool DataBase::OpenDB(void)
             return false;
         }
     }
-    if(!DatabaseExecute(db, "CREATE TABLE DEBUG("
+/*    if(!DatabaseExecute(db, "CREATE TABLE DEBUG("
                        "ID INT PRIMARY KEY     NOT NULL,"
                        "feature0 REAL,""feature1 REAL,""feature2 REAL,"
                        "axonl10 REAL,""AXONL11 REAL,""AXONL12 REAL,""AXONL13 REAL,"
@@ -38,7 +38,7 @@ bool DataBase::OpenDB(void)
         DatabaseClose(db);
         return false;
     }
-
+*/
 
 
     if(DatabaseTableExists(db, "STATE"))
@@ -51,7 +51,7 @@ bool DataBase::OpenDB(void)
             return false;
         }
     }
-    if(!DatabaseExecute(db, "CREATE TABLE STATE("
+/*    if(!DatabaseExecute(db, "CREATE TABLE STATE("
                        "ID INT PRIMARY KEY     NOT NULL,"
                        "NAME           TEXT    NOT NULL,"
                        "Gain            INT     NOT NULL,"
@@ -61,9 +61,30 @@ bool DataBase::OpenDB(void)
         DatabaseClose(db);
         return false;
     }
-    
+*/    
     return true;
 }
+bool DataBase::AddDBGTBLItem(string name, bool completed)
+{
+    static string str1="CREATE TABLE DEBUG( ID INT PRIMARY KEY     NOT NULL";
+    
+    if(!completed)
+        str1+=","+name+" REAL";
+    else
+    {
+        str1+=","+name+" REAL);";
+        if(!DatabaseExecute(db,str1))
+        {
+            Print("DB: create table DEBUG failed with code ", GetLastError());
+            Print(str1);
+            DatabaseClose(db);
+            return false;
+        }
+        str1="CREATE TABLE DEBUG( ID INT PRIMARY KEY     NOT NULL";      
+    }
+    return true;
+}
+
 bool DataBase::Insert(string name, float value, bool completed)
 {
     static string str1="INSERT INTO DEBUG (";

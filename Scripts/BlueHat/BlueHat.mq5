@@ -16,6 +16,8 @@ void OnStart()
     Owner owner();
     owner.CreateNN();
     owner.db.OpenDB();
+    owner.CreateDebugDB();
+    owner.CreateStateDB();
     
     for(int i=0; i< 10; i++)
     {

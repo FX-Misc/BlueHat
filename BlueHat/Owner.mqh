@@ -35,5 +35,7 @@ public:
     void SaveDebugInfo(int index);
     void Train1Epoch(float desired);
     trade_advice_t GetAdvice();
+    bool CreateDebugDB();
+    bool CreateStateDB();
 //    trade_advice_t Go1Bar(int index, int history_index, bool logging);
 };
