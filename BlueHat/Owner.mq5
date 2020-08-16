@@ -86,6 +86,9 @@ trade_advice_t Owner::GetAdvice()
     return TRADE_NONE;
 }
 void Owner::SaveDebugInfo(int index)
-{
-    db.Insert("softmax",(float)0.5);    
+{   //TODO_performance: use as transaction to speed up, rather than separate writtings
+    db.Insert("ID", (float)index, false);    
+    db.Insert("feature0", (float)0.5, false);    
+    db.Insert("softmax", (float)0.6, true);    
+//    db.Insert(index+1, "softmax", (float)0.5);    
 }

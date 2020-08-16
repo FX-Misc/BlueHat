@@ -64,15 +64,34 @@ bool DataBase::OpenDB(void)
     
     return true;
 }
-bool DataBase::Insert(string name, float value)
+bool DataBase::Insert(string name, float value, bool completed)
 {
-    static int i=0;
-    i++;
-//    if(!DatabaseExecute(db, "INSERT INTO DEBUG (" +name+ ") VALUES ( 0.1 ); "))
-    if(!DatabaseExecute(db, "INSERT INTO DEBUG ( ID , softmax ) VALUES (  " +IntegerToString(i)+" , 0.2 ); "))
+    static string str1="INSERT INTO DEBUG (";
+    static string str2=") VALUES (";
+    static string str3="); ";
+    
+    string number_str="";
+    if(name=="ID")
+        number_str=IntegerToString((int)value);
+    else
+        number_str=DoubleToString(value);
+        
+    str1+=name+(completed?"":",");
+    str2+=number_str+(completed?"":",");
+    if(completed)
     {
-        Print("DB: ", " insert failed with code ", GetLastError());
-        return false;
+        if(!DatabaseExecute(db,str1+str2+str3))
+        {
+            Print("DB: ", " insert failed with code ", GetLastError());
+            Print(str1+str2+str3);
+            return false;
+        }
+        str1="INSERT INTO DEBUG (";
+        str2=") VALUES (";
+        str3="); ";
     }
+        
+    
+//    if(!DatabaseExecute(db, "INSERT INTO DEBUG ( ID , " +name+ " ) VALUES (  " +IntegerToString(id)+" , 0.2 ); "))
     return true;
 }
