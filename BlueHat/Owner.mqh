@@ -22,8 +22,8 @@ class Owner
 private:
     CXArrayList<Feature*> features;
     CXArrayList<INeuron*> ineourons;
-    CXArrayList<IAxonTrain*> *axonsL1;
-    CXArrayList<IAxonTrain*> *axonsL2;
+    CXArrayList<Axon*> *axonsL1;
+    CXArrayList<Axon*> *axonsL2;
 public:
     Owner();
     ~Owner();

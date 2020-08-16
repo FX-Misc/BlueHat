@@ -2,8 +2,8 @@
 
 Owner::Owner()
 {
-    axonsL1 = new CXArrayList<IAxonTrain*>;
-    axonsL2 = new CXArrayList<IAxonTrain*>;
+    axonsL1 = new CXArrayList<Axon*>;
+    axonsL2 = new CXArrayList<Axon*>;
 }
 Owner::~Owner()
 {
@@ -32,10 +32,10 @@ void Owner::CreateNN()  //TODO: input file/
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
 
-    axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
-    axonsL1.Add( new Axon(features.at(0), RATE_DEGRADATION, RATE_GROWTH) );
-    axonsL1.Add( new Axon(features.at(1), RATE_DEGRADATION, RATE_GROWTH) );
-    axonsL1.Add( new Axon(features.at(2), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL1.Add( new Axon(features.at(0), 0, RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL1.Add( new Axon(features.at(0), 0, RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL1.Add( new Axon(features.at(1), 1, RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL1.Add( new Axon(features.at(2), 2, RATE_DEGRADATION, RATE_GROWTH) );
 
     NeuronFactory nf;
     ineourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
@@ -47,10 +47,10 @@ void Owner::CreateNN()  //TODO: input file/
     ineourons.at(1).AddAxon(axonsL1.at(2));
     ineourons.at(2).AddAxon(axonsL1.at(3));
        
-    axonsL2.Add( new Axon(ineourons.at(0), RATE_DEGRADATION, RATE_GROWTH) );
-    axonsL2.Add( new Axon(ineourons.at(1), RATE_DEGRADATION, RATE_GROWTH) );
-    axonsL2.Add( new Axon(ineourons.at(2), RATE_DEGRADATION, RATE_GROWTH) );
-    axonsL2.Add( new Axon(ineourons.at(2), RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL2.Add( new Axon(ineourons.at(0), 0, RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL2.Add( new Axon(ineourons.at(1), 1, RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL2.Add( new Axon(ineourons.at(2), 2, RATE_DEGRADATION, RATE_GROWTH) );
+    axonsL2.Add( new Axon(ineourons.at(2), 2, RATE_DEGRADATION, RATE_GROWTH) );
 
     softmax = new SoftMax();
     softmax.AddAxon(axonsL2.at(0));
@@ -89,6 +89,8 @@ bool Owner::CreateDebugDB()
 {
     for(int i=0; i<features.Count(); i++)
         db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
+    for(int i=0; i<axonsL1.Count(); i++)
+        db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'),false);
     db.AddDBGTBLItem("axonsL10",false);
     db.AddDBGTBLItem("axonsL11",false);
     db.AddDBGTBLItem("axonsL12",false);
