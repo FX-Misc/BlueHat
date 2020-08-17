@@ -8,7 +8,8 @@
 #include "globals/assert.mqh"
 
 #define RATE_GROWTH (float)0.01
-#define RATE_DEGRADATION (float)0.995
+#define RATE_DEGRADATION (float)0.9999
+#define AXON_FLOOR (float)0.001
 
 enum trade_advice_t
 {
