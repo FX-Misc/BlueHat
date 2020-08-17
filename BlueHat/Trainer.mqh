@@ -18,5 +18,7 @@ public:
     void Go1Epoch(float new_norm_diff, bool degradation);
     float GetAccuracyShort() const;
     float GetAccuracyAllTime() const;
+    float GetDirectionCorrectnessShort() const;
+    float GetDirectionCorrectnessAllTime() const;
     float GetCurrentOutput() const;
 };

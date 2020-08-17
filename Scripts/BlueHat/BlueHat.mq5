@@ -1,14 +1,13 @@
 #include "../../BlueHat/Owner.mqh"
-#include "../../BlueHat/Trainer.mqh"
+//#include "../../BlueHat/Trainer.mqh"
 
-//#include "../../BlueHat/INode.mqh"
-//#include "../../BlueHat/Axon.mqh"
-//#include "../../BlueHat/Features/FeatureCheater.mqh"
-//#include "../../BlueHat/globals/assert.mqh"
-//#include "../../BlueHat/globals/ExtendedArrList.mqh"
+#property script_show_inputs
+input bool debug=true;
 
 void OnStart()
 {
+    float desired;
+    
     Print("Hi there");
     assert(1>0,"test");
     
@@ -21,12 +20,12 @@ void OnStart()
     
     for(int i=0; i< 1000; i++)
     {
+        desired = (float)0.1;
         owner.UpdateInput(i,1000);
-        owner.SaveDebugInfo(i);
-        owner.Train1Epoch(0.15);
+        if(debug)
+            owner.SaveDebugInfo(i, desired);
+        owner.Train1Epoch(desired);
         owner.GetAdvice();
-    //    owner.Go1Bar(i,1000, true);
-        //Print(owner.trainer.GetCurrentOutput());
     }
         
     owner.db.CloseDB();
