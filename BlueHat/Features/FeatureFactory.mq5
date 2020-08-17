@@ -8,6 +8,9 @@ INode* FeatureFactory::CreateFeature(features_t fe)
         case FEATURE_CHEATER:
             feature = new FeatureCheater();
             break;
+        case FEATURE_RANDOM:
+            feature = new FeatureRandom();
+            break;
         default:
             feature = NULL;
             break;

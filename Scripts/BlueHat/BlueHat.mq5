@@ -19,11 +19,11 @@ void OnStart()
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
-    for(int i=0; i< 10; i++)
+    for(int i=0; i< 1000; i++)
     {
         owner.UpdateInput(i,1000);
         owner.SaveDebugInfo(i);
-        owner.Train1Epoch(0.5);
+        owner.Train1Epoch(0.15);
         owner.GetAdvice();
     //    owner.Go1Bar(i,1000, true);
         //Print(owner.trainer.GetCurrentOutput());
