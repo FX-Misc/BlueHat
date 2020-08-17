@@ -91,17 +91,10 @@ bool Owner::CreateDebugDB()
         db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL1.Count(); i++)
         db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'),false);
-    db.AddDBGTBLItem("axonsL10",false);
-    db.AddDBGTBLItem("axonsL11",false);
-    db.AddDBGTBLItem("axonsL12",false);
-    db.AddDBGTBLItem("axonsL13",false);
-    db.AddDBGTBLItem("ineourons0",false);
-    db.AddDBGTBLItem("ineourons1",false);
-    db.AddDBGTBLItem("ineourons2",false);
-    db.AddDBGTBLItem("axonsL20",false);
-    db.AddDBGTBLItem("axonsL21",false);
-    db.AddDBGTBLItem("axonsL22",false);
-    db.AddDBGTBLItem("axonsL23",false);
+    for(int i=0; i<ineourons.Count(); i++)
+        db.AddDBGTBLItem("N"+IntegerToString(i,2,'0'),false);
+    for(int i=0; i<axonsL2.Count(); i++)
+        db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'),false);
     return db.AddDBGTBLItem("softmax",true);
 }
 bool Owner::CreateStateDB()
@@ -126,9 +119,15 @@ bool Owner::CreateStateDB()
     return true;
 }
 void Owner::SaveDebugInfo(int index)
-{   //TODO_performance: use as transaction to speed up, rather than separate writtings
+{
     db.Insert("ID", (float)index, false);    
-    db.Insert(features.at(0).name+IntegerToString(0,2,'0'), features.at(0).GetNode(), false);    
-    db.Insert("softmax", (float)0.6, true);    
-//    db.Insert(index+1, "softmax", (float)0.5);    
+    for(int i=0; i<features.Count(); i++)
+        db.Insert(features.at(i).name+IntegerToString(i,2,'0'), features.at(i).GetNode(), false);
+    for(int i=0; i<axonsL1.Count(); i++)
+        db.Insert("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'), axonsL1.at(i).GetGain(), false);
+    for(int i=0; i<ineourons.Count(); i++)
+        db.Insert("N"+IntegerToString(i,2,'0'), ineourons.at(i).GetNode(), false);
+    for(int i=0; i<axonsL2.Count(); i++)
+        db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
+    db.Insert("softmax", softmax.GetNode(), true);
 }
