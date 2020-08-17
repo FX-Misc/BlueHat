@@ -28,12 +28,12 @@ void Owner::CreateNN()  //TODO: input file/
     FeatureFactory ff;
 
     //based on the input file, decide on feature type
+    features.Add(ff.CreateFeature(FEATURE_RANDOM));
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
-    features.Add(ff.CreateFeature(FEATURE_CHEATER));
-    features.Add(ff.CreateFeature(FEATURE_CHEATER));
+    features.Add(ff.CreateFeature(FEATURE_RANDOM));
 
     axonsL1.Add( new Axon(features.at(0), 0, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL1.Add( new Axon(features.at(0), 0, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+    axonsL1.Add( new Axon(features.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL1.Add( new Axon(features.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL1.Add( new Axon(features.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
 

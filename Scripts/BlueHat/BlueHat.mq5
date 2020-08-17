@@ -23,7 +23,7 @@ void OnStart()
     {
         owner.UpdateInput(i,1000);
         owner.SaveDebugInfo(i);
-        owner.Train1Epoch(0.5);
+        owner.Train1Epoch(0.15);
         owner.GetAdvice();
     //    owner.Go1Bar(i,1000, true);
         //Print(owner.trainer.GetCurrentOutput());
