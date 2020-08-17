@@ -22,5 +22,5 @@ void Axon::GainDegrade(void)
 }
 float Axon::GetGainedValue() const
 {
-    return pnode.GetNode();
+    return pnode.GetNode()*gain;
 }
