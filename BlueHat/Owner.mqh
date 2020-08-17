@@ -1,5 +1,6 @@
 #include "Trainer.mqh"
 #include "SoftMax.mqh"
+#include "DataBase.mqh"
 #include "Features/FeatureFactory.mqh"
 #include "Neurons/NeuronFactory.mqh"
 #include "INeuron.mqh"
@@ -19,16 +20,22 @@ enum trade_advice_t
 class Owner
 {
 private:
-    CXArrayList<INode*> features;
+    CXArrayList<Feature*> features;
     CXArrayList<INeuron*> ineourons;
-    CXArrayList<IAxonTrain*> *axonsL1;
-    CXArrayList<IAxonTrain*> *axonsL2;
-
+    CXArrayList<Axon*> *axonsL1;
+    CXArrayList<Axon*> *axonsL2;
 public:
     Owner();
     ~Owner();
+    DataBase db;
     SoftMax* softmax;
     Trainer* trainer;
     void CreateNN();//the database file as input?
-    trade_advice_t Go1Bar(int index, int history_index);
+    void UpdateInput(int index, int history_index);
+    void SaveDebugInfo(int index);
+    void Train1Epoch(float desired);
+    trade_advice_t GetAdvice();
+    bool CreateDebugDB();
+    bool CreateStateDB();
+//    trade_advice_t Go1Bar(int index, int history_index, bool logging);
 };

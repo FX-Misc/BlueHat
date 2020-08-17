@@ -3,7 +3,7 @@
 Trainer::~Trainer()
 {
 }
-Trainer::Trainer(INode* psm, CXArrayList<IAxonTrain*> *pL1, CXArrayList<IAxonTrain*> *pL2) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2)
+Trainer::Trainer(INode* psm, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2)
 {
     sum_accuracy_short = 0;
     sum_accuracy_all_time = 0;
