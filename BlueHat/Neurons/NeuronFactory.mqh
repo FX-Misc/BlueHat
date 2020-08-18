@@ -10,5 +10,5 @@ enum neurons_t
 class NeuronFactory
 {
 public:
-    INeuron* CreateNeuron(neurons_t n);
+    Neuron* CreateNeuron(neurons_t n);
 };

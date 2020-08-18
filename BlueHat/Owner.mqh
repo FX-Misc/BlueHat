@@ -5,7 +5,7 @@
 #include "Features/FeatureFactory.mqh"
 #include "Accuracy/AccuracyFactory.mqh"
 #include "Neurons/NeuronFactory.mqh"
-#include "INeuron.mqh"
+#include "Neuron.mqh"
 #include "/globals/ExtendedArrList.mqh"
 #include "globals/assert.mqh"
 
@@ -24,7 +24,7 @@ class Owner
 {
 private:
     CXArrayList<Feature*> features;
-    CXArrayList<INeuron*> ineourons;
+    CXArrayList<Neuron*> neourons;
     CXArrayList<Axon*> *axonsL1;
     CXArrayList<Axon*> *axonsL2;
 public:

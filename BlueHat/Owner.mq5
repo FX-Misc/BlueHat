@@ -14,8 +14,8 @@ Owner::~Owner()
         delete axonsL1.at(i);
     for(int i=0; i<axonsL2.Count(); i++)
         delete axonsL2.at(i);
-    for(int i=0; i<ineourons.Count(); i++)
-        delete ineourons.at(i);
+    for(int i=0; i<neourons.Count(); i++)
+        delete neourons.at(i);
     for(int i=0; i<features.Count(); i++)
         delete features.at(i);
     delete axonsL1;
@@ -42,18 +42,18 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     axonsL1.Add( new Axon(features.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
 
     NeuronFactory nf;
-    ineourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
-    ineourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
-    ineourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
+    neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
+    neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
+    neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
 
-    ineourons.at(0).AddAxon(axonsL1.at(0));
-    ineourons.at(0).AddAxon(axonsL1.at(1));
-    ineourons.at(1).AddAxon(axonsL1.at(2));
-    ineourons.at(2).AddAxon(axonsL1.at(3));
+    neourons.at(0).AddAxon(axonsL1.at(0));
+    neourons.at(0).AddAxon(axonsL1.at(1));
+    neourons.at(1).AddAxon(axonsL1.at(2));
+    neourons.at(2).AddAxon(axonsL1.at(3));
        
-    axonsL2.Add( new Axon(ineourons.at(0), 0, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL2.Add( new Axon(ineourons.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL2.Add( new Axon(ineourons.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+    axonsL2.Add( new Axon(neourons.at(0), 0, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+    axonsL2.Add( new Axon(neourons.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+    axonsL2.Add( new Axon(neourons.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
 
     softmax = new SoftMax();
     softmax.AddAxon(axonsL2.at(0));
@@ -95,7 +95,7 @@ bool Owner::CreateDebugDB()
         db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL1.Count(); i++)
         db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'),false);
-    for(int i=0; i<ineourons.Count(); i++)
+    for(int i=0; i<neourons.Count(); i++)
         db.AddDBGTBLItem("N"+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'),false);
@@ -117,8 +117,8 @@ void Owner::SaveDebugInfo(int index, float desired_in)
         db.Insert(features.at(i).name+IntegerToString(i,2,'0'), features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
         db.Insert("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'), axonsL1.at(i).GetGain(), false);
-    for(int i=0; i<ineourons.Count(); i++)
-        db.Insert("N"+IntegerToString(i,2,'0'), ineourons.at(i).GetNode(), false);
+    for(int i=0; i<neourons.Count(); i++)
+        db.Insert("N"+IntegerToString(i,2,'0'), neourons.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
     db.Insert("ACCshort", eval.GetAccuracyShort(), false);

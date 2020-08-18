@@ -9,10 +9,10 @@ class Axon
 {
 private:
     INode* pnode;
-    float gain;             //-1..+1 starts at 0
+    float gain;             //0.001...+1, starts at 0.001
     float degradaion_rate;  //1 for no degradation. should be less than 1
     float growth_rate;  //should be greater than 0
-    float min;  //the floor of the Axon, typically 0.01
+    float min;  //the floor of the Axon, typically 0.001
 public:
     Axon(INode* pn, int node_id, float deg_r, float gr_r, float m);
     int node_id;

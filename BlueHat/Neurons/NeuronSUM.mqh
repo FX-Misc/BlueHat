@@ -1,5 +1,5 @@
-#include "../INeuron.mqh"
-class NeuronSUM : public INeuron
+#include "../Neuron.mqh"
+class NeuronSUM : public Neuron
 {
 public:
     float GetNode();
