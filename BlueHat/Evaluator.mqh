@@ -12,8 +12,6 @@ private:
     float sum_accuracy_short;
     float sum_accuracy_all_time;   
     int epoch_counter;  //the number of training epochs so far 
-    float SampleCorrectnessAnalog(float desired, float value) const;
-    float SampleCorrectnessDirection(float desired, float value) const;
     IAccuracy* accuracy_calculator;
 public:
     Evaluator(IAccuracy* acc);

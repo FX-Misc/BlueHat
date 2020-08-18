@@ -5,14 +5,6 @@ Evaluator::Evaluator(IAccuracy* acc) : accuracy_calculator(acc)
     sum_accuracy_all_time = 0;
     epoch_counter = 0;
 }
-float Evaluator::SampleCorrectnessAnalog(float desired,float value) const
-{
-    return sum_accuracy_short / ACC_SHORT_LEN;
-}
-float Evaluator::SampleCorrectnessDirection(float desired,float value) const
-{
-    return sum_accuracy_short / ACC_SHORT_LEN;
-}
 float Evaluator::GetAccuracyShort(void) const
 {
     return sum_accuracy_short / ACC_SHORT_LEN;
@@ -32,7 +24,25 @@ float Evaluator::GetDirectionCorrectnessAllTime() const
 
 evaluate_score_t Evaluator::EvaluateTrial(float desired, float base_value, float trial_value)
 {
-    if(desired > 0)
+    float base_accuracy = accuracy_calculator.CalculateAccuracy(desired, base_value);
+    float trial_accuracy = accuracy_calculator.CalculateAccuracy(desired, trial_value);
+    
+    switch(FLOAT_CMP(trial_accuracy,base_accuracy))
+    {
+        case CMP_BIGGER: 
+            return SCORE_GOOD;
+            break;
+        case CMP_NEAR:
+            return SCORE_NEUTRAL;
+            break;
+        case CMP_SMALLER:
+            return SCORE_BAD;
+            break;
+        default:
+            assert(false,"");     
+            return 0;           
+    }
+/*    if(desired > 0)
     {
         switch(FLOAT_CMP(trial_value,base_value))
         {
@@ -72,5 +82,7 @@ evaluate_score_t Evaluator::EvaluateTrial(float desired, float base_value, float
                 return 0;             
         }
     }
+
+*/
 }
 
