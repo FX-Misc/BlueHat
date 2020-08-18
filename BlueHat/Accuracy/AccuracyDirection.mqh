@@ -1,6 +1,6 @@
 #include "../globals.mqh"
 #include "../IAccuracy.mqh"
-class AccuracyDirection : IAccuracy
+class AccuracyDirection : public IAccuracy
 {
 public:
     float CalculateAccuracy(float desired, float value);

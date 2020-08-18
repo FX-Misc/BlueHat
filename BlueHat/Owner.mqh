@@ -3,6 +3,7 @@
 #include "DataBase.mqh"
 #include "Evaluator.mqh"
 #include "Features/FeatureFactory.mqh"
+#include "Accuracy/AccuracyFactory.mqh"
 #include "Neurons/NeuronFactory.mqh"
 #include "INeuron.mqh"
 #include "/globals/ExtendedArrList.mqh"
@@ -33,6 +34,7 @@ public:
     SoftMax* softmax;
     Trainer* trainer;
     Evaluator* eval;
+    IAccuracy* acc;
     void CreateNN(evaluation_method_t evm);//the database file as input?
     void UpdateInput(int index, int history_index);
     void SaveDebugInfo(int index, float desired_in);

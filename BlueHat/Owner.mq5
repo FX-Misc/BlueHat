@@ -20,12 +20,16 @@ Owner::~Owner()
         delete features.at(i);
     delete axonsL1;
     delete axonsL2; 
+    delete eval;
+    delete acc;
 
     Print("deleting done");
 }
 void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
     FeatureFactory ff;
+    AccuracyFactory acf;
+    
 
     //based on the input file, decide on feature type
     features.Add(ff.CreateFeature(FEATURE_RANDOM));
@@ -56,7 +60,8 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     softmax.AddAxon(axonsL2.at(1));
     softmax.AddAxon(axonsL2.at(2));
     
-    eval = new Evaluator(evm);
+    acc = acf.CreateAccuracy(evm);
+    eval = new Evaluator(acc);
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
 }
 /*

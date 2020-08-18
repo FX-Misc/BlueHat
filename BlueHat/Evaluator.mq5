@@ -1,5 +1,5 @@
 #include "Evaluator.mqh"
-Evaluator::Evaluator(evaluation_method_t evm) : method(evm)
+Evaluator::Evaluator(IAccuracy* acc) : accuracy_calculator(acc)
 {
     sum_accuracy_short = 0;
     sum_accuracy_all_time = 0;
