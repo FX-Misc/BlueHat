@@ -3,6 +3,7 @@
 
 #property script_show_inputs
 input bool debug=true;
+input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
 void OnStart()
 {
@@ -13,7 +14,7 @@ void OnStart()
     
 
     Owner owner();
-    owner.CreateNN();
+    owner.CreateNN(evaluation_method);
     owner.db.OpenDB();
     owner.CreateDebugDB();
     owner.CreateStateDB();

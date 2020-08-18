@@ -1,9 +1,17 @@
 #include "Evaluator.mqh"
-Evaluator::Evaluator()
+Evaluator::Evaluator(evaluation_method_t evm) : method(evm)
 {
     sum_accuracy_short = 0;
     sum_accuracy_all_time = 0;
     epoch_counter = 0;
+}
+float Evaluator::SampleCorrectnessAnalog(float desired,float value) const
+{
+    return sum_accuracy_short / ACC_SHORT_LEN;
+}
+float Evaluator::SampleCorrectnessDirection(float desired,float value) const
+{
+    return sum_accuracy_short / ACC_SHORT_LEN;
 }
 float Evaluator::GetAccuracyShort(void) const
 {

@@ -23,7 +23,7 @@ Owner::~Owner()
 
     Print("deleting done");
 }
-void Owner::CreateNN()  //TODO: input file/
+void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
     FeatureFactory ff;
 
@@ -56,7 +56,7 @@ void Owner::CreateNN()  //TODO: input file/
     softmax.AddAxon(axonsL2.at(1));
     softmax.AddAxon(axonsL2.at(2));
     
-    eval = new Evaluator();
+    eval = new Evaluator(evm);
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
 }
 /*
