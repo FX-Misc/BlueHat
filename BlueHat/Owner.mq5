@@ -56,7 +56,8 @@ void Owner::CreateNN()  //TODO: input file/
     softmax.AddAxon(axonsL2.at(1));
     softmax.AddAxon(axonsL2.at(2));
     
-    trainer = new Trainer(softmax, axonsL1, axonsL2);
+    eval = new Evaluator();
+    trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
 }
 /*
 trade_advice_t Owner::Go1Bar(int index, int history_index, bool logging)
@@ -115,10 +116,10 @@ void Owner::SaveDebugInfo(int index, float desired_in)
         db.Insert("N"+IntegerToString(i,2,'0'), ineourons.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
-    db.Insert("ACCshort", trainer.GetAccuracyShort(), false);
-    db.Insert("ACCall", trainer.GetAccuracyAllTime(), false);
-    db.Insert("DIRshort", trainer.GetDirectionCorrectnessShort(), false);
-    db.Insert("DIRall", trainer.GetDirectionCorrectnessAllTime(), false);
+    db.Insert("ACCshort", eval.GetAccuracyShort(), false);
+    db.Insert("ACCall", eval.GetAccuracyAllTime(), false);
+    db.Insert("DIRshort", eval.GetDirectionCorrectnessShort(), false);
+    db.Insert("DIRall", eval.GetDirectionCorrectnessAllTime(), false);
     db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), true);
 }

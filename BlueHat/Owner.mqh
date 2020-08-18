@@ -1,6 +1,7 @@
 #include "Trainer.mqh"
 #include "SoftMax.mqh"
 #include "DataBase.mqh"
+#include "Evaluator.mqh"
 #include "Features/FeatureFactory.mqh"
 #include "Neurons/NeuronFactory.mqh"
 #include "INeuron.mqh"
@@ -31,6 +32,7 @@ public:
     DataBase db;
     SoftMax* softmax;
     Trainer* trainer;
+    Evaluator* eval;
     void CreateNN();//the database file as input?
     void UpdateInput(int index, int history_index);
     void SaveDebugInfo(int index, float desired_in);
