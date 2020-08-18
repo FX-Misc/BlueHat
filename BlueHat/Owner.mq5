@@ -93,30 +93,18 @@ bool Owner::CreateDebugDB()
         db.AddDBGTBLItem("N"+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'),false);
+    db.AddDBGTBLItem("ACCshort", false);
+    db.AddDBGTBLItem("ACCall", false);
+    db.AddDBGTBLItem("DIRshort", false);
+    db.AddDBGTBLItem("DIRall", false);
+    db.AddDBGTBLItem("desired", false);
     return db.AddDBGTBLItem("softmax",true);
 }
 bool Owner::CreateStateDB()
 {
-/*
-    db.AddDBGTBLItem("feature0",false);
-    db.AddDBGTBLItem("feature1",false);
-    db.AddDBGTBLItem("feature2",false);
-    db.AddDBGTBLItem("axonsL10",false);
-    db.AddDBGTBLItem("axonsL11",false);
-    db.AddDBGTBLItem("axonsL12",false);
-    db.AddDBGTBLItem("axonsL13",false);
-    db.AddDBGTBLItem("ineourons0",false);
-    db.AddDBGTBLItem("ineourons1",false);
-    db.AddDBGTBLItem("ineourons2",false);
-    db.AddDBGTBLItem("axonsL20",false);
-    db.AddDBGTBLItem("axonsL21",false);
-    db.AddDBGTBLItem("axonsL22",false);
-    db.AddDBGTBLItem("axonsL23",false);
-    return db.AddDBGTBLItem("softmax",true);
-    */
     return true;
 }
-void Owner::SaveDebugInfo(int index)
+void Owner::SaveDebugInfo(int index, float desired_in)
 {
     db.Insert("ID", (float)index, false);    
     for(int i=0; i<features.Count(); i++)
@@ -127,5 +115,10 @@ void Owner::SaveDebugInfo(int index)
         db.Insert("N"+IntegerToString(i,2,'0'), ineourons.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
+    db.Insert("ACCshort", trainer.GetAccuracyShort(), false);
+    db.Insert("ACCall", trainer.GetAccuracyAllTime(), false);
+    db.Insert("DIRshort", trainer.GetDirectionCorrectnessShort(), false);
+    db.Insert("DIRall", trainer.GetDirectionCorrectnessAllTime(), false);
+    db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), true);
 }

@@ -95,6 +95,14 @@ float Trainer::GetAccuracyAllTime(void) const
 {
     return sum_accuracy_all_time / (epoch_counter+1);
 }
+float Trainer::GetDirectionCorrectnessShort() const
+{
+    return 0;
+}
+float Trainer::GetDirectionCorrectnessAllTime() const
+{
+    return 0;
+}
 float Trainer::GetCurrentOutput(void) const
 {
     return pSoftMax.GetNode();
