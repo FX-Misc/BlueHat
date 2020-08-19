@@ -33,6 +33,13 @@ void OnStart()
     }
         
     owner.db.CloseDB();
+    Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME)," ",
+                    "  Direction:",owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME)," ",
+                               "");
     Print("Bye");
 }
 
