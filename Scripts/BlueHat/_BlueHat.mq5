@@ -19,14 +19,15 @@ void OnStart()
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
-    for(int i=0; i< 1000; i++)
+    owner.UpdateInput(1000,1001);
+    for(int i=999; i>0; i--)
     {
-        desired = (float)0.1;//close[1]
-        owner.UpdateInput(i,1000);
-        //owner.GetAdvice();
-        //trade here
+        desired = (float)0.1;//close[i]
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
+        owner.UpdateInput(i,1001);
+        //owner.GetAdvice();
+        //trade here
         if(debug)
             owner.SaveDebugInfo(i, desired);
         
