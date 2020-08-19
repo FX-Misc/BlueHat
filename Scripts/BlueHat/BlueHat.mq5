@@ -3,6 +3,7 @@
 
 #property script_show_inputs
 input bool debug=true;
+input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
 void OnStart()
 {
@@ -10,25 +11,35 @@ void OnStart()
     
     Print("Hi there");
     assert(1>0,"test");
-    
+   
 
     Owner owner();
-    owner.CreateNN();
+    owner.CreateNN(evaluation_method);
     owner.db.OpenDB();
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
     for(int i=0; i< 1000; i++)
     {
-        desired = (float)0.1;
+        desired = (float)0.1;//close[1]
         owner.UpdateInput(i,1000);
+        //owner.GetAdvice();
+        //trade here
+        owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
+        owner.Train1Epoch(desired);
         if(debug)
             owner.SaveDebugInfo(i, desired);
-        owner.Train1Epoch(desired);
-        owner.GetAdvice();
+        
     }
         
     owner.db.CloseDB();
+    Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME)," ",
+                    "  Direction:",owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME)," ",
+                               "");
     Print("Bye");
 }
 

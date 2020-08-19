@@ -1,7 +1,7 @@
 #include "INode.mqh"
 #include "Axon.mqh"
 #include "/globals/ExtendedArrList.mqh"
-class INeuron : public INode
+class Neuron : public INode
 {
 protected:
     CXArrayList<Axon*> axons;

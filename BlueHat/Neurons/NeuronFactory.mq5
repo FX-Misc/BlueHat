@@ -1,6 +1,6 @@
 #include "NeuronFactory.mqh"
 //#include "../globals/assert.mqh"
-INeuron* NeuronFactory::CreateNeuron(neurons_t n)
+Neuron* NeuronFactory::CreateNeuron(neurons_t n)
 {
     INode* neuron;
     switch(n)
