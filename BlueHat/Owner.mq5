@@ -63,6 +63,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     acc = acf.CreateAccuracy(evm);
     eval = new Evaluator(acc);
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
+    quality = new QualityMetrics();
 }
 /*
 trade_advice_t Owner::Go1Bar(int index, int history_index, bool logging)
@@ -99,10 +100,12 @@ bool Owner::CreateDebugDB()
         db.AddDBGTBLItem("N"+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'),false);
-    db.AddDBGTBLItem("ACCshort", false);
-    db.AddDBGTBLItem("ACCall", false);
-    db.AddDBGTBLItem("DIRshort", false);
-    db.AddDBGTBLItem("DIRall", false);
+    db.AddDBGTBLItem("DiffShort", false);
+    db.AddDBGTBLItem("DiffLong", false);
+    db.AddDBGTBLItem("DiffAll", false);
+    db.AddDBGTBLItem("DirShort", false);
+    db.AddDBGTBLItem("DirLong", false);
+    db.AddDBGTBLItem("DirAll", false);
     db.AddDBGTBLItem("desired", false);
     return db.AddDBGTBLItem("softmax",true);
 }
@@ -121,10 +124,12 @@ void Owner::SaveDebugInfo(int index, float desired_in)
         db.Insert("N"+IntegerToString(i,2,'0'), neourons.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
-    db.Insert("ACCshort", eval.GetAccuracyShort(), false);
-    db.Insert("ACCall", eval.GetAccuracyAllTime(), false);
-    db.Insert("DIRshort", eval.GetDirectionCorrectnessShort(), false);
-    db.Insert("DIRall", eval.GetDirectionCorrectnessAllTime(), false);
+    db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
+    db.Insert("DiffLong", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG), false);
+    db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
+    db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
+    db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
+    db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
     db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), true);
 }

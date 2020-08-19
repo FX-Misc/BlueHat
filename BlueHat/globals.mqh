@@ -13,3 +13,5 @@ enum
 };
 #define FLOAT_CMP(a,b) ( ((a)>(b)+(1e-20)) ? CMP_BIGGER :  (((a)<(b)-(1e-20))?CMP_SMALLER : CMP_NEAR) )
 #define FLOAT_SIGN(a) ( ((a)>0+(1e-20)) ? SIGN_POSITIVE :  (((a)<0-(1e-20))?SIGN_NEGATIVE : SIGN_ZERO) )
+
+#define FILTER(OLD,NEW,COEF) ( (float)( (OLD)*(COEF) + (NEW) )/( (COEF)+1 ) )
