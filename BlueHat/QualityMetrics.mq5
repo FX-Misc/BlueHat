@@ -73,7 +73,7 @@ void QualityMetrics::UpdateMetrics(float desired, float value)
     diff_filtered_long = FILTER(diff_filtered_long, diff, METRIC_FILTER_LONG);
     sum_diff_all_time += diff;
         
-    float diff_zero = MathAbs( 0 /*(float)MathRand()/16384-1*/ - value);
+    float diff_zero = MathAbs( desired /*(float)MathRand()/16384-1*/ - 0);
     
     zerodiff_filtered_short = FILTER(zerodiff_filtered_short, diff_zero, METRIC_FILTER_SHORT);
     zerodiff_filtered_long = FILTER(zerodiff_filtered_long, diff_zero, METRIC_FILTER_LONG);

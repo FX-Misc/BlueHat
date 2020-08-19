@@ -22,6 +22,7 @@ Owner::~Owner()
     delete axonsL2; 
     delete eval;
     delete acc;
+    delete quality;
 
     Print("deleting done");
 }
@@ -65,18 +66,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
     quality = new QualityMetrics();
 }
-/*
-trade_advice_t Owner::Go1Bar(int index, int history_index, bool logging)
-{
-    for(int i=0; i<features.Count(); i++)
-        ((Feature*)(features.at(i))).Update(index, history_index);
 
-    if(logging)
-        SaveDebugInfo(index);        
-    float new_desired = 0.5;//close[index]
-    trainer.Go1Epoch(new_desired,true);
-    return TRADE_NONE;
-*/
 void Owner::UpdateInput(int index, int history_index)
 {
     for(int i=0; i<features.Count(); i++)
@@ -126,7 +116,7 @@ void Owner::SaveDebugInfo(int index, float desired_in)
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
     db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
     db.Insert("DiffLong", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG), false);
-    db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
+    db.Insert("DiffAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
     db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
     db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
     db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);

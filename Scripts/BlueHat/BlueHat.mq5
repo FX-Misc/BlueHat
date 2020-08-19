@@ -21,12 +21,15 @@ void OnStart()
     
     for(int i=0; i< 1000; i++)
     {
-        desired = (float)0.1;
+        desired = (float)0.1;//close[1]
         owner.UpdateInput(i,1000);
+        //owner.GetAdvice();
+        //trade here
+        owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
+        owner.Train1Epoch(desired);
         if(debug)
             owner.SaveDebugInfo(i, desired);
-        owner.Train1Epoch(desired);
-        owner.GetAdvice();
+        
     }
         
     owner.db.CloseDB();
