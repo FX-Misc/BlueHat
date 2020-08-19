@@ -15,7 +15,6 @@ enum quality_period_t
 class QualityMetrics
 {
 private:
-public:
     float diff_filtered_short;  //0(good)..1
     float diff_filtered_long; 
     float sum_diff_all_time;  
