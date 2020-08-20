@@ -1,5 +1,5 @@
 #include "../../BlueHat/Owner.mqh"
-//#include "../../BlueHat/Trainer.mqh"
+#include "../../BlueHat/globals/_globals.mqh"
 
 #property script_show_inputs
 input bool debug=true;
@@ -19,10 +19,13 @@ void OnStart()
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
+    test_in[1000]=0;
+    for(int i=999; i>=0; i--)
+        test_in[i]=CAP(test_in[i+1]+NOISE(-0.1,0.1) ,-1,1);
     owner.UpdateInput(1000,1001);
     for(int i=999; i>0; i--)
     {
-        desired = (float)0.8+NOISE(-0.1,0.1);//close[i]
+        desired = test_in[i];//close[i]
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
         owner.UpdateInput(i,1001);

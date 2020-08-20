@@ -1,4 +1,7 @@
 #define FLOAT_NEAR(a,b) ( (MathAbs((a)-(b))<1e-20) ? true : false )
+
+float test_in[1001];
+
 enum
 {
     CMP_SMALLER,
@@ -17,3 +20,6 @@ enum
 #define FILTER(OLD,NEW,COEF) ( (float)( (OLD)*(COEF) + (NEW) )/( (COEF)+1 ) )
 
 #define NOISE(min,max) ((float)MathRand()*((float)(max)-(float)(min))/32768 + (float)(min))
+
+//#define CAP(a,min,max) ((a)>(max)?((max)-(float)(1e-20)) : ((a)<(min)?((min)+(float)(1e-20)):(a)) )
+#define CAP(a,min,max) (MathMax( MathMin((a),(max)) , (min) ))
