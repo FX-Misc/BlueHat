@@ -1,4 +1,4 @@
-#include "../globals.mqh"
+#include "../globals/_globals.mqh"
 #include "../IAccuracy.mqh"
 class AccuracyDirection : public IAccuracy
 {

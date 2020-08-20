@@ -1,5 +1,5 @@
 #include "../../BlueHat/Owner.mqh"
-//#include "../../BlueHat/Trainer.mqh"
+#include "../../BlueHat/globals/_globals.mqh"
 
 #property script_show_inputs
 input bool debug=true;
@@ -19,17 +19,24 @@ void OnStart()
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
-    owner.UpdateInput(1000,1001);
+    test_in[1000]=0;
+    test_in[999]=0;
+    test_in[998]=0;
+    for(int i=997; i>=0; i--)
+        test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
+    owner.UpdateInput(1001,1001);
     for(int i=999; i>0; i--)
     {
-        desired = (float)0.1;//close[i]
+//Note: index+1 is the last completed Bar, so the one that we need
+//If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
+        desired = test_in[i+1];//close[i+1]
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
-        owner.UpdateInput(i,1001);
-        //owner.GetAdvice();
-        //trade here
         if(debug)
             owner.SaveDebugInfo(i, desired);
+        owner.UpdateInput(i+1,1001);
+        //owner.GetAdvice();
+        //trade here
         
     }
         
