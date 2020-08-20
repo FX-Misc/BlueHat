@@ -1,4 +1,4 @@
-#include "globals.mqh"
+#include "globals/_globals.mqh"
 #define METRIC_FILTER_SHORT (15)
 #define METRIC_FILTER_LONG (255)
 enum quality_method_t 

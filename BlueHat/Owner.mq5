@@ -4,6 +4,7 @@ Owner::Owner()
 {
     axonsL1 = new CXArrayList<Axon*>;
     axonsL2 = new CXArrayList<Axon*>;
+    MathSrand(GetTickCount());
 }
 Owner::~Owner()
 {

@@ -22,7 +22,7 @@ void OnStart()
     owner.UpdateInput(1000,1001);
     for(int i=999; i>0; i--)
     {
-        desired = (float)0.1;//close[i]
+        desired = (float)0.8+NOISE(-0.1,0.1);//close[i]
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
         owner.UpdateInput(i,1001);
