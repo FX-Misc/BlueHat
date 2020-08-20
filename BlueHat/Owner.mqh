@@ -1,9 +1,12 @@
 #include "Trainer.mqh"
 #include "SoftMax.mqh"
 #include "DataBase.mqh"
+#include "Evaluator.mqh"
+#include "QualityMetrics.mqh"
 #include "Features/FeatureFactory.mqh"
+#include "Accuracy/AccuracyFactory.mqh"
 #include "Neurons/NeuronFactory.mqh"
-#include "INeuron.mqh"
+#include "Neuron.mqh"
 #include "/globals/ExtendedArrList.mqh"
 #include "globals/assert.mqh"
 
@@ -22,7 +25,7 @@ class Owner
 {
 private:
     CXArrayList<Feature*> features;
-    CXArrayList<INeuron*> ineourons;
+    CXArrayList<Neuron*> neourons;
     CXArrayList<Axon*> *axonsL1;
     CXArrayList<Axon*> *axonsL2;
 public:
@@ -31,7 +34,10 @@ public:
     DataBase db;
     SoftMax* softmax;
     Trainer* trainer;
-    void CreateNN();//the database file as input?
+    Evaluator* eval;
+    IAccuracy* acc;
+    QualityMetrics* quality;
+    void CreateNN(evaluation_method_t evm);//the database file as input?
     void UpdateInput(int index, int history_index);
     void SaveDebugInfo(int index, float desired_in);
     void Train1Epoch(float desired);

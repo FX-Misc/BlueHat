@@ -3,11 +3,8 @@
 Trainer::~Trainer()
 {
 }
-Trainer::Trainer(INode* psm, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2)
+Trainer::Trainer(INode* psm, Evaluator* peval, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2), eval(peval)
 {
-    sum_accuracy_short = 0;
-    sum_accuracy_all_time = 0;
-    epoch_counter = 0;
 }
 void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
 {
@@ -17,7 +14,7 @@ void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
         if(axonsL1.at(i).active)
         {
             axonsL1.at(i).GainGrow(); //trial grow
-            switch( evaluate( new_norm_diff, base_value, pSoftMax.GetNode() ) )
+            switch( eval.EvaluateTrial( new_norm_diff, base_value, pSoftMax.GetNode() ) )
             {
                 case SCORE_GOOD:    //all good, positive change
                     axonsL1.at(i).grow_temp_flag = FLAG_GROW;
@@ -36,7 +33,7 @@ void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
         if(axonsL2.at(i).active)
         {
             axonsL2.at(i).GainGrow(); //trial grow
-            switch( evaluate(new_norm_diff, base_value, pSoftMax.GetNode()) )
+            switch( eval.EvaluateTrial(new_norm_diff, base_value, pSoftMax.GetNode()) )
             {
                 case SCORE_GOOD:    //all good, positive change
                     axonsL2.at(i).grow_temp_flag = FLAG_GROW;
@@ -86,22 +83,6 @@ void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
                     break;
             }            
         }
-}
-float Trainer::GetAccuracyShort(void) const
-{
-    return sum_accuracy_short / ACC_SHORT_LEN;
-}
-float Trainer::GetAccuracyAllTime(void) const
-{
-    return sum_accuracy_all_time / (epoch_counter+1);
-}
-float Trainer::GetDirectionCorrectnessShort() const
-{
-    return 0;
-}
-float Trainer::GetDirectionCorrectnessAllTime() const
-{
-    return 0;
 }
 float Trainer::GetCurrentOutput(void) const
 {

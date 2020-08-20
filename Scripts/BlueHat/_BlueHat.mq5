@@ -1,8 +1,9 @@
 #include "../../BlueHat/Owner.mqh"
-//#include "../../BlueHat/Trainer.mqh"
+#include "../../BlueHat/globals/_globals.mqh"
 
 #property script_show_inputs
 input bool debug=true;
+input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
 void OnStart()
 {
@@ -10,25 +11,43 @@ void OnStart()
     
     Print("Hi there");
     assert(1>0,"test");
-    
+   
 
     Owner owner();
-    owner.CreateNN();
+    owner.CreateNN(evaluation_method);
     owner.db.OpenDB();
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
-    for(int i=0; i< 1000; i++)
+    test_in[1000]=0;
+    test_in[999]=0;
+    test_in[998]=0;
+    for(int i=997; i>=0; i--)
+        test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
+    owner.UpdateInput(1001,1001);
+    for(int i=999; i>0; i--)
     {
-        desired = (float)0.1;
-        owner.UpdateInput(i,1000);
+//Note: index+1 is the last completed Bar, so the one that we need
+//If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
+        desired = test_in[i+1];//close[i+1]
+        owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
+        owner.Train1Epoch(desired);
         if(debug)
             owner.SaveDebugInfo(i, desired);
-        owner.Train1Epoch(desired);
-        owner.GetAdvice();
+        owner.UpdateInput(i+1,1001);
+        //owner.GetAdvice();
+        //trade here
+        
     }
         
     owner.db.CloseDB();
+    Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME)," ",
+                    "  Direction:",owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME)," ",
+                               "");
     Print("Bye");
 }
 
