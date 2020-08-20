@@ -36,14 +36,17 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     //based on the input file, decide on feature type
     features.Add(ff.CreateFeature(FEATURE_RANDOM));
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
-    features.Add(ff.CreateFeature(FEATURE_RANDOM));
+    features.Add(ff.CreateFeature(FEATURE_BIAS_POSITIVE));
+    features.Add(ff.CreateFeature(FEATURE_BIAS_NEGATIVE));
 
     axonsL1.Add( new Axon(features.at(0), 0, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL1.Add( new Axon(features.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL1.Add( new Axon(features.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL1.Add( new Axon(features.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+    axonsL1.Add( new Axon(features.at(3), 3, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
 
     NeuronFactory nf;
+    neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
@@ -52,15 +55,18 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     neourons.at(0).AddAxon(axonsL1.at(1));
     neourons.at(1).AddAxon(axonsL1.at(2));
     neourons.at(2).AddAxon(axonsL1.at(3));
+    neourons.at(3).AddAxon(axonsL1.at(4));
        
     axonsL2.Add( new Axon(neourons.at(0), 0, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL2.Add( new Axon(neourons.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL2.Add( new Axon(neourons.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+    axonsL2.Add( new Axon(neourons.at(3), 3, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
 
     softmax = new SoftMax();
     softmax.AddAxon(axonsL2.at(0));
     softmax.AddAxon(axonsL2.at(1));
     softmax.AddAxon(axonsL2.at(2));
+    softmax.AddAxon(axonsL2.at(3));
     
     acc = acf.CreateAccuracy(evm);
     eval = new Evaluator(acc);
