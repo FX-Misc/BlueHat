@@ -1,6 +1,6 @@
 #define FLOAT_NEAR(a,b) ( (MathAbs((a)-(b))<1e-20) ? true : false )
 
-float test_in[1002];
+float test_in[1003];
 
 enum
 {
