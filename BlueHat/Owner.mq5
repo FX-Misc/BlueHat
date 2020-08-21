@@ -31,8 +31,19 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
     FeatureFactory ff;
     AccuracyFactory acf;
+    NeuronFactory nf;
     
-
+#define LOAD_NN_FROM_DB
+#ifdef  LOAD_NN_FROM_DB
+    string str;
+    str = db.ReadNextFeature();
+    while(str!="end")
+    {
+        assert(str!="error","DB ERROR IN NN");
+        features.Add(ff.CreateFeature(str));
+    };
+    Print(features.Count()," features created");
+#else 
     //based on the input file, decide on feature type
     features.Add(ff.CreateFeature(FEATURE_RANDOM));
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
@@ -45,7 +56,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     axonsL1.Add( new Axon(features.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL1.Add( new Axon(features.at(3), 3, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
 
-    NeuronFactory nf;
+
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
@@ -72,6 +83,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     eval = new Evaluator(acc);
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
     quality = new QualityMetrics();
+#endif 
 }
 
 void Owner::UpdateInput(int index, int history_index)

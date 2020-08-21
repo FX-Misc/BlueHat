@@ -14,10 +14,10 @@ void OnStart()
    
 
     Owner owner();
-    owner.CreateNN(evaluation_method);
     owner.db.OpenDB();
     owner.CreateDebugDB();
     owner.CreateStateDB();
+    owner.CreateNN(evaluation_method);
     
     test_in[1000]=0;
     test_in[999]=0;

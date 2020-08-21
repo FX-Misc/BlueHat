@@ -100,9 +100,9 @@ string DataBase::ReadNextFeature()
     }
     if( ! DatabaseRead(request))
     {
-        Print("DB: end of query");
+//        Print("DB: end of query");
         DatabaseFinalize(request);
-        return "";
+        return "end";
     }
     int id;
     if( ! DatabaseColumnInteger(request, 0, id))
@@ -110,15 +110,12 @@ string DataBase::ReadNextFeature()
         Print("DB: Read failed");
         return "error";
     }
-    Print(id);
     string str;
     if( ! DatabaseColumnText(request, 1, str))
     {
         Print("DB: Read failed");
         return "error";
     }
-    Print(str);
-
     return str;
 }
 
