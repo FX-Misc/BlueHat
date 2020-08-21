@@ -39,6 +39,9 @@ void OnStart()
         //trade here
         
     }
+    int n=9;
+    owner.db.ReadFeaturesCount(n);
+    Print(n);
         
     owner.db.CloseDB();
     Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",

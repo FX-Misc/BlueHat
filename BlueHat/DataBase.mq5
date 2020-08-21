@@ -85,6 +85,53 @@ bool DataBase::AddDBGTBLItem(string name, bool completed)
     return true;
 }
 
+bool DataBase::ReadFeaturesCount(int &n)
+{
+    int request = DatabasePrepare(db, "SELECT ID FROM DEBUG");
+    if(request==INVALID_HANDLE)
+    {
+        assert(false, "DB: unsuccessful query");
+        DatabaseClose(db);
+        return false;
+    }
+    if( ! DatabaseRead(request))
+    {
+        Print("DB: end of query");
+        return false;
+    }
+    if( ! DatabaseColumnInteger(request, 0, n))
+    {
+        Print("DB: Read failed");
+        return false;
+    }
+    Print(n);
+    if( ! DatabaseRead(request))
+    {
+        Print("DB: end of query2");
+        return false;
+    }
+    if( ! DatabaseColumnInteger(request, 0, n))
+    {
+        Print("DB: Read failed2");
+        return false;
+    }
+    Print(n);
+    if( ! DatabaseRead(request))
+    {
+        Print("DB: end of query3");
+        return false;
+    }
+    if( ! DatabaseColumnInteger(request, 0, n))
+    {
+        Print("DB: Read failed3");
+        return false;
+    }
+    Print(n);
+    
+    DatabaseFinalize(request);
+    return true;
+}
+
 bool DataBase::Insert(string name, float value, bool completed)
 {
     static string str1="INSERT INTO DEBUG (";
