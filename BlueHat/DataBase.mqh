@@ -7,5 +7,5 @@ public:
     bool CloseDB();
     bool AddDBGTBLItem(string name, bool completed);
     bool Insert(string name, float value, bool completed);
-    bool ReadFeaturesCount(int& n);
+    string ReadNextFeature();
 };

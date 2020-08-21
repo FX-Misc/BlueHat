@@ -85,51 +85,41 @@ bool DataBase::AddDBGTBLItem(string name, bool completed)
     return true;
 }
 
-bool DataBase::ReadFeaturesCount(int &n)
+string DataBase::ReadNextFeature()
 {
-    int request = DatabasePrepare(db, "SELECT ID FROM DEBUG");
-    if(request==INVALID_HANDLE)
+    static int request=0;
+    if(request==0)
     {
-        assert(false, "DB: unsuccessful query");
-        DatabaseClose(db);
-        return false;
+        request = DatabasePrepare(db, "SELECT ID,Features FROM NN");
+        if(request==INVALID_HANDLE)
+        {
+            assert(false, "DB: unsuccessful request");
+            DatabaseClose(db);
+            return "error";
+        }
     }
     if( ! DatabaseRead(request))
     {
         Print("DB: end of query");
-        return false;
+        DatabaseFinalize(request);
+        return "";
     }
-    if( ! DatabaseColumnInteger(request, 0, n))
+    int id;
+    if( ! DatabaseColumnInteger(request, 0, id))
     {
         Print("DB: Read failed");
-        return false;
+        return "error";
     }
-    Print(n);
-    if( ! DatabaseRead(request))
+    Print(id);
+    string str;
+    if( ! DatabaseColumnText(request, 1, str))
     {
-        Print("DB: end of query2");
-        return false;
+        Print("DB: Read failed");
+        return "error";
     }
-    if( ! DatabaseColumnInteger(request, 0, n))
-    {
-        Print("DB: Read failed2");
-        return false;
-    }
-    Print(n);
-    if( ! DatabaseRead(request))
-    {
-        Print("DB: end of query3");
-        return false;
-    }
-    if( ! DatabaseColumnInteger(request, 0, n))
-    {
-        Print("DB: Read failed3");
-        return false;
-    }
-    Print(n);
-    
-    DatabaseFinalize(request);
-    return true;
+    Print(str);
+
+    return str;
 }
 
 bool DataBase::Insert(string name, float value, bool completed)

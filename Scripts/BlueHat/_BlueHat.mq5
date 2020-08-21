@@ -25,10 +25,10 @@ void OnStart()
     for(int i=997; i>=0; i--)
         test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
     owner.UpdateInput(1001,1001);
-    for(int i=999; i>0; i--)
+/*    for(int i=999; i>0; i--)
     {
-//Note: index+1 is the last completed Bar, so the one that we need
-//If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
+        //Note: index+1 is the last completed Bar, so the one that we need
+        //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = test_in[i+1];//close[i+1]
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
@@ -39,9 +39,14 @@ void OnStart()
         //trade here
         
     }
-    int n=9;
-    owner.db.ReadFeaturesCount(n);
-    Print(n);
+*/  
+    Print(owner.db.ReadNextFeature());
+    Print(owner.db.ReadNextFeature());
+    Print(owner.db.ReadNextFeature());
+    Print(owner.db.ReadNextFeature());
+    Print(owner.db.ReadNextFeature());
+    Print(owner.db.ReadNextFeature());
+    Print(owner.db.ReadNextFeature());
         
     owner.db.CloseDB();
     Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
