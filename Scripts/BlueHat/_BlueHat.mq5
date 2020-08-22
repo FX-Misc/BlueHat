@@ -12,6 +12,7 @@ void OnStart()
     Print("Hi there");
     assert(1>0,"test");
 
+    Print(SOFT_NORMAL(-1000)," -10- ",SOFT_NORMAL(-10)," -1- ",SOFT_NORMAL(-1)," -0.5- ",SOFT_NORMAL(-0.5)," -0- ",SOFT_NORMAL(0)," -0.1- ",SOFT_NORMAL(0.1)," ",SOFT_NORMAL(1)," ",SOFT_NORMAL(-10)," ");
     Owner owner();
     owner.db.OpenDB();
     owner.CreateNN(evaluation_method);
