@@ -14,9 +14,9 @@ void OnStart()
 
     Owner owner();
     owner.db.OpenDB();
+    owner.CreateNN(evaluation_method);
     owner.CreateDebugDB();
     owner.CreateStateDB();
-    owner.CreateNN(evaluation_method);
     
     test_in[1000]=0;
     test_in[999]=0;
@@ -24,7 +24,7 @@ void OnStart()
     for(int i=997; i>=0; i--)
         test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
     owner.UpdateInput(1001,1001);
-/*    for(int i=999; i>0; i--)
+    for(int i=999; i>0; i--)
     {
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
@@ -37,8 +37,7 @@ void OnStart()
         //owner.GetAdvice();
         //trade here
         
-    }
-*/  
+    }  
         
     owner.db.CloseDB();
     Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
