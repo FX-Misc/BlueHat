@@ -88,6 +88,19 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     };
     db.FinaliseRequest(req);
     Print(neourons.Count()," neurons created");
+//==================AxonsL2
+    for(int j=0; j<neourons.Count(); j++)
+        axonsL2.Add( new Axon(neourons.at(j), j, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+    Print(axonsL2.Count()," Axons(L2) created");
+//==================Softmax
+    softmax = new SoftMax();
+    for(int j=0; j<axonsL2.Count(); j++)
+        softmax.AddAxon(axonsL2.at(j));
+//==================Others
+    acc = acf.CreateAccuracy(evm);
+    eval = new Evaluator(acc);
+    trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
+    quality = new QualityMetrics();
 #else 
     //based on the input file, decide on feature type
     features.Add(ff.CreateFeature(FEATURE_RANDOM));
