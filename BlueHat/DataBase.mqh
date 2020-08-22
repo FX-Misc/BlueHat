@@ -11,6 +11,6 @@ public:
     bool CloseDB();
     bool AddDBGTBLItem(string name, bool completed);
     bool Insert(string name, float value, bool completed);
-    string ReadNextFeature();
-    int ReadNextAxonL1();
+    string ReadNextString(string header);
+    int ReadNextInt(string header);
 };

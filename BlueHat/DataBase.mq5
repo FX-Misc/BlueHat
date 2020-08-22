@@ -85,12 +85,12 @@ bool DataBase::AddDBGTBLItem(string name, bool completed)
     return true;
 }
 
-int DataBase::ReadNextAxonL1()
+int DataBase::ReadNextInt(string header)
 {
     static int request=0;
     if(request==0)
     {
-        request = DatabasePrepare(db, "SELECT ID,AxonsFeID FROM NN");
+        request = DatabasePrepare(db, "SELECT ID,"+header+" FROM NN");
         if(request==INVALID_HANDLE)
         {
             assert(false, "DB: unsuccessful request");
@@ -123,13 +123,12 @@ int DataBase::ReadNextAxonL1()
     return feID;
 }
 
-
-string DataBase::ReadNextFeature()
+string DataBase::ReadNextString(string header)
 {
     static int request=0;
     if(request==0)
     {
-        request = DatabasePrepare(db, "SELECT ID,Features FROM NN");
+        request = DatabasePrepare(db, "SELECT ID,"+header+" FROM NN");
         if(request==INVALID_HANDLE)
         {
             assert(false, "DB: unsuccessful request");
