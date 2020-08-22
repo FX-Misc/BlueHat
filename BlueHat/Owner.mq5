@@ -63,12 +63,27 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     Print(axonsL1.Count()," Axons(L1) created");
 
 //==================Neurons
+    string tempstr[MAX_AXONS]; 
+    string tempaxons;
+    int tempcnt;
+    Neuron* tempne;
     req = db.CreateRequest("Neurons");
     str = db.ReadNextString(req);
     while(str!=DB_END_STR)
     {
         assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
-        neourons.Add(nf.CreateNeuron(str));
+        tempcnt = StringSplit(str,'=',tempstr);
+        assert(tempcnt==2,"wrong neuron entry format");
+        tempne = nf.CreateNeuron(tempstr[0]);
+        neourons.Add(tempne);
+        tempaxons = tempstr[1]; 
+        tempcnt = StringSplit(tempaxons,' ',tempstr);
+        for(int j=0; j<tempcnt; j++)
+        {
+            int axonNo = (int)StringToInteger(tempstr[j]);
+            assert(axonNo < axonsL1.Count(), "wrong axon no");
+            tempne.AddAxon(axonsL1.at(axonNo));
+        }      
         str = db.ReadNextString(req);
     };
     db.FinaliseRequest(req);

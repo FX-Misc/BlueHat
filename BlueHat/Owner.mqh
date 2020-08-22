@@ -14,6 +14,8 @@
 #define RATE_DEGRADATION (float)0.9999
 #define AXON_FLOOR (float)0.001
 
+#define MAX_AXONS 50
+
 enum trade_advice_t
 {
     TRADE_BUY,
