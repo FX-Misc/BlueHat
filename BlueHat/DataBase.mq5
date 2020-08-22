@@ -85,6 +85,67 @@ bool DataBase::AddDBGTBLItem(string name, bool completed)
     return true;
 }
 
+int DataBase::CreateRequest(string header)
+{
+    int request=0;
+    request = DatabasePrepare(db, "SELECT ID,"+header+" FROM NN");
+    if(request==INVALID_HANDLE)
+    {
+        assert(false, "DB: unsuccessful request");
+        DatabaseClose(db);
+        return DB_ERROR_INT;
+    }
+    return request;
+}
+void DataBase::FinaliseRequest(int request)
+{
+    DatabaseFinalize(request);
+}
+int DataBase::ReadNextInt(int request)
+{
+    if( ! DatabaseRead(request))
+        return DB_END_INT;
+    int id;
+    if( ! DatabaseColumnInteger(request, 0, id))
+    {
+        Print("DB: Read failed");
+        return DB_ERROR_INT;
+    }
+    int feID;
+    if( ! DatabaseColumnInteger(request, 1, feID))
+    {
+        Print("DB: Read failed");
+        return DB_ERROR_INT;
+    }
+    if(feID==-1)
+        return DB_END_INT;
+    return feID;
+}
+
+string DataBase::ReadNextString(int request)
+{
+    if( ! DatabaseRead(request))
+    {
+        DatabaseFinalize(request);
+        return DB_END_STR;
+    }
+    int id;
+    if( ! DatabaseColumnInteger(request, 0, id))
+    {
+        Print("DB: Read failed");
+        return DB_ERROR_STR;
+    }
+    string str;
+    if( ! DatabaseColumnText(request, 1, str))
+    {
+        Print("DB: Read failed");
+        return DB_ERROR_STR;
+    }
+    if(str=="-")
+        return DB_END_STR;
+    return str;
+}
+
 bool DataBase::Insert(string name, float value, bool completed)
 {
     static string str1="INSERT INTO DEBUG (";

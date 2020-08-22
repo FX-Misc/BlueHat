@@ -31,8 +31,77 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
     FeatureFactory ff;
     AccuracyFactory acf;
+    NeuronFactory nf;
     
+#define LOAD_NN_FROM_DB
+#ifdef  LOAD_NN_FROM_DB
+//==================Features
+    string str;
+    int req;
+    req = db.CreateRequest("Features");
+    str = db.ReadNextString(req);
+    while(str!=DB_END_STR)
+    {
+        assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+        features.Add(ff.CreateFeature(str));
+        str = db.ReadNextString(req);
+    };
+    db.FinaliseRequest(req);
+    Print(features.Count()," features created");
 
+//==================AxonsL1
+    int i;
+    req = db.CreateRequest("AxonsFeID");
+    i = db.ReadNextInt(req);
+    while(i!=DB_END_INT)
+    {
+        assert(i!=DB_ERROR_INT,"DB ERROR IN NN");
+        axonsL1.Add( new Axon(features.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+        i = db.ReadNextInt(req);
+    };
+    db.FinaliseRequest(req);
+    Print(axonsL1.Count()," Axons(L1) created");
+
+//==================Neurons
+    string tempstr[MAX_AXONS]; 
+    string tempaxons;
+    int tempcnt;
+    Neuron* tempne;
+    req = db.CreateRequest("Neurons");
+    str = db.ReadNextString(req);
+    while(str!=DB_END_STR)
+    {
+        assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+        tempcnt = StringSplit(str,'=',tempstr);
+        assert(tempcnt==2,"wrong neuron entry format");
+        tempne = nf.CreateNeuron(tempstr[0]);
+        neourons.Add(tempne);
+        tempaxons = tempstr[1]; 
+        tempcnt = StringSplit(tempaxons,' ',tempstr);
+        for(int j=0; j<tempcnt; j++)
+        {
+            int axonNo = (int)StringToInteger(tempstr[j]);
+            assert(axonNo < axonsL1.Count(), "wrong axon no");
+            tempne.AddAxon(axonsL1.at(axonNo));
+        }      
+        str = db.ReadNextString(req);
+    };
+    db.FinaliseRequest(req);
+    Print(neourons.Count()," neurons created");
+//==================AxonsL2
+    for(int j=0; j<neourons.Count(); j++)
+        axonsL2.Add( new Axon(neourons.at(j), j, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+    Print(axonsL2.Count()," Axons(L2) created");
+//==================Softmax
+    softmax = new SoftMax();
+    for(int j=0; j<axonsL2.Count(); j++)
+        softmax.AddAxon(axonsL2.at(j));
+//==================Others
+    acc = acf.CreateAccuracy(evm);
+    eval = new Evaluator(acc);
+    trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
+    quality = new QualityMetrics();
+#else 
     //based on the input file, decide on feature type
     features.Add(ff.CreateFeature(FEATURE_RANDOM));
     features.Add(ff.CreateFeature(FEATURE_CHEATER));
@@ -45,7 +114,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     axonsL1.Add( new Axon(features.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
     axonsL1.Add( new Axon(features.at(3), 3, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
 
-    NeuronFactory nf;
+
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
     neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
@@ -72,6 +141,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     eval = new Evaluator(acc);
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
     quality = new QualityMetrics();
+#endif 
 }
 
 void Owner::UpdateInput(int index, int history_index)

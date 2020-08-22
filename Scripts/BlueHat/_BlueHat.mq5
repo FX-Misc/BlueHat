@@ -11,11 +11,10 @@ void OnStart()
     
     Print("Hi there");
     assert(1>0,"test");
-   
 
     Owner owner();
-    owner.CreateNN(evaluation_method);
     owner.db.OpenDB();
+    owner.CreateNN(evaluation_method);
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
@@ -27,8 +26,8 @@ void OnStart()
     owner.UpdateInput(1001,1001);
     for(int i=999; i>0; i--)
     {
-//Note: index+1 is the last completed Bar, so the one that we need
-//If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
+        //Note: index+1 is the last completed Bar, so the one that we need
+        //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = test_in[i+1];//close[i+1]
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
@@ -38,7 +37,7 @@ void OnStart()
         //owner.GetAdvice();
         //trade here
         
-    }
+    }  
         
     owner.db.CloseDB();
     Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
