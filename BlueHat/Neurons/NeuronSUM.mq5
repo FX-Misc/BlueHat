@@ -1,4 +1,10 @@
 #include "NeuronSUM.mqh"
+
+void NeuronSUM::NeuronSUM()
+{
+    name = "neSum";
+}
+
 float NeuronSUM::GetNode()
 {
     float ret=0;
@@ -7,6 +13,7 @@ float NeuronSUM::GetNode()
     ret = ret/axons.Count();
     return ret;
 }
+
 void NeuronSUM::AddAxon(Axon* ax)
 {
     axons.Add(ax);
