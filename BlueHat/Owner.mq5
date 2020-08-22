@@ -37,13 +37,23 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 #ifdef  LOAD_NN_FROM_DB
     string str;
     str = db.ReadNextFeature();
-    while(str!="end")
+    while(str!=DB_END_STR)
     {
-        assert(str!="error","DB ERROR IN NN");
+        assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
         features.Add(ff.CreateFeature(str));
         str = db.ReadNextFeature();
     };
     Print(features.Count()," features created");
+
+    int i;
+    i = db.ReadNextAxonL1();
+    while(i!=DB_END_INT)
+    {
+        assert(i!=DB_ERROR_INT,"DB ERROR IN NN");
+        axonsL1.Add( new Axon(features.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+        i = db.ReadNextAxonL1();
+    };
+    Print(axonsL1.Count()," Axons(L1) created");
 #else 
     //based on the input file, decide on feature type
     features.Add(ff.CreateFeature(FEATURE_RANDOM));

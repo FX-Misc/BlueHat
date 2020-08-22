@@ -1,3 +1,7 @@
+#define DB_END_INT  (-1)
+#define DB_ERROR_INT  (-2)
+#define DB_END_STR  ("end")
+#define DB_ERROR_STR  ("error")
 class DataBase
 {
 private:
@@ -8,4 +12,5 @@ public:
     bool AddDBGTBLItem(string name, bool completed);
     bool Insert(string name, float value, bool completed);
     string ReadNextFeature();
+    int ReadNextAxonL1();
 };

@@ -85,6 +85,45 @@ bool DataBase::AddDBGTBLItem(string name, bool completed)
     return true;
 }
 
+int DataBase::ReadNextAxonL1()
+{
+    static int request=0;
+    if(request==0)
+    {
+        request = DatabasePrepare(db, "SELECT ID,AxonsFeID FROM NN");
+        if(request==INVALID_HANDLE)
+        {
+            assert(false, "DB: unsuccessful request");
+            DatabaseClose(db);
+            return DB_ERROR_INT;
+        }
+    }
+    if( ! DatabaseRead(request))
+    {
+        DatabaseFinalize(request);
+        return DB_END_INT;
+    }
+    int id;
+    if( ! DatabaseColumnInteger(request, 0, id))
+    {
+        Print("DB: Read failed");
+        return DB_ERROR_INT;
+    }
+    int feID;
+    if( ! DatabaseColumnInteger(request, 1, feID))
+    {
+        Print("DB: Read failed");
+        return DB_ERROR_INT;
+    }
+    if(feID==-1)
+    {
+        DatabaseFinalize(request);
+        return DB_END_INT;
+    }
+    return feID;
+}
+
+
 string DataBase::ReadNextFeature()
 {
     static int request=0;
@@ -95,30 +134,30 @@ string DataBase::ReadNextFeature()
         {
             assert(false, "DB: unsuccessful request");
             DatabaseClose(db);
-            return "error";
+            return DB_ERROR_STR;
         }
     }
     if( ! DatabaseRead(request))
     {
         DatabaseFinalize(request);
-        return "end";
+        return DB_END_STR;
     }
     int id;
     if( ! DatabaseColumnInteger(request, 0, id))
     {
         Print("DB: Read failed");
-        return "error";
+        return DB_ERROR_STR;
     }
     string str;
     if( ! DatabaseColumnText(request, 1, str))
     {
         Print("DB: Read failed");
-        return "error";
+        return DB_ERROR_STR;
     }
     if(str=="-")
     {
         DatabaseFinalize(request);
-        return "end";
+        return DB_END_STR;
     }
     return str;
 }
