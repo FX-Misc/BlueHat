@@ -100,7 +100,6 @@ string DataBase::ReadNextFeature()
     }
     if( ! DatabaseRead(request))
     {
-//        Print("DB: end of query");
         DatabaseFinalize(request);
         return "end";
     }
@@ -115,6 +114,11 @@ string DataBase::ReadNextFeature()
     {
         Print("DB: Read failed");
         return "error";
+    }
+    if(str=="-")
+    {
+        DatabaseFinalize(request);
+        return "end";
     }
     return str;
 }

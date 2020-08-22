@@ -41,6 +41,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     {
         assert(str!="error","DB ERROR IN NN");
         features.Add(ff.CreateFeature(str));
+        str = db.ReadNextFeature();
     };
     Print(features.Count()," features created");
 #else 
