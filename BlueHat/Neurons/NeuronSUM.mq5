@@ -2,7 +2,7 @@
 
 void NeuronSUM::NeuronSUM()
 {
-    name = "neSUM";
+    name = "neSum";
 }
 
 float NeuronSUM::GetNode()

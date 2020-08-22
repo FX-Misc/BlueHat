@@ -85,24 +85,26 @@ bool DataBase::AddDBGTBLItem(string name, bool completed)
     return true;
 }
 
-int DataBase::ReadNextInt(string header)
+int DataBase::CreateRequest(string header)
 {
-    static int request=0;
-    if(request==0)
+    int request=0;
+    request = DatabasePrepare(db, "SELECT ID,"+header+" FROM NN");
+    if(request==INVALID_HANDLE)
     {
-        request = DatabasePrepare(db, "SELECT ID,"+header+" FROM NN");
-        if(request==INVALID_HANDLE)
-        {
-            assert(false, "DB: unsuccessful request");
-            DatabaseClose(db);
-            return DB_ERROR_INT;
-        }
+        assert(false, "DB: unsuccessful request");
+        DatabaseClose(db);
+        return DB_ERROR_INT;
     }
+    return request;
+}
+void DataBase::FinaliseRequest(int request)
+{
+    DatabaseFinalize(request);
+}
+int DataBase::ReadNextInt(int request)
+{
     if( ! DatabaseRead(request))
-    {
-        DatabaseFinalize(request);
         return DB_END_INT;
-    }
     int id;
     if( ! DatabaseColumnInteger(request, 0, id))
     {
@@ -116,26 +118,12 @@ int DataBase::ReadNextInt(string header)
         return DB_ERROR_INT;
     }
     if(feID==-1)
-    {
-        DatabaseFinalize(request);
         return DB_END_INT;
-    }
     return feID;
 }
 
-string DataBase::ReadNextString(string header)
+string DataBase::ReadNextString(int request)
 {
-    static int request=0;
-    if(request==0)
-    {
-        request = DatabasePrepare(db, "SELECT ID,"+header+" FROM NN");
-        if(request==INVALID_HANDLE)
-        {
-            assert(false, "DB: unsuccessful request");
-            DatabaseClose(db);
-            return DB_ERROR_STR;
-        }
-    }
     if( ! DatabaseRead(request))
     {
         DatabaseFinalize(request);
@@ -154,10 +142,7 @@ string DataBase::ReadNextString(string header)
         return DB_ERROR_STR;
     }
     if(str=="-")
-    {
-        DatabaseFinalize(request);
         return DB_END_STR;
-    }
     return str;
 }
 

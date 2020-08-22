@@ -35,25 +35,44 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     
 #define LOAD_NN_FROM_DB
 #ifdef  LOAD_NN_FROM_DB
+//==================Features
     string str;
-    str = db.ReadNextString("Features");
+    int req;
+    req = db.CreateRequest("Features");
+    str = db.ReadNextString(req);
     while(str!=DB_END_STR)
     {
         assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
         features.Add(ff.CreateFeature(str));
-        str = db.ReadNextString("Features");
+        str = db.ReadNextString(req);
     };
+    db.FinaliseRequest(req);
     Print(features.Count()," features created");
 
+//==================AxonsL1
     int i;
-    i = db.ReadNextInt("AxonsFeID");
+    req = db.CreateRequest("AxonsFeID");
+    i = db.ReadNextInt(req);
     while(i!=DB_END_INT)
     {
         assert(i!=DB_ERROR_INT,"DB ERROR IN NN");
         axonsL1.Add( new Axon(features.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-        i = db.ReadNextInt("AxonsFeID");
+        i = db.ReadNextInt(req);
     };
+    db.FinaliseRequest(req);
     Print(axonsL1.Count()," Axons(L1) created");
+
+//==================Neurons
+    req = db.CreateRequest("Neurons");
+    str = db.ReadNextString(req);
+    while(str!=DB_END_STR)
+    {
+        assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+        neourons.Add(nf.CreateNeuron(str));
+        str = db.ReadNextString(req);
+    };
+    db.FinaliseRequest(req);
+    Print(neourons.Count()," neurons created");
 #else 
     //based on the input file, decide on feature type
     features.Add(ff.CreateFeature(FEATURE_RANDOM));

@@ -3,9 +3,9 @@
 Neuron* NeuronFactory::CreateNeuron(string name)
 {
     INode* neuron;
-    if(name=="neSUM")
+    if(name=="neSum")
         neuron = new NeuronSUM();
-    else if(name=="neSUM")
+    else if(name=="neSum")
         neuron = new NeuronSUM();
     else
         neuron = NULL;
