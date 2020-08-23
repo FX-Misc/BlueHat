@@ -1,4 +1,4 @@
-#define TIMESERIES_DEPTH 10 //number of bars available to features; must be at least equal to the length od indicators
+#define TIMESERIES_DEPTH (10+1) //+1 is for useless sample of 0. number of bars available to features; must be at least equal to the length od indicators
 
 
 #define FLOAT_NEAR(a,b) ( (MathAbs((a)-(b))<1e-20) ? true : false )

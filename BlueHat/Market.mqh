@@ -7,5 +7,7 @@ public:
     float diff[TIMESERIES_DEPTH];
     int oldest_available;  //oldest index that has enough history behind itself
 public:
-    void InitForScript();
+    void InitForScriptRealHistory();
+    void InitForScriptSimulatedData(int len);
+    void UpdateForScript(int index);
 };

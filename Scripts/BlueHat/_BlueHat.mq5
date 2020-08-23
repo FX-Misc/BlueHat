@@ -14,7 +14,7 @@ void OnStart()
     assert(1>0,"test");
 
     Market market;
-    market.InitForScript();
+    market.InitForScriptRealHistory();
     
     Owner owner();
     owner.db.OpenDB();
@@ -22,13 +22,13 @@ void OnStart()
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
-    test_in[1000]=0;
-    test_in[999]=0;
-    test_in[998]=0;
-    for(int i=997; i>=0; i--)
-        test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
+//    test_in[1000]=0;
+//    test_in[999]=0;
+//    test_in[998]=0;
+//    for(int i=997; i>=0; i--)
+//        test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
     owner.UpdateInput(1001,1001);
-    for(int i=999; i>0; i--)
+    for(int i=market.oldest_available; i>0; i--)
     {
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
