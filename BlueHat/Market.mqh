@@ -7,6 +7,6 @@ public:
     float diff[TIMESERIES_DEPTH];
     int oldest_available;  //oldest index that has enough history behind itself
 public:
-    virtual void Initialise()=0;
+    virtual void Initialise(int max_history)=0;
     virtual void UpdateBuffers(int index)=0;
 };

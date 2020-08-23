@@ -14,7 +14,7 @@ void OnStart()
     assert(1>0,"test");
 
     Market* market = new MarketScriptReal;
-    market.Initialise();
+    market.Initialise(100); //0 for full history
         
     Owner owner();
     owner.db.OpenDB();
@@ -22,12 +22,6 @@ void OnStart()
     owner.CreateDebugDB();
     owner.CreateStateDB();
     
-//    test_in[1000]=0;
-//    test_in[999]=0;
-//    test_in[998]=0;
-//    for(int i=997; i>=0; i--)
-//        test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
-
     market.UpdateBuffers(market.oldest_available);
     owner.UpdateInput(market.close, TIMESERIES_DEPTH);
     for(int i=market.oldest_available-1; i>0; i--)
@@ -54,6 +48,7 @@ void OnStart()
                                    owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG)," ",
                                    owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME)," ",
                                "");
+    delete market;
     Print("Bye");
 }
 

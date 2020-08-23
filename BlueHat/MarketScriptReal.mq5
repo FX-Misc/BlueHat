@@ -1,9 +1,9 @@
 #include "MarketScriptReal.mqh"
-void MarketScriptReal::Initialise(void)
+void MarketScriptReal::Initialise(int max_history)
 {
     ArraySetAsSeries(history, true);  //changes the indexing method of the array; the latest as 0
     
-    int max = iBars(ChartSymbol(),ChartPeriod());
+    int max = (max_history==0)? iBars(ChartSymbol(),ChartPeriod()) : max_history;
     Print("--bars in history:",max); 
     CopyClose(ChartSymbol(),ChartPeriod(),0,max,history);
     oldest_available = ArraySize(history) - TIMESERIES_DEPTH;
