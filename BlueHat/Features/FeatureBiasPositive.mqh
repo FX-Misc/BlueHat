@@ -6,6 +6,6 @@ class FeatureBiasPositive : public Feature
 public:
     FeatureBiasPositive();
     ~FeatureBiasPositive();
-    void Update(int index, int history_index);
+    void Update(const float& c[], int len);
 };
     

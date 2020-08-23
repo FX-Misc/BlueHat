@@ -13,9 +13,9 @@ void OnStart()
     Print("Hi there");
     assert(1>0,"test");
 
-    Market market;
-    market.InitForScriptRealHistory();
-    
+    Market* market = new MarketScriptReal;
+    market.Initialise();
+        
     Owner owner();
     owner.db.OpenDB();
     owner.CreateNN(evaluation_method);
@@ -27,9 +27,10 @@ void OnStart()
 //    test_in[998]=0;
 //    for(int i=997; i>=0; i--)
 //        test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
-    owner.UpdateInput(1001,1001);
+//    owner.UpdateInput(1001,1001);
     for(int i=market.oldest_available; i>0; i--)
     {
+        market.Update(i);
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = test_in[i+1];//close[i+1]
@@ -37,7 +38,7 @@ void OnStart()
         owner.Train1Epoch(desired);
         if(debug)
             owner.SaveDebugInfo(i, desired);
-        owner.UpdateInput(i+1,1001);
+        owner.UpdateInput(market.close, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
         

@@ -7,6 +7,6 @@ class FeatureRandom : public Feature
 public:
     FeatureRandom();
     ~FeatureRandom();
-    void Update(int index, int history_index);
+    void Update(const float& c[], int len);
 };
     

@@ -7,7 +7,7 @@ FeatureBiasPositive::FeatureBiasPositive(void)
 FeatureBiasPositive::~FeatureBiasPositive(void)
 {
 }
-void FeatureBiasPositive::Update(int index, int history_index)
+void FeatureBiasPositive::Update(const float& c[], int len)
 {
     updated_value = (float)0.5;
 }

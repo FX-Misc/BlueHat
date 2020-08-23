@@ -144,10 +144,10 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 #endif 
 }
 
-void Owner::UpdateInput(int index, int history_index)
+void Owner::UpdateInput(const float& c[], int len)
 {
     for(int i=0; i<features.Count(); i++)
-        ((Feature*)(features.at(i))).Update(index, history_index);
+        ((Feature*)(features.at(i))).Update(c, len);
 }
 void Owner::Train1Epoch(float desired)
 {

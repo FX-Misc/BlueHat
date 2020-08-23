@@ -40,7 +40,7 @@ public:
     IAccuracy* acc;
     QualityMetrics* quality;
     void CreateNN(evaluation_method_t evm);//the database file as input?
-    void UpdateInput(int index, int history_index);
+    void UpdateInput(const float& c[], int len);
     void SaveDebugInfo(int index, float desired_in);
     void Train1Epoch(float desired);
     trade_advice_t GetAdvice();

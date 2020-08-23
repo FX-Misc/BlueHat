@@ -5,7 +5,7 @@ class Feature : public INode
 protected:
     float updated_value;
 public:
-    virtual void Update(int index, int history_index) = 0;
+    virtual void Update(const float& c[], int len) = 0;
     float GetNode(void);
     string name;
 };
