@@ -1,4 +1,5 @@
 #include "../../BlueHat/Owner.mqh"
+#include "../../BlueHat/Market.mqh"
 #include "../../BlueHat/globals/_globals.mqh"
 
 #property script_show_inputs
@@ -12,6 +13,9 @@ void OnStart()
     Print("Hi there");
     assert(1>0,"test");
 
+    Market market;
+    market.InitForScript();
+    
     Owner owner();
     owner.db.OpenDB();
     owner.CreateNN(evaluation_method);
