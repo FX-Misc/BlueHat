@@ -27,13 +27,15 @@ void OnStart()
 //    test_in[998]=0;
 //    for(int i=997; i>=0; i--)
 //        test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
-//    owner.UpdateInput(1001,1001);
-    for(int i=market.oldest_available; i>0; i--)
+
+    market.UpdateBuffers(market.oldest_available);
+    owner.UpdateInput(market.close, TIMESERIES_DEPTH);
+    for(int i=market.oldest_available-1; i>0; i--)
     {
-        market.Update(i);
+        market.UpdateBuffers(i);
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
-        desired = test_in[i+1];//close[i+1]
+        desired = market.close[1];
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
         if(debug)

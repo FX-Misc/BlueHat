@@ -16,7 +16,7 @@ void MarketScriptReal::Initialise(void)
 //    oldest_available = len;
     //TODO: fill in history
 //}
-void MarketScriptReal::Update(int index)
+void MarketScriptReal::UpdateBuffers(int index)
 {
     ArrayCopy(close,history,0,index,TIMESERIES_DEPTH+1); //Still, close[0] is for cheating
     
