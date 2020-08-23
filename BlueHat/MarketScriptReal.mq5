@@ -2,10 +2,14 @@
 void MarketScriptReal::Initialise(int max_history)
 {
     ArraySetAsSeries(history, true);  //changes the indexing method of the array; the latest as 0
-    
+    ArraySetAsSeries(close, true);  
+    ArraySetAsSeries(diff, true);  
+    ArrayResize(diff, TIMESERIES_DEPTH);
+        
     int max = (max_history==0)? iBars(ChartSymbol(),ChartPeriod()) : max_history;
     Print("--bars in history:",max); 
     CopyClose(ChartSymbol(),ChartPeriod(),0,max,history);
+//    ArrayReverse(history);  //so that ArrayCopy can be performed correctly
     oldest_available = ArraySize(history) - TIMESERIES_DEPTH;
     Print("market init for ",ChartSymbol(),". oldest avail sample=",oldest_available," + depth=",TIMESERIES_DEPTH);
 }
@@ -24,6 +28,5 @@ void MarketScriptReal::UpdateBuffers(int index)
     {
         diff[i]=close[i]-close[i+1];    //TODO: normalisation
     }
-    
 }
 
