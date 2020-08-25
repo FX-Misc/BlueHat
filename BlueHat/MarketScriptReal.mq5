@@ -10,6 +10,7 @@ void MarketScriptReal::Initialise(int max_history)
     Print("--bars in history:",max); 
     CopyClose(ChartSymbol(),ChartPeriod(),0,max,history);
     oldest_available = ArraySize(history) - TIMESERIES_DEPTH;
+    diff_norm_factor = 1000;    //TODO: calculate based on the reverse of a typical strong diff, 1000 for eurusd/1h as a sample 
     Print("market init for ",ChartSymbol(),". oldest avail sample=",oldest_available," + depth=",TIMESERIES_DEPTH);
 }
 
@@ -27,3 +28,7 @@ void MarketScriptReal::UpdateBuffers(int index)
     }
 }
 
+float MarketScriptReal::GetNormalisedDiff(float d)
+{
+    return SOFT_NORMAL(d * diff_norm_factor);
+}

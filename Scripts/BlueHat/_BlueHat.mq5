@@ -33,7 +33,7 @@ void OnStart()
         //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
-        desired = market.diff[1];
+        desired = market.GetNormalisedDiff(market.diff[1]);
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
         if(debug)
