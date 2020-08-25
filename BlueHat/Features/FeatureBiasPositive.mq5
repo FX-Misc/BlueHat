@@ -7,7 +7,7 @@ FeatureBiasPositive::FeatureBiasPositive(void)
 FeatureBiasPositive::~FeatureBiasPositive(void)
 {
 }
-void FeatureBiasPositive::Update(const float& c[], int len)
+void FeatureBiasPositive::Update(const float& raw_close[], const float& d[], int len)
 {
     updated_value = (float)0.5;
 }

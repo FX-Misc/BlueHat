@@ -144,10 +144,10 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 #endif 
 }
 
-void Owner::UpdateInput(const float& c[], int len)
+void Owner::UpdateInput(const float& c[], const float& d[], int len)
 {
     for(int i=0; i<features.Count(); i++)
-        ((Feature*)(features.at(i))).Update(c, len);
+        ((Feature*)(features.at(i))).Update(c, d, len);
 }
 void Owner::Train1Epoch(float desired)
 {
@@ -159,6 +159,14 @@ trade_advice_t Owner::GetAdvice()
 }
 bool Owner::CreateDebugDB()
 {
+    db.AddDBGTBLItem("desired", false);
+    db.AddDBGTBLItem("softmax",false);
+    db.AddDBGTBLItem("DiffShort", false);
+    db.AddDBGTBLItem("DiffLong", false);
+    db.AddDBGTBLItem("DiffAll", false);
+    db.AddDBGTBLItem("DirShort", false);
+    db.AddDBGTBLItem("DirLong", false);
+    db.AddDBGTBLItem("DirAll", false);
     for(int i=0; i<features.Count(); i++)
         db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL1.Count(); i++)
@@ -167,14 +175,7 @@ bool Owner::CreateDebugDB()
         db.AddDBGTBLItem("N"+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'),false);
-    db.AddDBGTBLItem("DiffShort", false);
-    db.AddDBGTBLItem("DiffLong", false);
-    db.AddDBGTBLItem("DiffAll", false);
-    db.AddDBGTBLItem("DirShort", false);
-    db.AddDBGTBLItem("DirLong", false);
-    db.AddDBGTBLItem("DirAll", false);
-    db.AddDBGTBLItem("desired", false);
-    return db.AddDBGTBLItem("softmax",true);
+    return db.AddDBGTBLItem("reserve", true);
 }
 bool Owner::CreateStateDB()
 {
@@ -183,6 +184,14 @@ bool Owner::CreateStateDB()
 void Owner::SaveDebugInfo(int index, float desired_in)
 {
     db.Insert("ID", (float)index, false);    
+    db.Insert("desired", desired_in, false);
+    db.Insert("softmax", softmax.GetNode(), false);
+    db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
+    db.Insert("DiffLong", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG), false);
+    db.Insert("DiffAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
+    db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
+    db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
+    db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
     for(int i=0; i<features.Count(); i++)
         db.Insert(features.at(i).name+IntegerToString(i,2,'0'), features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
@@ -191,12 +200,5 @@ void Owner::SaveDebugInfo(int index, float desired_in)
         db.Insert("N"+IntegerToString(i,2,'0'), neourons.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
-    db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
-    db.Insert("DiffLong", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG), false);
-    db.Insert("DiffAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
-    db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
-    db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
-    db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
-    db.Insert("desired", desired_in, false);
-    db.Insert("softmax", softmax.GetNode(), true);
+    db.Insert("reserve", 0, true);
 }

@@ -7,6 +7,6 @@ class FeatureCheater : public Feature
 public:
     FeatureCheater();
     ~FeatureCheater();
-    void Update(const float& c[], int len);
+    void Update(const float& raw_close[], const float& d[], int len);
 };
     

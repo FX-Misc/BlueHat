@@ -7,8 +7,8 @@ FeatureRepeatLast::FeatureRepeatLast(void)
 FeatureRepeatLast::~FeatureRepeatLast(void)
 {
 }
-void FeatureRepeatLast::Update(const float& c[], int len)
+void FeatureRepeatLast::Update(const float& raw_close[], const float& d[], int len)
 {
-    updated_value = c[1];
+    updated_value = d[1];
 }
 
