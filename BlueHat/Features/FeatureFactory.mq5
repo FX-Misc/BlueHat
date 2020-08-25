@@ -11,6 +11,8 @@ INode* FeatureFactory::CreateFeature(string name)
         feature = new FeatureBiasPositive();
     else if(name=="feBiasN")
         feature = new FeatureBiasNegative();
+    else if(name=="feRepeatL")
+        feature = new FeatureRepeatLast();
     else
         feature = NULL;
     assert(feature != NULL, "");

@@ -2,6 +2,7 @@
 #include "/FeatureRandom.mqh"
 #include "/FeatureBiasPositive.mqh"
 #include "/FeatureBiasNegative.mqh"
+#include "/FeatureRepeatLast.mqh"
  
 #include "/../INode.mqh"
 
