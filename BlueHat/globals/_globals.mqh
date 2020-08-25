@@ -26,3 +26,6 @@ enum
 
 //#define CAP(a,min,max) ((a)>(max)?((max)-(float)(1e-20)) : ((a)<(min)?((min)+(float)(1e-20)):(a)) )
 #define CAP(a,min,max) (MathMax( MathMin((a),(max)) , (min) ))
+
+#define SOFT_NORMAL(a) ((float)MathArctan((float)(a)*2)*(float)0.635)
+//-1000-> -0.99714 -10-> -0.96573 -1-> -0.70304 -0.5-> -0.49873 -0-> 0.0 0.1-> 0.12535 0.70304 -0.96573 

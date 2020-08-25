@@ -13,5 +13,5 @@ public:
     Trainer(INode* psm, Evaluator* peval, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2);
     ~Trainer();
     void Go1Epoch(float new_norm_diff, bool degradation);
-    float GetCurrentOutput() const;
+    float GetCurrentOutputN() const;
 };
