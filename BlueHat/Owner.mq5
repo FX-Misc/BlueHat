@@ -136,7 +136,7 @@ bool Owner::CreateDebugDB()
     db.AddDBGTBLItem("DirLong", false);
     db.AddDBGTBLItem("DirAll", false);
     for(int i=0; i<features.Count(); i++)
-        db.AddDBGTBLItem("_"+IntegerToString(i,2,'0')+features.at(i).name,false);
+        db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL1.Count(); i++)
         db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'),false);
     for(int i=0; i<neourons.Count(); i++)
@@ -161,7 +161,7 @@ void Owner::SaveDebugInfo(int index, float desired_in)
     db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
     db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
     for(int i=0; i<features.Count(); i++)
-        db.Insert("_"+IntegerToString(i,2,'0')+features.at(i).name, features.at(i).GetNode(), false);
+        db.Insert(features.at(i).name+IntegerToString(i,2,'0'), features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
         db.Insert("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'), axonsL1.at(i).GetGain(), false);
     for(int i=0; i<neourons.Count(); i++)
