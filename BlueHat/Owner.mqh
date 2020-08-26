@@ -30,6 +30,7 @@ private:
     CXArrayList<Neuron*> neourons;
     CXArrayList<Axon*> *axonsL1;
     CXArrayList<Axon*> *axonsL2;
+    int GetFeatureNo(string fe_name);
 public:
     Owner();
     ~Owner();

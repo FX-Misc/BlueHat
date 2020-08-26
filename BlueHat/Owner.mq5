@@ -27,6 +27,13 @@ Owner::~Owner()
 
     Print("deleting done");
 }
+int Owner::GetFeatureNo(string fe_name)
+{
+    for(int i=0; i<features.Count(); i++)
+        if(features.at(i).name == fe_name)
+            return i;
+    return -1;
+}
 void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
     FeatureFactory ff;
@@ -50,14 +57,19 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     Print(features.Count()," features created");
 
 //==================AxonsL1
-    int i;
+    string s;
+    string temps[2]; 
     req = db.CreateRequest("AxonsFeID");
-    i = db.ReadNextInt(req);
-    while(i!=DB_END_INT)
+    s = db.ReadNextString(req);
+    while(s!=DB_END_STR)
     {
-        assert(i!=DB_ERROR_INT,"DB ERROR IN NN");
-        axonsL1.Add( new Axon(features.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
-        i = db.ReadNextInt(req);
+        assert(s!=DB_ERROR_STR,"DB ERROR IN NN");
+        assert(StringSplit(str,'=',temps)==2,"wrong format in NN");
+        int axNo = (int)StringToInteger(temps[0]);
+        int feNo = GetFeatureNo(temps[1]);
+        axonsL1.Add( new Axon(features.at(feNo), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+        assert(axNo==axonsL1.Count()+1,"wrong axon no in NN");
+        s = db.ReadNextString(req);
     };
     db.FinaliseRequest(req);
     Print(axonsL1.Count()," Axons(L1) created");
