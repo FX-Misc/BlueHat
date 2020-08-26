@@ -1,4 +1,4 @@
-//#include "../globals/_globals.mqh"
+#include "../globals/_globals.mqh"
 #include "../INode.mqh"
 #include "Feature.mqh"
 class FeatureRepeatLast : public Feature

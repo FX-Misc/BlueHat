@@ -9,6 +9,6 @@ Feature3LastDiffsMean::~Feature3LastDiffsMean(void)
 }
 void Feature3LastDiffsMean::Update(const float& raw_close[], const float& norm_d[], int len)
 {
-    updated_value = norm_d[1]+norm_d[1]+norm_d[1];
+    updated_value = norm_d[1]+norm_d[2]+norm_d[3];
 }
 

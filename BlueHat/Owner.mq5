@@ -60,10 +60,11 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
         assert(s!=DB_ERROR_STR,"DB ERROR IN NN");
         assert(StringSplit(s,' ',temps)==2,"wrong format in NN");
         int axNo = (int)StringToInteger(temps[0]);
-        assert(StringSplit(temps[0],'=',temp2)==2,"wrong format2 in NN");
+        assert(StringSplit(temps[1],'=',temp2)==2,"wrong format2 in NN");
         int feNo = (int)StringToInteger(temp2[1]);
         assert(feNo<features.Count(),"wrong feNo in NN");
         string name = temp2[0];
+        assert(features.at(feNo).name==name,"feature name/no mismatch in NN");
         axonsL1.Add( new Axon(features.at(feNo), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
         assert(axNo==axonsL1.Count()-1,"wrong axon no in NN");
         s = db.ReadNextString(req);
