@@ -6,7 +6,7 @@ FeatureRandom::FeatureRandom(void)
 FeatureRandom::~FeatureRandom(void)
 {
 }
-void FeatureRandom::Update(int index, int history_index)
+void FeatureRandom::Update(const float& raw_close[], const float& norm_d[], int len)
 {   
     updated_value = NOISE(-1,1);
 }

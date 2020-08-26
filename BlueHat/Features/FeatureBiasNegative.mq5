@@ -7,7 +7,7 @@ FeatureBiasNegative::FeatureBiasNegative(void)
 FeatureBiasNegative::~FeatureBiasNegative(void)
 {
 }
-void FeatureBiasNegative::Update(int index, int history_index)
+void FeatureBiasNegative::Update(const float& raw_close[], const float& norm_d[], int len)
 {
     updated_value = (float)-0.5;
 }

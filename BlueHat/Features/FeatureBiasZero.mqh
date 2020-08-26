@@ -1,11 +1,11 @@
 //#include "../globals/_globals.mqh"
 #include "../INode.mqh"
 #include "Feature.mqh"
-class FeatureBiasNegative : public Feature
+class FeatureBiasZero : public Feature
 {
 public:
-    FeatureBiasNegative();
-    ~FeatureBiasNegative();
+    FeatureBiasZero();
+    ~FeatureBiasZero();
     void Update(const float& raw_close[], const float& norm_d[], int len);
 };
     

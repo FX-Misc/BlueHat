@@ -7,9 +7,10 @@ FeatureCheater::FeatureCheater(void)
 FeatureCheater::~FeatureCheater(void)
 {
 }
-void FeatureCheater::Update(int index, int history_index)
-{   //returns the future value; this "cheating" is only to test the diverging speed of NN
+void FeatureCheater::Update(const float& raw_close[], const float& norm_d[], int len)
+{   //returns the future value; this "cheating" is only to test the converging speed of NN
     //don't use it in real training
-    updated_value = test_in[index-1];   //TODO: find a way to skip access restriction and get and return the future value
+//    updated_value = test_in[index-1];   //TODO: find a way to skip access restriction and get and return the future value
+    updated_value = norm_d[0];
 }
 

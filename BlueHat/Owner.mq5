@@ -56,7 +56,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     while(i!=DB_END_INT)
     {
         assert(i!=DB_ERROR_INT,"DB ERROR IN NN");
-        axonsL1.Add( new Axon(features.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+        axonsL1.Add( new Axon(features.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
         i = db.ReadNextInt(req);
     };
     db.FinaliseRequest(req);
@@ -90,10 +90,10 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     Print(neourons.Count()," neurons created");
 //==================AxonsL2
     for(int j=0; j<neourons.Count(); j++)
-        axonsL2.Add( new Axon(neourons.at(j), j, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
+        axonsL2.Add( new Axon(neourons.at(j), j, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
     Print(axonsL2.Count()," Axons(L2) created");
 //==================Softmax
-    softmax = new SoftMax();
+    softmax = new NeuronSUM();
     for(int j=0; j<axonsL2.Count(); j++)
         softmax.AddAxon(axonsL2.at(j));
 //==================Others
@@ -101,53 +101,12 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     eval = new Evaluator(acc);
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
     quality = new QualityMetrics();
-#else 
-    //based on the input file, decide on feature type
-    features.Add(ff.CreateFeature(FEATURE_RANDOM));
-    features.Add(ff.CreateFeature(FEATURE_CHEATER));
-    features.Add(ff.CreateFeature(FEATURE_BIAS_POSITIVE));
-    features.Add(ff.CreateFeature(FEATURE_BIAS_NEGATIVE));
-
-    axonsL1.Add( new Axon(features.at(0), 0, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL1.Add( new Axon(features.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL1.Add( new Axon(features.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL1.Add( new Axon(features.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL1.Add( new Axon(features.at(3), 3, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-
-
-    neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
-    neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
-    neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
-    neourons.Add( nf.CreateNeuron(NEURON_SUM) ); 
-
-    neourons.at(0).AddAxon(axonsL1.at(0));
-    neourons.at(0).AddAxon(axonsL1.at(1));
-    neourons.at(1).AddAxon(axonsL1.at(2));
-    neourons.at(2).AddAxon(axonsL1.at(3));
-    neourons.at(3).AddAxon(axonsL1.at(4));
-       
-    axonsL2.Add( new Axon(neourons.at(0), 0, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL2.Add( new Axon(neourons.at(1), 1, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL2.Add( new Axon(neourons.at(2), 2, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-    axonsL2.Add( new Axon(neourons.at(3), 3, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR) );
-
-    softmax = new SoftMax();
-    softmax.AddAxon(axonsL2.at(0));
-    softmax.AddAxon(axonsL2.at(1));
-    softmax.AddAxon(axonsL2.at(2));
-    softmax.AddAxon(axonsL2.at(3));
-    
-    acc = acf.CreateAccuracy(evm);
-    eval = new Evaluator(acc);
-    trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
-    quality = new QualityMetrics();
-#endif 
 }
 
-void Owner::UpdateInput(int index, int history_index)
+void Owner::UpdateInput(const float& c[], const float& d[], int len)
 {
     for(int i=0; i<features.Count(); i++)
-        ((Feature*)(features.at(i))).Update(index, history_index);
+        ((Feature*)(features.at(i))).Update(c, d, len);
 }
 void Owner::Train1Epoch(float desired)
 {
@@ -159,6 +118,14 @@ trade_advice_t Owner::GetAdvice()
 }
 bool Owner::CreateDebugDB()
 {
+    db.AddDBGTBLItem("desired", false);
+    db.AddDBGTBLItem("softmax",false);
+    db.AddDBGTBLItem("DiffShort", false);
+    db.AddDBGTBLItem("DiffLong", false);
+    db.AddDBGTBLItem("DiffAll", false);
+    db.AddDBGTBLItem("DirShort", false);
+    db.AddDBGTBLItem("DirLong", false);
+    db.AddDBGTBLItem("DirAll", false);
     for(int i=0; i<features.Count(); i++)
         db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL1.Count(); i++)
@@ -167,14 +134,7 @@ bool Owner::CreateDebugDB()
         db.AddDBGTBLItem("N"+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'),false);
-    db.AddDBGTBLItem("DiffShort", false);
-    db.AddDBGTBLItem("DiffLong", false);
-    db.AddDBGTBLItem("DiffAll", false);
-    db.AddDBGTBLItem("DirShort", false);
-    db.AddDBGTBLItem("DirLong", false);
-    db.AddDBGTBLItem("DirAll", false);
-    db.AddDBGTBLItem("desired", false);
-    return db.AddDBGTBLItem("softmax",true);
+    return db.AddDBGTBLItem("reserve", true);
 }
 bool Owner::CreateStateDB()
 {
@@ -183,6 +143,14 @@ bool Owner::CreateStateDB()
 void Owner::SaveDebugInfo(int index, float desired_in)
 {
     db.Insert("ID", (float)index, false);    
+    db.Insert("desired", desired_in, false);
+    db.Insert("softmax", softmax.GetNode(), false);
+    db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
+    db.Insert("DiffLong", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG), false);
+    db.Insert("DiffAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
+    db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
+    db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
+    db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
     for(int i=0; i<features.Count(); i++)
         db.Insert(features.at(i).name+IntegerToString(i,2,'0'), features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
@@ -191,12 +159,5 @@ void Owner::SaveDebugInfo(int index, float desired_in)
         db.Insert("N"+IntegerToString(i,2,'0'), neourons.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
-    db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
-    db.Insert("DiffLong", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG), false);
-    db.Insert("DiffAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
-    db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
-    db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
-    db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
-    db.Insert("desired", desired_in, false);
-    db.Insert("softmax", softmax.GetNode(), true);
+    db.Insert("reserve", 0, true);
 }

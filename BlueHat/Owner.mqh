@@ -1,5 +1,4 @@
 #include "Trainer.mqh"
-#include "SoftMax.mqh"
 #include "DataBase.mqh"
 #include "Evaluator.mqh"
 #include "QualityMetrics.mqh"
@@ -13,6 +12,7 @@
 #define RATE_GROWTH (float)0.01
 #define RATE_DEGRADATION (float)0.9999
 #define AXON_FLOOR (float)0.001
+#define AXON_CEILING (float)10
 
 #define MAX_AXONS 50
 
@@ -34,13 +34,13 @@ public:
     Owner();
     ~Owner();
     DataBase db;
-    SoftMax* softmax;
+    Neuron* softmax;
     Trainer* trainer;
     Evaluator* eval;
     IAccuracy* acc;
     QualityMetrics* quality;
     void CreateNN(evaluation_method_t evm);//the database file as input?
-    void UpdateInput(int index, int history_index);
+    void UpdateInput(const float& c[], const float& d[], int len);
     void SaveDebugInfo(int index, float desired_in);
     void Train1Epoch(float desired);
     trade_advice_t GetAdvice();
