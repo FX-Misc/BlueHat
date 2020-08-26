@@ -26,19 +26,19 @@ void OnStart()
     owner.CreateStateDB();
     
     market.UpdateBuffers(market.oldest_available);
-    owner.UpdateInput(market.close, market.diff, TIMESERIES_DEPTH);
+    owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
     for(int i=market.oldest_available-1; i>=0; i--)
     {
         market.UpdateBuffers(i);
         //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
-        desired = market.GetNormalisedDiff(market.diff[1]);
+        desired = market.diff_norm[1];
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
         if(debug)
             owner.SaveDebugInfo(i, desired);
-        owner.UpdateInput(market.close, market.diff, TIMESERIES_DEPTH);
+        owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
         
