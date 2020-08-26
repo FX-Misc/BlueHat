@@ -1,5 +1,5 @@
 #include "Axon.mqh"
-Axon::Axon(INode* pn, int n_id, float deg_r, float gr_r, float m, float M) : degradaion_rate(deg_r), growth_rate(gr_r), pnode(pn), node_id(n_id), min(m), max(M)
+Axon::Axon(INode* pn, float deg_r, float gr_r, float m, float M) : degradaion_rate(deg_r), growth_rate(gr_r), pnode(pn), min(m), max(M)
 {
     gain = m;
     active = true;

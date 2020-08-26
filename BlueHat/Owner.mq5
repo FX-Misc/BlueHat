@@ -64,11 +64,11 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     while(s!=DB_END_STR)
     {
         assert(s!=DB_ERROR_STR,"DB ERROR IN NN");
-        assert(StringSplit(str,'=',temps)==2,"wrong format in NN");
+        assert(StringSplit(s,'=',temps)==2,"wrong format in NN");
         int axNo = (int)StringToInteger(temps[0]);
         int feNo = GetFeatureNo(temps[1]);
-        axonsL1.Add( new Axon(features.at(feNo), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
-        assert(axNo==axonsL1.Count()+1,"wrong axon no in NN");
+        axonsL1.Add( new Axon(features.at(feNo), RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+        assert(axNo==axonsL1.Count()-1,"wrong axon no in NN");
         s = db.ReadNextString(req);
     };
     db.FinaliseRequest(req);
@@ -102,7 +102,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     Print(neourons.Count()," neurons created");
 //==================AxonsL2
     for(int j=0; j<neourons.Count(); j++)
-        axonsL2.Add( new Axon(neourons.at(j), j, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+        axonsL2.Add( new Axon(neourons.at(j), RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
     Print(axonsL2.Count()," Axons(L2) created");
 //==================Softmax
     softmax = new NeuronSUM();
@@ -139,13 +139,13 @@ bool Owner::CreateDebugDB()
     db.AddDBGTBLItem("DirLong", false);
     db.AddDBGTBLItem("DirAll", false);
     for(int i=0; i<features.Count(); i++)
-        db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
+        db.AddDBGTBLItem("_"+IntegerToString(i,2,'0')+features.at(i).name,false);
     for(int i=0; i<axonsL1.Count(); i++)
-        db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'),false);
+        db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(GetFeatureNo(((Feature*)(axonsL1.at(i).pnode)).name),2,'0'),false);
     for(int i=0; i<neourons.Count(); i++)
         db.AddDBGTBLItem("N"+IntegerToString(i,2,'0'),false);
     for(int i=0; i<axonsL2.Count(); i++)
-        db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'),false);
+        db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0'),false);
     return db.AddDBGTBLItem("reserve", true);
 }
 bool Owner::CreateStateDB()
@@ -164,12 +164,19 @@ void Owner::SaveDebugInfo(int index, float desired_in)
     db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
     db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
     for(int i=0; i<features.Count(); i++)
-        db.Insert(features.at(i).name+IntegerToString(i,2,'0'), features.at(i).GetNode(), false);
+        db.Insert("_"+IntegerToString(i,2,'0')+features.at(i).name, features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
-        db.Insert("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'), axonsL1.at(i).GetGain(), false);
+        db.Insert("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(GetFeatureNo(((Feature*)(axonsL1.at(i).pnode)).name),2,'0'), axonsL1.at(i).GetGain(), false);
     for(int i=0; i<neourons.Count(); i++)
         db.Insert("N"+IntegerToString(i,2,'0'), neourons.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
-        db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
+        db.Insert("Y"+IntegerToString(i,2,'0'), axonsL2.at(i).GetGain(), false);
     db.Insert("reserve", 0, true);
 }
+/*2020.08.26 16:44:56.296	BlueHat (EURUSD,H1)	CREATE TABLE DEBUG( ID INT PRIMARY KEY    
+ NOT NULL,desired REAL,softmax REAL,DiffShort REAL,DiffLong REAL,DiffAll REAL,DirShort REAL,DirLong REAL,DirAll REAL,
+ 00feCheater REAL,01feBiasP REAL,02feBiasN REAL,03feBiasZ REAL,04feRandom REAL,05feRepeatL REAL,
+ 06fe3DiffMean REAL,X00_00 REAL,X01_01 REAL,X02_02 REAL,X03_03 REAL,X04_04 REAL,X05_05 REAL,
+ X06_06 REAL,X07_06 REAL,X08_06 REAL,X09_06 REAL,N00 REAL,N01 REAL,N02 REAL,Y00 REAL,Y01 REAL,Y02 REAL,
+ reserve REAL);
+*/
