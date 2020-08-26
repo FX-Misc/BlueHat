@@ -1,4 +1,6 @@
 #include "Neuron.mqh"
+#include "INode.mqh"
+#include "globals/_globals.mqh"
 class SoftMax : public Neuron
 {
 private:

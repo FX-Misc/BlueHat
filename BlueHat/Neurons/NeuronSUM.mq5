@@ -9,8 +9,8 @@ float NeuronSUM::GetNode()
 {
     float ret=0;
     for(int i=0; i<axons.Count(); i++)
-        ret += axons.at(i).GetGainedValue();
-    ret = ret/axons.Count();
+        ret += axons.at(i).GetGainedValueN();
+//    ret = SOFT_NORMAL(ret);
     return ret;
 }
 

@@ -1,5 +1,4 @@
 #include "Trainer.mqh"
-#include "SoftMax.mqh"
 #include "DataBase.mqh"
 #include "Evaluator.mqh"
 #include "QualityMetrics.mqh"
@@ -13,6 +12,7 @@
 #define RATE_GROWTH (float)0.01
 #define RATE_DEGRADATION (float)0.9999
 #define AXON_FLOOR (float)0.001
+#define AXON_CEILING (float)10
 
 #define MAX_AXONS 50
 
@@ -34,7 +34,7 @@ public:
     Owner();
     ~Owner();
     DataBase db;
-    SoftMax* softmax;
+    Neuron* softmax;
     Trainer* trainer;
     Evaluator* eval;
     IAccuracy* acc;
