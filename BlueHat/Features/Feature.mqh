@@ -12,5 +12,5 @@ public:
     //or: get the index by Update and calculate the indicator[index+1]
                             
     float GetNode(void);
-    string name;
+
 };

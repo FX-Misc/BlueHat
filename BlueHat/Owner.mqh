@@ -10,7 +10,7 @@
 #include "globals/assert.mqh"
 
 #define RATE_GROWTH (float)0.01
-#define RATE_DEGRADATION (float)0.9999
+#define RATE_DEGRADATION (float)0.999
 #define AXON_FLOOR (float)0.001
 #define AXON_CEILING (float)10
 
@@ -27,9 +27,11 @@ class Owner
 {
 private:
     CXArrayList<Feature*> features;
-    CXArrayList<Neuron*> neourons;
+    CXArrayList<Neuron*> neouronsL1;
+    CXArrayList<Neuron*> neouronsL2;
     CXArrayList<Axon*> *axonsL1;
     CXArrayList<Axon*> *axonsL2;
+    CXArrayList<Axon*> *axonsL3;
 public:
     Owner();
     ~Owner();

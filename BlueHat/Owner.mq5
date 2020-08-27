@@ -4,19 +4,24 @@ Owner::Owner()
 {
     axonsL1 = new CXArrayList<Axon*>;
     axonsL2 = new CXArrayList<Axon*>;
+    axonsL3 = new CXArrayList<Axon*>;
     MathSrand(GetTickCount());
 }
 Owner::~Owner()
 {
     delete softmax;
     delete trainer;
-    Print("deleting axons: ",axonsL1.Count(),"+",axonsL2.Count());
+    Print("deleting axons: ",axonsL1.Count(),"+",axonsL2.Count(),"+",axonsL3.Count());
     for(int i=0; i<axonsL1.Count(); i++)
         delete axonsL1.at(i);
     for(int i=0; i<axonsL2.Count(); i++)
         delete axonsL2.at(i);
-    for(int i=0; i<neourons.Count(); i++)
-        delete neourons.at(i);
+    for(int i=0; i<axonsL3.Count(); i++)
+        delete axonsL3.at(i);
+    for(int i=0; i<neouronsL1.Count(); i++)
+        delete neouronsL1.at(i);
+    for(int i=0; i<neouronsL2.Count(); i++)
+        delete neouronsL2.at(i);
     for(int i=0; i<features.Count(); i++)
         delete features.at(i);
     delete axonsL1;
@@ -33,8 +38,7 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     AccuracyFactory acf;
     NeuronFactory nf;
     
-#define LOAD_NN_FROM_DB
-#ifdef  LOAD_NN_FROM_DB
+/*
 //==================Features
     string str;
     int req;
@@ -105,12 +109,13 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 //==================Softmax
     softmax = new NeuronSUM();
     for(int j=0; j<axonsL2.Count(); j++)
-        softmax.AddAxon(axonsL2.at(j));
+        softmax.AddAxon(axonsL2.at(j));//!!3
 //==================Others
     acc = acf.CreateAccuracy(evm);
     eval = new Evaluator(acc);
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
     quality = new QualityMetrics();
+*/
 }
 
 void Owner::UpdateInput(const float& c[], const float& d[], int len)
@@ -120,7 +125,7 @@ void Owner::UpdateInput(const float& c[], const float& d[], int len)
 }
 void Owner::Train1Epoch(float desired)
 {
-    trainer.Go1Epoch(desired,true);
+    trainer.Go1Epoch(desired);
 }
 trade_advice_t Owner::GetAdvice()
 {
@@ -137,13 +142,17 @@ bool Owner::CreateDebugDB()
     db.AddDBGTBLItem("DirLong", false);
     db.AddDBGTBLItem("DirAll", false);
     for(int i=0; i<features.Count(); i++)
-        db.AddDBGTBLItem(features.at(i).name+IntegerToString(i,2,'0'),false);
+        db.AddDBGTBLItem(features.at(i).name,false);
     for(int i=0; i<axonsL1.Count(); i++)
-        db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'),false);
-    for(int i=0; i<neourons.Count(); i++)
-        db.AddDBGTBLItem("N"+IntegerToString(i,2,'0'),false);
+        db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name,false);
+    for(int i=0; i<neouronsL1.Count(); i++)
+        db.AddDBGTBLItem("N"+"_"+neouronsL1.at(i).name,false);
     for(int i=0; i<axonsL2.Count(); i++)
-        db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'),false);
+        db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name,false);
+    for(int i=0; i<neouronsL2.Count(); i++)
+        db.AddDBGTBLItem("N"+"_"+neouronsL2.at(i).name,false);
+    for(int i=0; i<axonsL3.Count(); i++)
+        db.AddDBGTBLItem("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name,false);
     return db.AddDBGTBLItem("reserve", true);
 }
 bool Owner::CreateStateDB()
@@ -162,12 +171,16 @@ void Owner::SaveDebugInfo(int index, float desired_in)
     db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
     db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
     for(int i=0; i<features.Count(); i++)
-        db.Insert(features.at(i).name+IntegerToString(i,2,'0'), features.at(i).GetNode(), false);
+        db.Insert(features.at(i).name, features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
-        db.Insert("X"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL1.at(i).node_id,2,'0'), axonsL1.at(i).GetGain(), false);
-    for(int i=0; i<neourons.Count(); i++)
-        db.Insert("N"+IntegerToString(i,2,'0'), neourons.at(i).GetNode(), false);
+        db.Insert("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name, axonsL1.at(i).GetGain(), false);
+    for(int i=0; i<neouronsL1.Count(); i++)
+        db.Insert("N"+"_"+neouronsL1.at(i).name, neouronsL1.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
-        db.Insert("Y"+IntegerToString(i,2,'0')+"_"+IntegerToString(axonsL2.at(i).node_id,2,'0'), axonsL2.at(i).GetGain(), false);
+        db.Insert("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name, axonsL2.at(i).GetGain(), false);
+    for(int i=0; i<neouronsL2.Count(); i++)
+        db.Insert("N"+"_"+neouronsL2.at(i).name, neouronsL2.at(i).GetNode(), false);
+    for(int i=0; i<axonsL3.Count(); i++)
+        db.Insert("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name, axonsL3.at(i).GetGain(), false);
     db.Insert("reserve", 0, true);
 }
