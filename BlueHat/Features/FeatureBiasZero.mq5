@@ -7,7 +7,7 @@ FeatureBiasZero::FeatureBiasZero(void)
 FeatureBiasZero::~FeatureBiasZero(void)
 {
 }
-void FeatureBiasZero::Update(const float& raw_close[], const float& d[], int len)
+void FeatureBiasZero::Update(const float& raw_close[], const float& norm_d[], int len)
 {
     updated_value = (float)0;
 }

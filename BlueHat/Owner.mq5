@@ -50,14 +50,24 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
     Print(features.Count()," features created");
 
 //==================AxonsL1
-    int i;
+    string s;
+    string temps[2]; 
+    string temp2[2]; 
     req = db.CreateRequest("AxonsFeID");
-    i = db.ReadNextInt(req);
-    while(i!=DB_END_INT)
+    s = db.ReadNextString(req);
+    while(s!=DB_END_STR)
     {
-        assert(i!=DB_ERROR_INT,"DB ERROR IN NN");
-        axonsL1.Add( new Axon(features.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
-        i = db.ReadNextInt(req);
+        assert(s!=DB_ERROR_STR,"DB ERROR IN NN");
+        assert(StringSplit(s,' ',temps)==2,"wrong format in NN");
+        int axNo = (int)StringToInteger(temps[0]);
+        assert(StringSplit(temps[1],'=',temp2)==2,"wrong format2 in NN");
+        int feNo = (int)StringToInteger(temp2[1]);
+        assert(feNo<features.Count(),"wrong feNo in NN");
+        string name = temp2[0];
+        assert(features.at(feNo).name==name,"feature name/no mismatch in NN");
+        axonsL1.Add( new Axon(features.at(feNo), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+        assert(axNo==axonsL1.Count()-1,"wrong axon no in NN");
+        s = db.ReadNextString(req);
     };
     db.FinaliseRequest(req);
     Print(axonsL1.Count()," Axons(L1) created");

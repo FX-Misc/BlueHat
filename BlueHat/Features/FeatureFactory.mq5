@@ -15,6 +15,8 @@ INode* FeatureFactory::CreateFeature(string name)
         feature = new FeatureBiasZero();
     else if(name=="feRepeatL")
         feature = new FeatureRepeatLast();
+    else if(name=="fe3DiffMean")
+        feature = new Feature3LastDiffsMean();
     else
         feature = NULL;
     assert(feature != NULL, "");

@@ -125,10 +125,8 @@ int DataBase::ReadNextInt(int request)
 string DataBase::ReadNextString(int request)
 {
     if( ! DatabaseRead(request))
-    {
-        DatabaseFinalize(request);
         return DB_END_STR;
-    }
+
     int id;
     if( ! DatabaseColumnInteger(request, 0, id))
     {
