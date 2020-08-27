@@ -12,5 +12,5 @@ class FeatureFactory
 {
 private:
 public:
-    INode* CreateFeature(string name);
+    INode* FeatureInstance(string name);
 };

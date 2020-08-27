@@ -7,6 +7,12 @@ FeatureBiasNegative::FeatureBiasNegative(void)
 FeatureBiasNegative::~FeatureBiasNegative(void)
 {
 }
+Feature* FeatureBiasNegative::Instance()
+{
+    if(!CheckPointer(uniqueInstance))
+        uniqueInstance=new FeatureBiasNegative;
+    return uniqueInstance;
+}
 void FeatureBiasNegative::Update(const float& raw_close[], const float& norm_d[], int len)
 {
     updated_value = (float)-0.5;

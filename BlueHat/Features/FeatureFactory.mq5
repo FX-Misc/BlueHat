@@ -1,22 +1,22 @@
 #include "FeatureFactory.mqh"
 #include "../globals/assert.mqh"
-INode* FeatureFactory::CreateFeature(string name)
+INode* FeatureFactory::FeatureInstance(string name)
 {
     INode* feature;
     if(name=="feCheater")
-        feature = new FeatureCheater();
+        feature = FeatureCheater::Instance();
     else if(name=="feRandom")
-        feature = new FeatureRandom();
+        feature = FeatureRandom::Instance();
     else if(name=="feBiasP")
-        feature = new FeatureBiasPositive();
+        feature = FeatureBiasPositive::Instance();
     else if(name=="feBiasN")
-        feature = new FeatureBiasNegative();
+        feature = FeatureBiasNegative::Instance();
     else if(name=="feBiasZ")
-        feature = new FeatureBiasZero();
+        feature = FeatureBiasZero::Instance();
     else if(name=="feRepeatL")
-        feature = new FeatureRepeatLast();
+        feature = FeatureRepeatLast::Instance();
     else if(name=="fe3DiffMean")
-        feature = new Feature3LastDiffsMean();
+        feature = Feature3LastDiffsMean::Instance();
     else
         feature = NULL;
     assert(feature != NULL, "");

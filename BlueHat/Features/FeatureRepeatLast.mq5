@@ -7,6 +7,12 @@ FeatureRepeatLast::FeatureRepeatLast(void)
 FeatureRepeatLast::~FeatureRepeatLast(void)
 {
 }
+Feature* FeatureRepeatLast::Instance()
+{
+    if(!CheckPointer(uniqueInstance))
+        uniqueInstance=new FeatureRepeatLast;
+    return uniqueInstance;
+}
 void FeatureRepeatLast::Update(const float& raw_close[], const float& norm_d[], int len)
 {
     updated_value = norm_d[1];

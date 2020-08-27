@@ -34,6 +34,7 @@ Owner::~Owner()
 }
 void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
+    Feature* fe=FeatureCheater::Instance();
     FeatureFactory ff;
     AccuracyFactory acf;
     NeuronFactory nf;
