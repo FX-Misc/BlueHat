@@ -34,26 +34,35 @@ Owner::~Owner()
 }
 void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
-    Feature* fe=FeatureCheater::Instance();
     FeatureFactory ff;
+    features.AddIfNotFound(ff.FeatureInstance("feCheater"));
+    features.AddIfNotFound(ff.FeatureInstance("feCheater"));
+    features.AddIfNotFound(ff.FeatureInstance("feRandom"));
+    features.AddIfNotFound(ff.FeatureInstance("feCheater"));
+    Print(features.Count(),features.at(0).name,features.at(1).name);
     AccuracyFactory acf;
     NeuronFactory nf;
     
-/*
-//==================Features
-    string str;
-    int req;
-    req = db.CreateRequest("Features");
-    str = db.ReadNextString(req);
-    while(str!=DB_END_STR)
-    {
-        assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
-        features.Add(ff.CreateFeature(str));
-        str = db.ReadNextString(req);
-    };
-    db.FinaliseRequest(req);
-    Print(features.Count()," features created");
 
+//==================Features & AxonsL1
+    {
+        string str;
+        int req;
+        req = db.CreateRequest("AxonsL1");
+        str = db.ReadNextString(req);
+        while(str!=DB_END_STR)
+        {
+            assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+            features.Add(ff.FeatureInstance(str));
+            str = db.ReadNextString(req);
+        };
+        db.FinaliseRequest(req);
+        Print(features.Count()," features created");
+    }
+    {
+        string str;
+    }
+/*
 //==================AxonsL1
     string s;
     string temps[2]; 
