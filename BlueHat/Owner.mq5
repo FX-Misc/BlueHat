@@ -35,11 +35,8 @@ Owner::~Owner()
 void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
     FeatureFactory ff;
-    features.AddIfNotFound(ff.FeatureInstance("feCheater"));
-    features.AddIfNotFound(ff.FeatureInstance("feCheater"));
-    features.AddIfNotFound(ff.FeatureInstance("feRandom"));
-    features.AddIfNotFound(ff.FeatureInstance("feCheater"));
-    Print(features.Count(),features.at(0).name,features.at(1).name);
+//    features.AddIfNotFound(ff.FeatureInstance("feCheater"));
+//    Print(features.Count(),features.at(0).name,features.at(1).name);
     AccuracyFactory acf;
     NeuronFactory nf;
     
@@ -53,40 +50,47 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
         while(str!=DB_END_STR)
         {
             assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
-            features.Add(ff.FeatureInstance(str));
+            features.AddIfNotFound(ff.FeatureInstance(str));
+            int feNo = features.IndexOf(ff.FeatureInstance(str));
+            assert(feNo>=0 && feNo<features.Count(), "wrong feature no");
+            axonsL1.Add( new Axon(ff.FeatureInstance(str), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
             str = db.ReadNextString(req);
         };
         db.FinaliseRequest(req);
         Print(features.Count()," features created");
+        Print(axonsL1.Count()," Axons(L1) created");
     }
+//==================NeuronsL1
     {
         string str;
+        int req;
+        Neuron* ne = NULL;
+        int index = 0;
+        string tempstr[2];
+        //int splitcnt;
+        req = db.CreateRequest("NeuronsL1");
+        str = db.ReadNextString(req);
+        while(str!=DB_END_STR)
+        {
+            assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+            if(str=="+")
+            {
+                ne.AddAxon(axonsL1.at(index));
+                continue;
+            }
+            int splitcnt = StringSplit(str,'=',tempstr);
+            assert(splitcnt==2,"wrong neuron format in NN");
+            ne = nf.CreateNeuron(tempstr[0],tempstr[1]);
+            ne.AddAxon(axonsL1.at(index));
+
+            str = db.ReadNextString(req);
+            index++;
+        };
+        db.FinaliseRequest(req);
+        Print(features.Count()," features created");
+        Print(axonsL1.Count()," Axons(L1) created");
     }
 /*
-//==================AxonsL1
-    string s;
-    string temps[2]; 
-    string temp2[2]; 
-    req = db.CreateRequest("AxonsFeID");
-    s = db.ReadNextString(req);
-    while(s!=DB_END_STR)
-    {
-        assert(s!=DB_ERROR_STR,"DB ERROR IN NN");
-        assert(StringSplit(s,' ',temps)==2,"wrong format in NN");
-        int axNo = (int)StringToInteger(temps[0]);
-        assert(StringSplit(temps[1],'=',temp2)==2,"wrong format2 in NN");
-        int feNo = (int)StringToInteger(temp2[1]);
-        assert(feNo<features.Count(),"wrong feNo in NN");
-        string name = temp2[0];
-        assert(features.at(feNo).name==name,"feature name/no mismatch in NN");
-        axonsL1.Add( new Axon(features.at(feNo), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
-        assert(axNo==axonsL1.Count()-1,"wrong axon no in NN");
-        s = db.ReadNextString(req);
-    };
-    db.FinaliseRequest(req);
-    Print(axonsL1.Count()," Axons(L1) created");
-
-//==================Neurons
     string tempstr[MAX_AXONS]; 
     string tempaxons;
     int tempcnt;

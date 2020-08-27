@@ -6,6 +6,8 @@
 input bool debug=true;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
+#include <Generic\HashSet.mqh>
+
 void OnStart()
 {
     float desired;

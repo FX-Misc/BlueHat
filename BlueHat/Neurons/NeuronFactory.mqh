@@ -5,5 +5,5 @@
 class NeuronFactory
 {
 public:
-    Neuron* CreateNeuron(string name);
+    Neuron* CreateNeuron(string type, string nname);
 };
