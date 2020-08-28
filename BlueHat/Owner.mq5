@@ -26,6 +26,7 @@ Owner::~Owner()
         delete features.at(i);
     delete axonsL1;
     delete axonsL2; 
+    delete axonsL3; 
     delete eval;
     delete acc;
     delete quality;

@@ -64,7 +64,7 @@ void Trainer::Go1Epoch(float new_norm_diff)
                     axonsL3.at(i).grow_temp_flag = FLAG_DEGROW;
                     break;
             }
-            axonsL2.at(i).GainDeGrow();
+            axonsL3.at(i).GainDeGrow();
         }
      
     //fixing the changes
