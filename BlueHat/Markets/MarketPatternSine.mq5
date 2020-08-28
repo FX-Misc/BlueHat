@@ -13,7 +13,7 @@ void MarketPatternSine::Initialise(int max_history)
     
     ArrayResize(history,max);
     for(int i=max-1; i>=0; i--)
-        history[i]=MathSin(i/4);
+        history[i]=MathSin((float)(i)/4);
         
     oldest_available = ArraySize(history) - TIMESERIES_DEPTH;
     diff_norm_factor = 1;    //TODO: calculate based on the reverse of a typical strong diff, 1000 for eurusd/1h as a sample 
