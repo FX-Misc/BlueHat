@@ -12,3 +12,14 @@ Neuron* NeuronFactory::CreateNeuron(string type, string nname)
     assert(neuron != NULL, "CreateNeuron failed to create");
     return neuron;
 }
+Neuron* NeuronFactory::FindNeuronByName(string n, CXArrayList<Neuron*>* list, int& ret_id)
+{
+    for(int i=0; i<list.Count(); i++)
+        if(list.at(i).name == n)
+        {
+            ret_id = i;
+            return list.at(i);
+        }
+    ret_id = -1;
+    return NULL;
+}

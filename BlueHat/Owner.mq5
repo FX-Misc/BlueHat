@@ -18,10 +18,10 @@ Owner::~Owner()
         delete axonsL2.at(i);
     for(int i=0; i<axonsL3.Count(); i++)
         delete axonsL3.at(i);
-    for(int i=0; i<neouronsL1.Count(); i++)
-        delete neouronsL1.at(i);
-    for(int i=0; i<neouronsL2.Count(); i++)
-        delete neouronsL2.at(i);
+    for(int i=0; i<neuronsL1.Count(); i++)
+        delete neuronsL1.at(i);
+    for(int i=0; i<neuronsL2.Count(); i++)
+        delete neuronsL2.at(i);
     for(int i=0; i<features.Count(); i++)
         delete features.at(i);
     delete axonsL1;
@@ -87,8 +87,27 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
             index++;
         };
         db.FinaliseRequest(req);
-        Print(features.Count()," features created");
-        Print(axonsL1.Count()," Axons(L1) created");
+        Print(neuronsL1.Count()," Neurons(L1) created");
+    }
+//==================AxonsL2
+    {
+        string str;
+        int req;
+        int index = -1;
+        Neuron* ne=NULL;
+        req = db.CreateRequest("AxonsL2");
+        str = db.ReadNextString(req);
+        while(str!=DB_END_STR)
+        {
+            assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+            ne = nf.FindNeuronByName(str, &neuronsL1, index);
+            assert(index!=-1 && ne!=NULL,"neuron not found in NN");
+            axonsL2.Add(new Axon(ne, index, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING));
+            
+            str = db.ReadNextString(req);
+        };
+        db.FinaliseRequest(req);
+        Print(axonsL2.Count()," Axons(L2) created");
     }
 /*
     string tempstr[MAX_AXONS]; 
@@ -159,12 +178,12 @@ bool Owner::CreateDebugDB()
         db.AddDBGTBLItem(features.at(i).name,false);
     for(int i=0; i<axonsL1.Count(); i++)
         db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name,false);
-    for(int i=0; i<neouronsL1.Count(); i++)
-        db.AddDBGTBLItem("N"+"_"+neouronsL1.at(i).name,false);
+    for(int i=0; i<neuronsL1.Count(); i++)
+        db.AddDBGTBLItem("N"+"_"+neuronsL1.at(i).name,false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name,false);
-    for(int i=0; i<neouronsL2.Count(); i++)
-        db.AddDBGTBLItem("N"+"_"+neouronsL2.at(i).name,false);
+    for(int i=0; i<neuronsL2.Count(); i++)
+        db.AddDBGTBLItem("N"+"_"+neuronsL2.at(i).name,false);
     for(int i=0; i<axonsL3.Count(); i++)
         db.AddDBGTBLItem("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name,false);
     return db.AddDBGTBLItem("reserve", true);
@@ -188,12 +207,12 @@ void Owner::SaveDebugInfo(int index, float desired_in)
         db.Insert(features.at(i).name, features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
         db.Insert("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name, axonsL1.at(i).GetGain(), false);
-    for(int i=0; i<neouronsL1.Count(); i++)
-        db.Insert("N"+"_"+neouronsL1.at(i).name, neouronsL1.at(i).GetNode(), false);
+    for(int i=0; i<neuronsL1.Count(); i++)
+        db.Insert("N"+"_"+neuronsL1.at(i).name, neuronsL1.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name, axonsL2.at(i).GetGain(), false);
-    for(int i=0; i<neouronsL2.Count(); i++)
-        db.Insert("N"+"_"+neouronsL2.at(i).name, neouronsL2.at(i).GetNode(), false);
+    for(int i=0; i<neuronsL2.Count(); i++)
+        db.Insert("N"+"_"+neuronsL2.at(i).name, neuronsL2.at(i).GetNode(), false);
     for(int i=0; i<axonsL3.Count(); i++)
         db.Insert("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name, axonsL3.at(i).GetGain(), false);
     db.Insert("reserve", 0, true);

@@ -27,8 +27,8 @@ class Owner
 {
 private:
     CXArrayList<Feature*> features;
-    CXArrayList<Neuron*> neouronsL1;
-    CXArrayList<Neuron*> neouronsL2;
+    CXArrayList<Neuron*> neuronsL1;
+    CXArrayList<Neuron*> neuronsL2;
     CXArrayList<Axon*> *axonsL1;
     CXArrayList<Axon*> *axonsL2;
     CXArrayList<Axon*> *axonsL3;
