@@ -74,15 +74,15 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
         {
             assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
             if(str=="+")
-            {
                 ne.AddAxon(axonsL1.at(index));
-                continue;
+            else
+            {                
+                int splitcnt = StringSplit(str,'=',tempstr);
+                assert(splitcnt==2,"wrong neuron format in NN");
+                ne = nf.CreateNeuron(tempstr[0],tempstr[1]);
+                ne.AddAxon(axonsL1.at(index));
+                neuronsL1.Add(ne);
             }
-            int splitcnt = StringSplit(str,'=',tempstr);
-            assert(splitcnt==2,"wrong neuron format in NN");
-            ne = nf.CreateNeuron(tempstr[0],tempstr[1]);
-            ne.AddAxon(axonsL1.at(index));
-
             str = db.ReadNextString(req);
             index++;
         };
