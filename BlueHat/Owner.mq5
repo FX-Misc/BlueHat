@@ -109,46 +109,53 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
         db.FinaliseRequest(req);
         Print(axonsL2.Count()," Axons(L2) created");
     }
-/*
-    string tempstr[MAX_AXONS]; 
-    string tempaxons;
-    int tempcnt;
-    Neuron* tempne;
-    req = db.CreateRequest("Neurons");
-    str = db.ReadNextString(req);
-    while(str!=DB_END_STR)
+//==================NeuronsL2
     {
-        assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
-        tempcnt = StringSplit(str,'=',tempstr);
-        assert(tempcnt==2,"wrong neuron entry format");
-        tempne = nf.CreateNeuron(tempstr[0]);
-        neourons.Add(tempne);
-        tempaxons = tempstr[1]; 
-        tempcnt = StringSplit(tempaxons,' ',tempstr);
-        for(int j=0; j<tempcnt; j++)
-        {
-            int axonNo = (int)StringToInteger(tempstr[j]);
-            assert(axonNo < axonsL1.Count(), "wrong axon no");
-            tempne.AddAxon(axonsL1.at(axonNo));
-        }      
+        string str;
+        int req;
+        Neuron* ne = NULL;
+        int index = 0;
+        string tempstr[2];
+        //int splitcnt;
+        req = db.CreateRequest("NeuronsL2");
         str = db.ReadNextString(req);
-    };
-    db.FinaliseRequest(req);
-    Print(neourons.Count()," neurons created");
+        while(str!=DB_END_STR)
+        {
+            assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+            if(str=="+")
+                ne.AddAxon(axonsL2.at(index));
+            else
+            {                
+                int splitcnt = StringSplit(str,'=',tempstr);
+                assert(splitcnt==2,"wrong neuron format in NN");
+                ne = nf.CreateNeuron(tempstr[0],tempstr[1]);
+                ne.AddAxon(axonsL2.at(index));
+                neuronsL2.Add(ne);
+            }
+            str = db.ReadNextString(req);
+            index++;
+        };
+        db.FinaliseRequest(req);
+        Print(neuronsL2.Count()," Neurons(L2) created");
+    }
 //==================AxonsL2
-    for(int j=0; j<neourons.Count(); j++)
-        axonsL2.Add( new Axon(neourons.at(j), j, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
-    Print(axonsL2.Count()," Axons(L2) created");
+    {
+        for(int i=0; i<neuronsL2.Count(); i++)
+            axonsL3.Add( new Axon(neuronsL2.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+        Print(axonsL3.Count()," Axons(L3) created");
+    }
 //==================Softmax
-    softmax = new NeuronSUM();
-    for(int j=0; j<axonsL2.Count(); j++)
-        softmax.AddAxon(axonsL2.at(j));//!!3
+    {
+        softmax = new NeuronSUM("softmax");
+        for(int i=0; i<axonsL3.Count(); i++)
+            softmax.AddAxon(axonsL3.at(i));
+    }
 //==================Others
     acc = acf.CreateAccuracy(evm);
     eval = new Evaluator(acc);
-    trainer = new Trainer(softmax, eval, axonsL1, axonsL2);
+    trainer = new Trainer(softmax, eval, axonsL1, axonsL2, axonsL3);
     quality = new QualityMetrics();
-*/
+
 }
 
 void Owner::UpdateInput(const float& c[], const float& d[], int len)
