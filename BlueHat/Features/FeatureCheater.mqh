@@ -8,5 +8,7 @@ public:
     FeatureCheater();
     ~FeatureCheater();
     void Update(const float& raw_close[], const float& norm_d[], int len);
+    static Feature* Instance();
+    static Feature* uniqueInstance;
 };
-    
+Feature* FeatureCheater::uniqueInstance=NULL;

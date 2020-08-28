@@ -4,6 +4,7 @@
 #include "/FeatureBiasNegative.mqh"
 #include "/FeatureBiasZero.mqh"
 #include "/FeatureRepeatLast.mqh"
+#include "/Feature3LastDiffsMean.mqh"
  
 #include "/../INode.mqh"
 
@@ -11,5 +12,5 @@ class FeatureFactory
 {
 private:
 public:
-    INode* CreateFeature(string name);
+    INode* FeatureInstance(string name);
 };

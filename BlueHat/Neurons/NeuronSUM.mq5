@@ -1,8 +1,8 @@
 #include "NeuronSUM.mqh"
 
-void NeuronSUM::NeuronSUM()
+void NeuronSUM::NeuronSUM(string nname)
 {
-    name = "neSum";
+    name = nname;
 }
 
 float NeuronSUM::GetNode()
