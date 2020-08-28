@@ -6,6 +6,8 @@
 input bool debug=true;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
+#include <Generic\HashSet.mqh>
+
 void OnStart()
 {
     float desired;
@@ -14,7 +16,7 @@ void OnStart()
     assert(1>0,"test");
 
     Market* market = new MarketScriptReal;
-    market.Initialise(100); //0 for full history
+    market.Initialise(1000); //0 for full history
         
     market.UpdateBuffers(0);
     Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
