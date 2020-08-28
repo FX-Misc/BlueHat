@@ -194,8 +194,8 @@ bool Owner::CreateDebugDB()
         db.AddDBGTBLItem("N"+"_"+neuronsL2.at(i).name,false);
     for(int i=0; i<axonsL3.Count(); i++)
         db.AddDBGTBLItem("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name,false);
-    return db.AddDBGTBLItem("s", false);
-    return db.AddDBGTBLItem("ss", false);
+    db.AddDBGTBLItem("diff_raw", false);
+    db.AddDBGTBLItem("close_raw", false);
     return db.AddDBGTBLItem("reserve", true);
 }
 bool Owner::CreateStateDB()
@@ -225,7 +225,7 @@ void Owner::SaveDebugInfo(int index, float desired_in, float diff_raw1, float cl
         db.Insert("N"+"_"+neuronsL2.at(i).name, neuronsL2.at(i).GetNode(), false);
     for(int i=0; i<axonsL3.Count(); i++)
         db.Insert("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name, axonsL3.at(i).GetGain(), false);
-    db.Insert("s", 0, false);
-    db.Insert("ss", 0, false);
+    db.Insert("diff_raw", diff_raw1, false);
+    db.Insert("close_raw", close1, false);
     db.Insert("reserve", 0, true);
 }
