@@ -1,4 +1,4 @@
-#include "../BlueHat/globals/_globals.mqh"
+#include "../globals/_globals.mqh"
 class Market
 {
 public:

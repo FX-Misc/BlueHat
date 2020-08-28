@@ -1,9 +1,12 @@
 #include "../../BlueHat/Owner.mqh"
-#include "../../BlueHat/Market.mqh"
+#include "../../BlueHat/Markets/Market.mqh"
+#include "../../BlueHat/Markets/MarketFactory.mqh"
 #include "../../BlueHat/globals/_globals.mqh"
 
 #property script_show_inputs
+input markets_t market_type=MARKET_SCRIPT_REAL;
 input bool debug=true;
+input int depth=100;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
 #include <Generic\HashSet.mqh>
@@ -15,8 +18,9 @@ void OnStart()
     Print("Hi there");
     assert(1>0,"test");
 
-    Market* market = new MarketScriptReal;
-    market.Initialise(1000); //0 for full history
+    MarketFactory mf;
+    Market* market = mf.CreateMarket(market_type);
+    market.Initialise(depth); //0 for full history
         
     market.UpdateBuffers(0);
     Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
@@ -39,7 +43,7 @@ void OnStart()
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
         if(debug)
-            owner.SaveDebugInfo(i, desired);
+            owner.SaveDebugInfo(i, desired, market.diff_raw[1], market.close[1]);
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
