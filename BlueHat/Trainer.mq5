@@ -8,11 +8,12 @@ Trainer::Trainer(INode* psm, Evaluator* peval, CXArrayList<Axon*> *pL1, CXArrayL
 }
 void Trainer::Go1Epoch(double new_norm_diff)
 {
-    double base_value = GetCurrentOutputN();
+    double base_value;
 
     for(int i=0; i<axonsL1.Count(); i++)
         if(axonsL1.at(i).active)
         {
+            base_value = GetCurrentOutputN();
             axonsL1.at(i).GainGrow(); //trial grow
             switch( eval.EvaluateTrial( new_norm_diff, base_value, GetCurrentOutputN() ) )
             {
@@ -32,6 +33,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
     for(int i=0; i<axonsL2.Count(); i++)
         if(axonsL2.at(i).active)
         {
+            base_value = GetCurrentOutputN();
             axonsL2.at(i).GainGrow(); //trial grow
             switch( eval.EvaluateTrial(new_norm_diff, base_value, GetCurrentOutputN() ) )
             {
@@ -51,6 +53,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
     for(int i=0; i<axonsL3.Count(); i++)
         if(axonsL3.at(i).active)
         {
+            base_value = GetCurrentOutputN();
             axonsL3.at(i).GainGrow(); //trial grow
             switch( eval.EvaluateTrial(new_norm_diff, base_value, GetCurrentOutputN() ) )
             {

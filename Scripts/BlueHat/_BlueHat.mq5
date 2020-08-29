@@ -6,7 +6,7 @@
 #property script_show_inputs
 input markets_t market_type=MARKET_SCRIPT_REAL;
 input bool debug=true;
-input int depth=100;
+input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
 #include <Generic\HashSet.mqh>
