@@ -9,10 +9,10 @@
 #include "/globals/ExtendedArrList.mqh"
 #include "globals/assert.mqh"
 
-#define RATE_GROWTH (float)0.01
-#define RATE_DEGRADATION (float)0.999
-#define AXON_FLOOR (float)0.001
-#define AXON_CEILING (float)10
+#define RATE_GROWTH (double)0.01
+#define RATE_DEGRADATION (double)0.999
+#define AXON_FLOOR (double)0.001
+#define AXON_CEILING (double)10
 
 #define MAX_AXONS 50
 
@@ -42,9 +42,9 @@ public:
     IAccuracy* acc;
     QualityMetrics* quality;
     void CreateNN(evaluation_method_t evm);//the database file as input?
-    void UpdateInput(const float& c[], const float& d[], int len);
-    void SaveDebugInfo(int index, float desired_in, float diff_raw1, float close1);
-    void Train1Epoch(float desired);
+    void UpdateInput(const double& c[], const double& d[], int len);
+    void SaveDebugInfo(int index, double desired_in, double diff_raw1, double close1);
+    void Train1Epoch(double desired);
     trade_advice_t GetAdvice();
     bool CreateDebugDB();
     bool CreateStateDB();

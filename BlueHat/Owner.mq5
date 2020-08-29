@@ -159,12 +159,12 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 
 }
 
-void Owner::UpdateInput(const float& c[], const float& d[], int len)
+void Owner::UpdateInput(const double& c[], const double& d[], int len)
 {
     for(int i=0; i<features.Count(); i++)
         ((Feature*)(features.at(i))).Update(c, d, len);
 }
-void Owner::Train1Epoch(float desired)
+void Owner::Train1Epoch(double desired)
 {
     trainer.Go1Epoch(desired);
 }
@@ -202,9 +202,9 @@ bool Owner::CreateStateDB()
 {
     return true;
 }
-void Owner::SaveDebugInfo(int index, float desired_in, float diff_raw1, float close1)
+void Owner::SaveDebugInfo(int index, double desired_in, double diff_raw1, double close1)
 {
-    db.Insert("ID", (float)index, false);    
+    db.Insert("ID", (double)index, false);    
     db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), false);
     db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);

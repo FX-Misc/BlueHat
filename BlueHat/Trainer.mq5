@@ -6,9 +6,9 @@ Trainer::~Trainer()
 Trainer::Trainer(INode* psm, Evaluator* peval, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2, CXArrayList<Axon*> *pL3) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2), axonsL3(pL3), eval(peval)
 {
 }
-void Trainer::Go1Epoch(float new_norm_diff)
+void Trainer::Go1Epoch(double new_norm_diff)
 {
-    float base_value;
+    double base_value;
 
     for(int i=0; i<axonsL1.Count(); i++)
         if(axonsL1.at(i).active)
@@ -120,7 +120,7 @@ void Trainer::Go1Epoch(float new_norm_diff)
             }            
         }
 }
-float Trainer::GetCurrentOutputN(void) const
+double Trainer::GetCurrentOutputN(void) const
 {
     return SOFT_NORMAL( pSoftMax.GetNode() );
 }

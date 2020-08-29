@@ -13,7 +13,7 @@ input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
 void OnStart()
 {
-    float desired;
+    double desired;
     
     Print("Hi there");
     assert(1>0,"test");

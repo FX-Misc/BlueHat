@@ -3,5 +3,5 @@
 class AccuracyDirection : public IAccuracy
 {
 public:
-    float CalculateAccuracy(float desired, float value);
+    double CalculateAccuracy(double desired, double value);
 };

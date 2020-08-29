@@ -13,8 +13,8 @@ Feature* FeatureBiasNegative::Instance()
         uniqueInstance=new FeatureBiasNegative;
     return uniqueInstance;
 }
-void FeatureBiasNegative::Update(const float& raw_close[], const float& norm_d[], int len)
+void FeatureBiasNegative::Update(const double& raw_close[], const double& norm_d[], int len)
 {
-    updated_value = (float)-0.5;
+    updated_value = (double)-0.5;
 }
 

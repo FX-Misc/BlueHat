@@ -13,7 +13,7 @@ Feature* FeatureReverseLast::Instance()
         uniqueInstance=new FeatureReverseLast;
     return uniqueInstance;
 }
-void FeatureReverseLast::Update(const float& raw_close[], const float& norm_d[], int len)
+void FeatureReverseLast::Update(const double& raw_close[], const double& norm_d[], int len)
 {
     updated_value = -norm_d[1];
 }
