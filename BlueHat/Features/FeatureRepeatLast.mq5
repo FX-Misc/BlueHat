@@ -13,7 +13,7 @@ Feature* FeatureRepeatLast::Instance()
         uniqueInstance=new FeatureRepeatLast;
     return uniqueInstance;
 }
-void FeatureRepeatLast::Update(const float& raw_close[], const float& norm_d[], int len)
+void FeatureRepeatLast::Update(const double& raw_close[], const double& norm_d[], int len)
 {
     updated_value = norm_d[1];
 }

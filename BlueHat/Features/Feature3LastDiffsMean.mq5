@@ -13,7 +13,7 @@ Feature* Feature3LastDiffsMean::Instance()
         uniqueInstance=new Feature3LastDiffsMean;
     return uniqueInstance;
 }
-void Feature3LastDiffsMean::Update(const float& raw_close[], const float& norm_d[], int len)
+void Feature3LastDiffsMean::Update(const double& raw_close[], const double& norm_d[], int len)
 {
     updated_value = norm_d[1]+norm_d[2]+norm_d[3];
 }

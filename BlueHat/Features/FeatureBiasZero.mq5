@@ -13,8 +13,8 @@ Feature* FeatureBiasZero::Instance()
         uniqueInstance=new FeatureBiasZero;
     return uniqueInstance;
 }
-void FeatureBiasZero::Update(const float& raw_close[], const float& norm_d[], int len)
+void FeatureBiasZero::Update(const double& raw_close[], const double& norm_d[], int len)
 {
-    updated_value = (float)0;
+    updated_value = (double)0;
 }
 

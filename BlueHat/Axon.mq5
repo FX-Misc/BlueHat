@@ -1,5 +1,5 @@
 #include "Axon.mqh"
-Axon::Axon(INode* pn, int n_id, float deg_r, float gr_r, float m, float M) : degradaion_rate(deg_r), growth_rate(gr_r), pnode(pn), node_id(n_id), min(m), max(M)
+Axon::Axon(INode* pn, int n_id, double deg_r, double gr_r, double m, double M) : degradaion_rate(deg_r), growth_rate(gr_r), pnode(pn), node_id(n_id), min(m), max(M)
 {
     gain = m;
     active = true;
@@ -22,11 +22,11 @@ void Axon::GainDegrade(void)
     if(gain<min)
         gain = min;
 }
-float Axon::GetGainedValueN() const
+double Axon::GetGainedValueN() const
 {
     return SOFT_NORMAL( pnode.GetNode()*gain );
 }
-float Axon::GetGain()
+double Axon::GetGain()
 {
     return gain;
 }
