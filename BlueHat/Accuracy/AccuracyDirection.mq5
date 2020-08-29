@@ -1,5 +1,5 @@
 #include "AccuracyDirection.mqh"
-float AccuracyDirection::CalculateAccuracy(float desired, float value)
+double AccuracyDirection::CalculateAccuracy(double desired, double value)
 {
     if(FLOAT_SIGN(desired)==FLOAT_SIGN(value))
         return MathAbs(value);

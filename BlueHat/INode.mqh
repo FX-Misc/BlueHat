@@ -1,6 +1,6 @@
 class INode
 {
 public:
-    virtual float GetNode(void)=0;
+    virtual double GetNode(void)=0;
     string name;
 };

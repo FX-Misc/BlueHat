@@ -144,7 +144,7 @@ string DataBase::ReadNextString(int request)
     return str;
 }
 
-bool DataBase::Insert(string name, float value, bool completed)
+bool DataBase::Insert(string name, double value, bool completed)
 {
     static string str1="INSERT INTO DEBUG (";
     static string str2=") VALUES (";
