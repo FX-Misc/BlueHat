@@ -17,6 +17,8 @@ INode* FeatureFactory::FeatureInstance(string name)
         feature = FeatureRepeatLast::Instance();
     else if(name=="fe3DiffMean")
         feature = Feature3LastDiffsMean::Instance();
+    else if(name=="feReverseL")
+        feature = FeatureReverseLast::Instance();
     else
         feature = NULL;
     assert(feature != NULL, "");
