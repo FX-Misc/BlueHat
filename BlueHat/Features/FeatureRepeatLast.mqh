@@ -1,13 +1,13 @@
-//#include "../globals/_globals.mqh"
+#include "../globals/_globals.mqh"
 #include "../INode.mqh"
 #include "Feature.mqh"
-class FeatureBiasPositive : public Feature
+class FeatureRepeatLast : public Feature
 {
 public:
-    FeatureBiasPositive();
-    ~FeatureBiasPositive();
+    FeatureRepeatLast();
+    ~FeatureRepeatLast();
     void Update(const float& raw_close[], const float& norm_d[], int len);
     static Feature* Instance();
     static Feature* uniqueInstance;
 };
-Feature* FeatureBiasPositive::uniqueInstance=NULL;    
+Feature* FeatureRepeatLast::uniqueInstance=NULL;    

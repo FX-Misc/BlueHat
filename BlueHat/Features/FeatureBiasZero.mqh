@@ -6,6 +6,8 @@ class FeatureBiasZero : public Feature
 public:
     FeatureBiasZero();
     ~FeatureBiasZero();
-    void Update(int index, int history_index);
+    void Update(const float& raw_close[], const float& norm_d[], int len);
+    static Feature* Instance();
+    static Feature* uniqueInstance;
 };
-    
+Feature* FeatureBiasZero::uniqueInstance=NULL;    

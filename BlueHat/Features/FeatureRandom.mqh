@@ -7,6 +7,8 @@ class FeatureRandom : public Feature
 public:
     FeatureRandom();
     ~FeatureRandom();
-    void Update(int index, int history_index);
+    void Update(const float& raw_close[], const float& norm_d[], int len);
+    static Feature* Instance();
+    static Feature* uniqueInstance;
 };
-    
+Feature* FeatureRandom::uniqueInstance=NULL;    
