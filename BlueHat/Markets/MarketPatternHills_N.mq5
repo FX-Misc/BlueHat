@@ -13,7 +13,7 @@ void MarketPatternHills_N::Initialise(int max_history)
     
     ArrayResize(history,max);
     for(int i=max-1; i>=0; i--)
-        history[i]=(i%40>19)?(double)((40-i%40-1)%20-10)/10+NOISE(-0.2,0.2):(double)((i%40)%20-10)/10+NOISE(-0.2,0.2);
+        history[i]=(i%40>19)?(double)((40-i%40-1)%20-10)/10+NOISE(-0.1,0.1):(double)((i%40)%20-10)/10+NOISE(-0.1,0.1);
         
     oldest_available = ArraySize(history) - TIMESERIES_DEPTH;
     diff_norm_factor = 1;    //TODO: calculate based on the reverse of a typical strong diff, 1000 for eurusd/1h as a sample 
