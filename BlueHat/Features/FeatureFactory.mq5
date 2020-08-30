@@ -23,6 +23,9 @@ INode* FeatureFactory::FeatureInstance(string name)
         feature = FeatureSlope12::Instance();
     else if(name=="feRepeatW5")
         feature = FeatureRepeatW5::Instance();
+        
+    else if(name=="fiIMAFast")
+        feature = FeatureIMAFast::Instance();
     else
         feature = NULL;
     assert(feature != NULL, "");
