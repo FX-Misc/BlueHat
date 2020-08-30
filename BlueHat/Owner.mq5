@@ -182,15 +182,15 @@ bool Owner::CreateDebugDB()
     for(int i=0; i<features.Count(); i++)
         db.AddDBGTBLItem(features.at(i).name,false);
     for(int i=0; i<axonsL1.Count(); i++)
-        db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name,false);
+        db.AddDBGTBLItem("X"+axonsL1.at(i).pnode.name,false);
     for(int i=0; i<neuronsL1.Count(); i++)
         db.AddDBGTBLItem("N"+"_"+neuronsL1.at(i).name,false);
     for(int i=0; i<axonsL2.Count(); i++)
-        db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name,false);
+        db.AddDBGTBLItem("Y"+axonsL2.at(i).pnode.name,false);
     for(int i=0; i<neuronsL2.Count(); i++)
         db.AddDBGTBLItem("N"+"_"+neuronsL2.at(i).name,false);
     for(int i=0; i<axonsL3.Count(); i++)
-        db.AddDBGTBLItem("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name,false);
+        db.AddDBGTBLItem("Z"+axonsL3.at(i).pnode.name,false);
     db.AddDBGTBLItem("diff_raw", false);
     db.AddDBGTBLItem("close_raw", false);
     return db.AddDBGTBLItem("reserve", true);
@@ -213,15 +213,15 @@ void Owner::SaveDebugInfo(int index, double desired_in, double diff_raw1, double
     for(int i=0; i<features.Count(); i++)
         db.Insert(features.at(i).name, features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
-        db.Insert("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name, axonsL1.at(i).GetGain(), false);
+        db.Insert("X"+axonsL1.at(i).pnode.name, axonsL1.at(i).GetGain(), false);
     for(int i=0; i<neuronsL1.Count(); i++)
         db.Insert("N"+"_"+neuronsL1.at(i).name, neuronsL1.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
-        db.Insert("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name, axonsL2.at(i).GetGain(), false);
+        db.Insert("Y"+axonsL2.at(i).pnode.name, axonsL2.at(i).GetGain(), false);
     for(int i=0; i<neuronsL2.Count(); i++)
         db.Insert("N"+"_"+neuronsL2.at(i).name, neuronsL2.at(i).GetNode(), false);
     for(int i=0; i<axonsL3.Count(); i++)
-        db.Insert("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name, axonsL3.at(i).GetGain(), false);
+        db.Insert("Z"+axonsL3.at(i).pnode.name, axonsL3.at(i).GetGain(), false);
     db.Insert("diff_raw", diff_raw1, false);
     db.Insert("close_raw", close1, false);
     db.Insert("reserve", 0, true);

@@ -66,7 +66,7 @@ bool DataBase::OpenDB(void)
 }
 bool DataBase::AddDBGTBLItem(string name, bool completed)
 {
-    static string str1="CREATE TABLE DEBUG( ID INT ";
+    static string str1="CREATE TABLE DEBUG( ID INT PRIMARY KEY     NOT NULL";
     
     if(!completed)
         str1+=","+name+" REAL";
