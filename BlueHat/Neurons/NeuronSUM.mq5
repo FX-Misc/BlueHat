@@ -1,13 +1,13 @@
 #include "NeuronSUM.mqh"
 
-void NeuronSUM::NeuronSUM()
+void NeuronSUM::NeuronSUM(string nname)
 {
-    name = "neSum";
+    name = nname;
 }
 
-float NeuronSUM::GetNode()
+double NeuronSUM::GetNode()
 {
-    float ret=0;
+    double ret=0;
     for(int i=0; i<axons.Count(); i++)
         ret += axons.at(i).GetGainedValueN();
 //    ret = SOFT_NORMAL(ret);

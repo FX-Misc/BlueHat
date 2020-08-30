@@ -7,8 +7,14 @@ FeatureBiasZero::FeatureBiasZero(void)
 FeatureBiasZero::~FeatureBiasZero(void)
 {
 }
-void FeatureBiasZero::Update(const float& raw_close[], const float& norm_d[], int len)
+Feature* FeatureBiasZero::Instance()
 {
-    updated_value = (float)0;
+    if(!CheckPointer(uniqueInstance))
+        uniqueInstance=new FeatureBiasZero;
+    return uniqueInstance;
+}
+void FeatureBiasZero::Update(const double& raw_close[], const double& norm_d[], int len)
+{
+    updated_value = (double)0;
 }
 

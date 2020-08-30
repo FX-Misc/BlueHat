@@ -3,16 +3,17 @@
 Trainer::~Trainer()
 {
 }
-Trainer::Trainer(INode* psm, Evaluator* peval, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2), eval(peval)
+Trainer::Trainer(INode* psm, Evaluator* peval, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2, CXArrayList<Axon*> *pL3) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2), axonsL3(pL3), eval(peval)
 {
 }
-void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
+void Trainer::Go1Epoch(double new_norm_diff)
 {
-    float base_value = GetCurrentOutputN();
+    double base_value;
 
     for(int i=0; i<axonsL1.Count(); i++)
         if(axonsL1.at(i).active)
         {
+            base_value = GetCurrentOutputN();
             axonsL1.at(i).GainGrow(); //trial grow
             switch( eval.EvaluateTrial( new_norm_diff, base_value, GetCurrentOutputN() ) )
             {
@@ -32,6 +33,7 @@ void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
     for(int i=0; i<axonsL2.Count(); i++)
         if(axonsL2.at(i).active)
         {
+            base_value = GetCurrentOutputN();
             axonsL2.at(i).GainGrow(); //trial grow
             switch( eval.EvaluateTrial(new_norm_diff, base_value, GetCurrentOutputN() ) )
             {
@@ -47,13 +49,32 @@ void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
             }
             axonsL2.at(i).GainDeGrow();
         }
+        
+    for(int i=0; i<axonsL3.Count(); i++)
+        if(axonsL3.at(i).active)
+        {
+            base_value = GetCurrentOutputN();
+            axonsL3.at(i).GainGrow(); //trial grow
+            switch( eval.EvaluateTrial(new_norm_diff, base_value, GetCurrentOutputN() ) )
+            {
+                case SCORE_GOOD:    //all good, positive change
+                    axonsL3.at(i).grow_temp_flag = FLAG_GROW;
+                    break;
+                case SCORE_NEUTRAL:    //no change in the output, keep the existing
+                    axonsL3.at(i).grow_temp_flag = FLAG_KEEP;
+                    break;
+                case SCORE_BAD:    //change in the reverse direction
+                    axonsL3.at(i).grow_temp_flag = FLAG_DEGROW;
+                    break;
+            }
+            axonsL3.at(i).GainDeGrow();
+        }
      
     //fixing the changes
     for(int i=0; i<axonsL1.Count(); i++)
         if(axonsL1.at(i).active)
         {
-            if(degradation)
-                axonsL1.at(i).GainDegrade();
+            axonsL1.at(i).GainDegrade();
             switch(axonsL1.at(i).grow_temp_flag)
             {
                 case FLAG_GROW:
@@ -69,8 +90,7 @@ void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
     for(int i=0; i<axonsL2.Count(); i++)
         if(axonsL2.at(i).active)
         {
-            if(degradation)
-                axonsL2.at(i).GainDegrade();
+            axonsL2.at(i).GainDegrade();
             switch(axonsL2.at(i).grow_temp_flag)
             {
                 case FLAG_GROW:
@@ -83,8 +103,24 @@ void Trainer::Go1Epoch(float new_norm_diff, bool degradation)
                     break;
             }            
         }
+    for(int i=0; i<axonsL3.Count(); i++)
+        if(axonsL3.at(i).active)
+        {
+            axonsL3.at(i).GainDegrade();
+            switch(axonsL3.at(i).grow_temp_flag)
+            {
+                case FLAG_GROW:
+                    axonsL3.at(i).GainGrow();
+                    break;
+                case FLAG_DEGROW:
+                    axonsL3.at(i).GainDeGrow();
+                    break;
+                case FLAG_KEEP:
+                    break;
+            }            
+        }
 }
-float Trainer::GetCurrentOutputN(void) const
+double Trainer::GetCurrentOutputN(void) const
 {
     return SOFT_NORMAL( pSoftMax.GetNode() );
 }

@@ -2,7 +2,7 @@
 class NeuronSUM : public Neuron
 {
 public:
-    NeuronSUM();
-    float GetNode();
+    NeuronSUM(string nname);
+    double GetNode();
     void AddAxon(Axon*);    
 };

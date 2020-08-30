@@ -6,6 +6,8 @@ class FeatureRepeatLast : public Feature
 public:
     FeatureRepeatLast();
     ~FeatureRepeatLast();
-    void Update(const float& raw_close[], const float& norm_d[], int len);
+    void Update(const double& raw_close[], const double& norm_d[], int len);
+    static Feature* Instance();
+    static Feature* uniqueInstance;
 };
-    
+Feature* FeatureRepeatLast::uniqueInstance=NULL;    

@@ -1,20 +1,26 @@
 #include "../../BlueHat/Owner.mqh"
-#include "../../BlueHat/Market.mqh"
+#include "../../BlueHat/Markets/Market.mqh"
+#include "../../BlueHat/Markets/MarketFactory.mqh"
 #include "../../BlueHat/globals/_globals.mqh"
 
 #property script_show_inputs
+input markets_t market_type=MARKET_SCRIPT_REAL;
 input bool debug=true;
+input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
+
+#include <Generic\HashSet.mqh>
 
 void OnStart()
 {
-    float desired;
+    double desired;
     
     Print("Hi there");
     assert(1>0,"test");
 
-    Market* market = new MarketScriptReal;
-    market.Initialise(100); //0 for full history
+    MarketFactory mf;
+    Market* market = mf.CreateMarket(market_type);
+    market.Initialise(depth); //0 for full history
         
     market.UpdateBuffers(0);
     Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
@@ -37,7 +43,7 @@ void OnStart()
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
         if(debug)
-            owner.SaveDebugInfo(i, desired);
+            owner.SaveDebugInfo(i, desired, market.diff_raw[1], market.close[1]);
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
@@ -45,10 +51,11 @@ void OnStart()
     }  
         
     owner.db.CloseDB();
-    Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
+    Print("Quality metrics, Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
                                    owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG)," ",
-                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME)," ",
-                    "  Direction:",owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME));
+                                   
+    Print("Quality metrics, Direction=",owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT)," ",
                                    owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG)," ",
                                    owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME)," ",
                                "");
