@@ -5,7 +5,7 @@
 
 #property script_show_inputs
 input markets_t market_type=MARKET_SCRIPT_REAL;
-input bool debug=true;
+input DEBUG_MODE debug_mode=DEBUG_NORMAL;
 input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
@@ -28,7 +28,7 @@ void OnStart()
     Owner owner();
     owner.db.OpenDB();
     owner.CreateNN(evaluation_method);
-    owner.CreateDebugDB();
+    owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
     market.UpdateBuffers(market.oldest_available);
@@ -42,8 +42,7 @@ void OnStart()
         desired = market.diff_norm[1];
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
-        if(debug)
-            owner.SaveDebugInfo(i, desired, market.diff_raw[1], market.close[1]);
+        owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1]);
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
