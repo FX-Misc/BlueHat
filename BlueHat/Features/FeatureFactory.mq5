@@ -26,6 +26,8 @@ INode* FeatureFactory::FeatureInstance(string name)
         
     else if(name=="fiIMAFast")
         feature = FeatureIMAFast::Instance();
+    else if(name=="fiMACD")
+        feature = FeatureMACD::Instance();
     else
         feature = NULL;
     assert(feature != NULL, "");
