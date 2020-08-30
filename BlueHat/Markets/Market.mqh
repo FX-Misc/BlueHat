@@ -14,5 +14,5 @@ public:
 public:
     virtual void Initialise(int max_history)=0;
     virtual void UpdateBuffers(int index)=0;
-    virtual void GetIndicators(int hndl, double& buf0[])=0;
+    virtual void GetIndicators(int hndl, int ind_buff_no, double& buf0[])=0;
 };

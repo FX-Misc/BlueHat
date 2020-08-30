@@ -32,7 +32,7 @@ void MarketScriptReal::UpdateBuffers(int index)
     }
 }
 
-void MarketScriptReal::GetIndicators(int hndl, double& buf0[])
+void MarketScriptReal::GetIndicators(int hndl, int ind_buff_no, double& buf0[])
 {
-    CopyBuffer(hndl,0,current_index,TIMESERIES_DEPTH,buf0);
+    assert( CopyBuffer(hndl,ind_buff_no,current_index,TIMESERIES_DEPTH,buf0) >0, "indicator CopyBuffer not successfull");
 }
