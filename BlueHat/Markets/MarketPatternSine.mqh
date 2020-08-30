@@ -1,5 +1,5 @@
-#include "Market.mqh"
-class MarketPatternSine : public Market
+#include "MarketPattern.mqh"
+class MarketPatternSine : public MarketPattern
 {
 public:
     void Initialise(int max_history);

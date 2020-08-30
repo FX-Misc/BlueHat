@@ -1,6 +1,8 @@
 #include "../globals/_globals.mqh"
 class Market
 {
+protected:
+    int current_index;
 public:
     double history[];
     double close[];
@@ -12,4 +14,5 @@ public:
 public:
     virtual void Initialise(int max_history)=0;
     virtual void UpdateBuffers(int index)=0;
+    virtual void GetIndicators(int hndl, double& buf0[])=0;
 };

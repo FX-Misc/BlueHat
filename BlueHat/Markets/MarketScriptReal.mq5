@@ -18,6 +18,7 @@ void MarketScriptReal::Initialise(int max_history)
 
 void MarketScriptReal::UpdateBuffers(int index)
 {
+    current_index = index;
     ArrayCopy(close,history,0,index,TIMESERIES_DEPTH+1); 
     //close[0] is the uncomplete bar in the main loop of EA, the newest but unused bar in the script
     //close[1] is the desired in the main loop.
@@ -29,4 +30,9 @@ void MarketScriptReal::UpdateBuffers(int index)
         diff_raw[i] = close[i]-close[i+1];
         diff_norm[i] = SOFT_NORMAL(diff_raw[i] * diff_norm_factor);
     }
+}
+
+void MarketScriptReal::GetIndicators(int hndl, double& buf0[])
+{
+    CopyBuffer(hndl,0,current_index,TIMESERIES_DEPTH,buf0);
 }
