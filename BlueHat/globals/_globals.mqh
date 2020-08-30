@@ -1,5 +1,12 @@
 #define TIMESERIES_DEPTH (10+1) //+1 is for useless sample of 0. number of bars available to features; must be at least equal to the length od indicators
 
+enum DEBUG_MODE
+{
+    DEBUG_NONE,
+    DEBUG_NORMAL,
+    DEBUG_VERBOSE
+};
+
 
 #define FLOAT_NEAR(a,b) ( (MathAbs((a)-(b))<1e-30) ? true : false )
 

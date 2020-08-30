@@ -169,8 +169,10 @@ trade_advice_t Owner::GetAdvice()
 {
     return TRADE_NONE;
 }
-bool Owner::CreateDebugDB()
+bool Owner::CreateDebugDB(DEBUG_MODE debug_m)
 {
+    if(debug_m == DEBUG_NONE)
+        return true;
     db.AddDBGTBLItem("desired", false);
     db.AddDBGTBLItem("softmax",false);
     db.AddDBGTBLItem("DiffShort", false);
@@ -179,18 +181,21 @@ bool Owner::CreateDebugDB()
     db.AddDBGTBLItem("DirShort", false);
     db.AddDBGTBLItem("DirLong", false);
     db.AddDBGTBLItem("DirAll", false);
-    for(int i=0; i<features.Count(); i++)
-        db.AddDBGTBLItem(features.at(i).name,false);
+    if(debug_m==DEBUG_VERBOSE)
+        for(int i=0; i<features.Count(); i++)
+            db.AddDBGTBLItem(features.at(i).name,false);
     for(int i=0; i<axonsL1.Count(); i++)
-        db.AddDBGTBLItem("X"+axonsL1.at(i).pnode.name,false);
-    for(int i=0; i<neuronsL1.Count(); i++)
-        db.AddDBGTBLItem("N"+"_"+neuronsL1.at(i).name,false);
+        db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name,false);
+    if(debug_m==DEBUG_VERBOSE)
+        for(int i=0; i<neuronsL1.Count(); i++)
+            db.AddDBGTBLItem("N"+"_"+neuronsL1.at(i).name,false);
     for(int i=0; i<axonsL2.Count(); i++)
-        db.AddDBGTBLItem("Y"+axonsL2.at(i).pnode.name,false);
-    for(int i=0; i<neuronsL2.Count(); i++)
-        db.AddDBGTBLItem("N"+"_"+neuronsL2.at(i).name,false);
+        db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name,false);
+    if(debug_m==DEBUG_VERBOSE)
+        for(int i=0; i<neuronsL2.Count(); i++)
+            db.AddDBGTBLItem("N"+"_"+neuronsL2.at(i).name,false);
     for(int i=0; i<axonsL3.Count(); i++)
-        db.AddDBGTBLItem("Z"+axonsL3.at(i).pnode.name,false);
+        db.AddDBGTBLItem("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name,false);
     db.AddDBGTBLItem("diff_raw", false);
     db.AddDBGTBLItem("close_raw", false);
     return db.AddDBGTBLItem("reserve", true);
@@ -199,8 +204,10 @@ bool Owner::CreateStateDB()
 {
     return true;
 }
-void Owner::SaveDebugInfo(int index, double desired_in, double diff_raw1, double close1)
+void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, double diff_raw1, double close1)
 {
+    if(debug_m == DEBUG_NONE)
+        return;
     db.Insert("ID", (double)index, false);    
     db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), false);
@@ -210,18 +217,21 @@ void Owner::SaveDebugInfo(int index, double desired_in, double diff_raw1, double
     db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
     db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
     db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
-    for(int i=0; i<features.Count(); i++)
-        db.Insert(features.at(i).name, features.at(i).GetNode(), false);
+    if(debug_m==DEBUG_VERBOSE)
+        for(int i=0; i<features.Count(); i++)
+            db.Insert(features.at(i).name, features.at(i).GetNode(), false);
     for(int i=0; i<axonsL1.Count(); i++)
-        db.Insert("X"+axonsL1.at(i).pnode.name, axonsL1.at(i).GetGain(), false);
-    for(int i=0; i<neuronsL1.Count(); i++)
-        db.Insert("N"+"_"+neuronsL1.at(i).name, neuronsL1.at(i).GetNode(), false);
+        db.Insert("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name, axonsL1.at(i).GetGain(), false);
+    if(debug_m==DEBUG_VERBOSE)
+        for(int i=0; i<neuronsL1.Count(); i++)
+            db.Insert("N"+"_"+neuronsL1.at(i).name, neuronsL1.at(i).GetNode(), false);
     for(int i=0; i<axonsL2.Count(); i++)
-        db.Insert("Y"+axonsL2.at(i).pnode.name, axonsL2.at(i).GetGain(), false);
-    for(int i=0; i<neuronsL2.Count(); i++)
-        db.Insert("N"+"_"+neuronsL2.at(i).name, neuronsL2.at(i).GetNode(), false);
+        db.Insert("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name, axonsL2.at(i).GetGain(), false);
+    if(debug_m==DEBUG_VERBOSE)
+        for(int i=0; i<neuronsL2.Count(); i++)
+            db.Insert("N"+"_"+neuronsL2.at(i).name, neuronsL2.at(i).GetNode(), false);
     for(int i=0; i<axonsL3.Count(); i++)
-        db.Insert("Z"+axonsL3.at(i).pnode.name, axonsL3.at(i).GetGain(), false);
+        db.Insert("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name, axonsL3.at(i).GetGain(), false);
     db.Insert("diff_raw", diff_raw1, false);
     db.Insert("close_raw", close1, false);
     db.Insert("reserve", 0, true);
