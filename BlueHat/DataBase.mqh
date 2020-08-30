@@ -14,5 +14,4 @@ public:
     int CreateRequest(string header);
     void FinaliseRequest(int request);
     string ReadNextString(int request);
-    int ReadNextInt(int request);
 };

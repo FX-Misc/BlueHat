@@ -36,12 +36,9 @@ Owner::~Owner()
 void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
 {
     FeatureFactory ff;
-//    features.AddIfNotFound(ff.FeatureInstance("feCheater"));
-//    Print(features.Count(),features.at(0).name,features.at(1).name);
     AccuracyFactory acf;
     NeuronFactory nf;
     
-
 //==================Features & AxonsL1
     {
         string str;
