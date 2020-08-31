@@ -21,11 +21,8 @@ Feature* FeatureMACD::Instance()
 }
 void FeatureMACD::Update(const double& raw_close[], const double& norm_d[], int len)
 {
-//    int temp;
     market.GetIndicators(handle, 0, macd_main);
-    market.GetIndicators(handle, 1, macd_signal);
-//    temp = CopyBuffer(IMA_handle,0,0,3,IMA);
-//    assert(temp>0,"CopyBuffer failed");
-    updated_value = macd_signal[1];
+    market.GetIndicators(handle, 1, macd_signal);   //the histogram
+    updated_value = 2*( macd_signal[1]-macd_signal[2] ) +2*( macd_main[1]-macd_main[2] ) +1*( macd_main[1]-macd_signal[1] );
 }
 
