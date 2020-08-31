@@ -27,7 +27,7 @@ void OnStart()
 
     Owner owner();
     owner.db.OpenDB();
-    owner.CreateNN(evaluation_method);
+    owner.CreateNN(evaluation_method, market);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     

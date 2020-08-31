@@ -33,7 +33,7 @@ Owner::~Owner()
 
     Print("deleting done");
 }
-void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
+void Owner::CreateNN(evaluation_method_t evm, Market* m)
 {
     FeatureFactory ff;
     AccuracyFactory acf;
@@ -54,6 +54,8 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
             axonsL1.Add( new Axon(ff.FeatureInstance(str), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
             str = db.ReadNextString(req);
         };
+        for(int i=0; i<features.Count(); i++)
+            features.at(i).market = m;
         db.FinaliseRequest(req);
         Print(features.Count()," features created");
         Print(axonsL1.Count()," Axons(L1) created");
