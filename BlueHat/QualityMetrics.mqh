@@ -30,5 +30,5 @@ private:
 public:
     QualityMetrics();
     double GetQuality(quality_method_t method, quality_period_t period) const; //-1(min)..-(bad)..0(neutral)..+(good)..1(max)
-    void UpdateMetrics(double desired, double value);
+    void UpdateMetrics(double desired, double value, double diff_raw);
 };

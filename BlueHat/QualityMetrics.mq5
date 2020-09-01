@@ -44,7 +44,7 @@ double QualityMetrics::GetQuality(quality_method_t method, quality_period_t peri
         assert(false,"invalid quality method");
     return 0;    
 }
-void QualityMetrics::UpdateMetrics(double desired, double value)
+void QualityMetrics::UpdateMetrics(double desired, double value, double diff_raw)
 {
     epoch_counter++;
     if(FLOAT_SIGN(desired)==FLOAT_SIGN(value))
