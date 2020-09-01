@@ -85,7 +85,40 @@ bool DataBase::AddDBGTBLItem(string name, bool completed)
     return true;
 }
 
-bool DataBase::Insert(string name, float value, bool completed)
+int DataBase::CreateRequest(string header)
+{
+    int request=0;
+    request = DatabasePrepare(db, "SELECT "+header+" FROM NN");
+    if(request==INVALID_HANDLE)
+    {
+        assert(false, "DB: unsuccessful request");
+        DatabaseClose(db);
+        return DB_ERROR_INT;
+    }
+    return request;
+}
+void DataBase::FinaliseRequest(int request)
+{
+    DatabaseFinalize(request);
+}
+
+string DataBase::ReadNextString(int request)
+{
+    if( ! DatabaseRead(request))
+        return DB_END_STR;
+
+    string str;
+    if( ! DatabaseColumnText(request, 0, str))
+    {
+        Print("DB: Read failed");
+        return DB_ERROR_STR;
+    }
+    if(str=="-")
+        return DB_END_STR;
+    return str;
+}
+
+bool DataBase::Insert(string name, double value, bool completed)
 {
     static string str1="INSERT INTO DEBUG (";
     static string str2=") VALUES (";

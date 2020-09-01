@@ -1,14 +1,11 @@
-#include "/NeuronSUM.mqh"
- 
+#include "../globals/ExtendedArrList.mqh"
 #include "/../INode.mqh"
 
-enum neurons_t
-{
-    NEURON_SUM,
-};
+#include "/NeuronSUM.mqh"
  
 class NeuronFactory
 {
 public:
-    Neuron* CreateNeuron(neurons_t n);
+    Neuron* CreateNeuron(string type, string nname);
+    Neuron* FindNeuronByName(string n, CXArrayList<Neuron*>* list, int& ret_id);    
 };

@@ -2,5 +2,5 @@ class IAccuracy
 {
 protected:
 public:
-    virtual float CalculateAccuracy(float desired, float value)=0;
+    virtual double CalculateAccuracy(double desired, double value)=0;
 };

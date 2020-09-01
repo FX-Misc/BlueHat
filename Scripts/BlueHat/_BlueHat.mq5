@@ -1,53 +1,64 @@
 #include "../../BlueHat/Owner.mqh"
+#include "../../BlueHat/Markets/Market.mqh"
+#include "../../BlueHat/Markets/MarketFactory.mqh"
 #include "../../BlueHat/globals/_globals.mqh"
 
 #property script_show_inputs
-input bool debug=true;
+input markets_t market_type=MARKET_SCRIPT_REAL;
+input DEBUG_MODE debug_mode=DEBUG_NORMAL;
+input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
+
+#include <Generic\HashSet.mqh>
 
 void OnStart()
 {
-    float desired;
+    double desired;
     
     Print("Hi there");
     assert(1>0,"test");
-   
+
+    MarketFactory mf;
+    Market* market = mf.CreateMarket(market_type);
+    market.Initialise(depth); //0 for full history
+        
+    market.UpdateBuffers(0);
+    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     Owner owner();
-    owner.CreateNN(evaluation_method);
     owner.db.OpenDB();
-    owner.CreateDebugDB();
+    owner.CreateNN(evaluation_method, market);
+    owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
-    test_in[1000]=0;
-    test_in[999]=0;
-    test_in[998]=0;
-    for(int i=997; i>=0; i--)
-        test_in[i]=CAP((test_in[i+1]*3+test_in[i+2]*2+test_in[i+3]*1)/6+NOISE(-0.4,0.4) ,-1,1);
-    owner.UpdateInput(1001,1001);
-    for(int i=999; i>0; i--)
+    market.UpdateBuffers(market.oldest_available);
+    owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+    for(int i=market.oldest_available-1; i>=0; i--)
     {
-//Note: index+1 is the last completed Bar, so the one that we need
-//If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
-        desired = test_in[i+1];//close[i+1]
+        market.UpdateBuffers(i);
+        //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
+        //Note: index+1 is the last completed Bar, so the one that we need
+        //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
+        desired = market.diff_norm[1];
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode());
         owner.Train1Epoch(desired);
-        if(debug)
-            owner.SaveDebugInfo(i, desired);
-        owner.UpdateInput(i+1,1001);
+        owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1]);
+        owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
         
-    }
+    }  
         
     owner.db.CloseDB();
-    Print("Quality metrics: Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
+    Print("Quality metrics, Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
                                    owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG)," ",
-                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME)," ",
-                    "  Direction:",owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT)," ",
+                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME));
+                                   
+    Print("Quality metrics, Direction=",owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT)," ",
                                    owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG)," ",
                                    owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME)," ",
                                "");
+    delete market;
     Print("Bye");
 }
 

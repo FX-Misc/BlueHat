@@ -7,4 +7,5 @@ protected:
     CXArrayList<Axon*> axons;
 public:
     virtual void AddAxon(Axon* ax)=0;
+
 };

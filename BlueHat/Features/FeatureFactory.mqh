@@ -1,17 +1,16 @@
 #include "/FeatureCheater.mqh"
-#include "/Featurerandom.mqh"
+#include "/FeatureRandom.mqh"
+#include "/FeatureBiasPositive.mqh"
+#include "/FeatureBiasNegative.mqh"
+#include "/FeatureBiasZero.mqh"
+#include "/FeatureRepeatLast.mqh"
+#include "/Feature3LastDiffsMean.mqh"
  
 #include "/../INode.mqh"
 
-enum features_t
-{
-    FEATURE_RANDOM,
-    FEATURE_CHEATER,
-};
- 
 class FeatureFactory
 {
 private:
 public:
-    INode* CreateFeature(features_t fe);
+    INode* FeatureInstance(string name);
 };
