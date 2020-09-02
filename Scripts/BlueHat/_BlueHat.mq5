@@ -40,8 +40,8 @@ void OnStart()
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = market.diff_norm[1];
-        owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.diff_raw[1]);
         owner.Train1Epoch(desired);
+        owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.diff_raw[1]);
         owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1]);
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
