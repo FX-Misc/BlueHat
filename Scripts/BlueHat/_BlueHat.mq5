@@ -33,6 +33,7 @@ void OnStart()
     
     market.UpdateBuffers(market.oldest_available);
     owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+    int len_div_10=(market.oldest_available-1)/10;
     for(int i=market.oldest_available-1; i>=0; i--)
     {
         market.UpdateBuffers(i);
@@ -46,24 +47,29 @@ void OnStart()
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
-        
+        if( (i%len_div_10) == 0)
+            print_progress(&owner, 10*(i/len_div_10));
     }  
         
     owner.db.CloseDB();
-    Print("Quality metrics, profit=",owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_SHORT)," ",
-                                   owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG)," ",
-                                   owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME));
-    Print("Quality metrics, Diff=",owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT)," ",
-                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG)," ",
-                                   owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME));
-    Print("Quality metrics, Direction=",owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT)," ",
-                                   owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG)," ",
-                                   owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME)," ",
-                               "");
+//    print_progress(&owner,100);
     delete market;
     Print("Bye");
 }
-
+void print_progress(Owner* owner, int progress)
+{
+    Print("..",progress,"%");
+    Print("Quality metrics, profit= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_SHORT),5)," ",
+                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG),5)," ",
+                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME),4));
+    Print("Quality metrics, Diff= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT),5)," ",
+                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG),5)," ",
+                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME),4));
+    Print("Quality metrics, Direction= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT),5)," ",
+                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG),5)," ",
+                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME),4)," ",
+                               "");
+}
 //snippet
 /*
 DataBaseExport to save a table as csv
