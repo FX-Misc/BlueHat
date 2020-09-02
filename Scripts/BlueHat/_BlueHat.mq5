@@ -45,8 +45,9 @@ void OnStart()
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.diff_raw[1]);
         owner.UpdateAxonStats();
         owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1]);
-        if( (i%len_div_10) == 0)
-            print_progress(&owner, 10*(i/len_div_10));
+        if( len_div_10 > 0)
+            if( (i%len_div_10) == 0)
+                print_progress(&owner, 10*(i/len_div_10));
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here

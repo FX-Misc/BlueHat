@@ -11,7 +11,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
     double base_value;
 
     for(int i=0; i<axonsL1.Count(); i++)
-        if(axonsL1.at(i).active)
+        if(!axonsL1.at(i).freeze)
         {
             base_value = GetCurrentOutputN();
             axonsL1.at(i).GainGrow(); //trial grow
@@ -31,7 +31,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
         }
         
     for(int i=0; i<axonsL2.Count(); i++)
-        if(axonsL2.at(i).active)
+        if(!axonsL2.at(i).freeze)
         {
             base_value = GetCurrentOutputN();
             axonsL2.at(i).GainGrow(); //trial grow
@@ -51,7 +51,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
         }
         
     for(int i=0; i<axonsL3.Count(); i++)
-        if(axonsL3.at(i).active)
+        if(!axonsL3.at(i).freeze)
         {
             base_value = GetCurrentOutputN();
             axonsL3.at(i).GainGrow(); //trial grow
@@ -72,7 +72,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
      
     //fixing the changes
     for(int i=0; i<axonsL1.Count(); i++)
-        if(axonsL1.at(i).active)
+        if(!axonsL1.at(i).freeze)
         {
             axonsL1.at(i).GainDegrade();
             switch(axonsL1.at(i).grow_temp_flag)
@@ -88,7 +88,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
             }            
         }
     for(int i=0; i<axonsL2.Count(); i++)
-        if(axonsL2.at(i).active)
+        if(!axonsL2.at(i).freeze)
         {
             axonsL2.at(i).GainDegrade();
             switch(axonsL2.at(i).grow_temp_flag)
@@ -104,7 +104,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
             }            
         }
     for(int i=0; i<axonsL3.Count(); i++)
-        if(axonsL3.at(i).active)
+        if(!axonsL3.at(i).freeze)
         {
             axonsL3.at(i).GainDegrade();
             switch(axonsL3.at(i).grow_temp_flag)

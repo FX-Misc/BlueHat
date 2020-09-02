@@ -48,10 +48,38 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
         while(str!=DB_END_STR)
         {
             assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
-            features.AddIfNotFound(ff.FeatureInstance(str));
-            int feNo = features.IndexOf(ff.FeatureInstance(str));
+            string tempstr[3],name;
+            bool freeze;
+            double init;
+            int splitcnt = StringSplit(str,'=',tempstr);
+            switch(splitcnt)
+            {
+                case 1:   //normal Axon
+                    name = tempstr[0];
+                    freeze = false;
+                    init = AXON_FLOOR;
+                    break;
+                case 2:   //frozen Axon
+                    name = tempstr[0];
+                    freeze = false;
+                    init = StringToDouble(tempstr[1]);
+                    break;
+                case 3:   //active Axon, but with init value
+                    assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
+                    name = tempstr[0];
+                    freeze = true;
+                    init = StringToDouble(tempstr[2]);
+                    break;
+                 default:
+                    freeze = true;
+                    init = 0;
+                    assert(false,"wrong Axon format");
+                    break;
+            }
+            features.AddIfNotFound(ff.FeatureInstance(name));
+            int feNo = features.IndexOf(ff.FeatureInstance(name));
             assert(feNo>=0 && feNo<features.Count(), "wrong feature no");
-            axonsL1.Add( new Axon(ff.FeatureInstance(str), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+            axonsL1.Add( new Axon(ff.FeatureInstance(name), feNo, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
             str = db.ReadNextString(req);
         };
         for(int i=0; i<features.Count(); i++)
@@ -100,10 +128,38 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
         while(str!=DB_END_STR)
         {
             assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
-            ne = nf.FindNeuronByName(str, &neuronsL1, index);
+            string tempstr[3],name;
+            bool freeze;
+            double init;
+            int splitcnt = StringSplit(str,'=',tempstr);
+            switch(splitcnt)
+            {
+                case 1:   //normal Axon
+                    name = tempstr[0];
+                    freeze = false;
+                    init = AXON_FLOOR;
+                    break;
+                case 2:   //frozen Axon
+                    name = tempstr[0];
+                    freeze = false;
+                    init = StringToDouble(tempstr[1]);
+                    break;
+                case 3:   //active Axon, but with init value
+                    assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
+                    name = tempstr[0];
+                    freeze = true;
+                    init = StringToDouble(tempstr[2]);
+                    break;
+                 default:
+                    freeze = true;
+                    init = 0;
+                    assert(false,"wrong Axon format");
+                    break;
+            }
+            ne = nf.FindNeuronByName(name, &neuronsL1, index);
             assert(index!=-1 && ne!=NULL,"neuron not found in NN");
-            axonsL2.Add(new Axon(ne, index, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING));
-            
+            axonsL2.Add(new Axon(ne, index, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING));
+
             str = db.ReadNextString(req);
         };
         db.FinaliseRequest(req);
@@ -138,10 +194,10 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
         db.FinaliseRequest(req);
         Print(neuronsL2.Count()," Neurons(L2) created");
     }
-//==================AxonsL2
+//==================AxonsL3
     {
         for(int i=0; i<neuronsL2.Count(); i++)
-            axonsL3.Add( new Axon(neuronsL2.at(i), i, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+            axonsL3.Add( new Axon(neuronsL2.at(i), i, true, AXON_FLOOR, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
         Print(axonsL3.Count()," Axons(L3) created");
     }
 //==================Softmax
