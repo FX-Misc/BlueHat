@@ -250,3 +250,35 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
     db.Insert("close_raw", close1, false);
     db.Insert("reserve", 0, true);
 }
+void Owner::UpdateAxonStats()
+{
+    bestL1=axonsL1.at(0);
+    for(int i=0; i<axonsL1.Count(); i++)
+    {
+        axonsL1.at(i).UpdateAve();
+        if(axonsL1.at(i).GetAve() > bestL1.GetAve())
+            bestL1=axonsL1.at(i);
+    }
+    bestL2=axonsL2.at(0);
+    for(int i=0; i<axonsL2.Count(); i++)
+    {
+        axonsL2.at(i).UpdateAve();
+        if(axonsL2.at(i).GetAve() > bestL2.GetAve())
+            bestL2=axonsL2.at(i);
+    }
+    bestL3=axonsL3.at(0);
+    for(int i=0; i<axonsL3.Count(); i++)
+    {
+        axonsL3.at(i).UpdateAve();
+        if(axonsL3.at(i).GetAve() > bestL3.GetAve())
+            bestL3=axonsL3.at(i);
+    }
+    
+}
+string Owner::GetAxonsReport()
+{
+    string temp = bestL1.pnode.name + "=" + DoubleToString(bestL1.GetAve(),2);
+    temp += "  "+ bestL2.pnode.name + "=" + DoubleToString(bestL2.GetAve(),2);
+    temp += "  "+ bestL3.pnode.name + "=" + DoubleToString(bestL3.GetAve(),2);
+    return temp;
+}

@@ -3,6 +3,8 @@ Axon::Axon(INode* pn, int n_id, double deg_r, double gr_r, double m, double M) :
 {
     gain = m;
     active = true;
+    hist_sum = 0;
+    hist_cnt = 1;
 }
 void Axon::GainGrow(void)
 {
@@ -29,4 +31,13 @@ double Axon::GetGainedValueN() const
 double Axon::GetGain()
 {
     return gain;
+}
+double Axon::GetAve()
+{
+    return hist_sum/hist_cnt;
+}
+void Axon::UpdateAve()
+{
+    hist_cnt++;
+    hist_sum += gain;
 }
