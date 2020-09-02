@@ -213,6 +213,12 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
 {
     if(debug_m == DEBUG_NONE)
         return;
+    if(debug_m == DEBUG_INTERVAL_10)
+        if(index%10 != 0)
+            return;
+    if(debug_m == DEBUG_INTERVAL_100)
+        if(index%100 != 0)
+            return;
     db.Insert("ID", (double)index, false);    
     db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), false);
