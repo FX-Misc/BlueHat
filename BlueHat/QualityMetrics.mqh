@@ -27,7 +27,9 @@ private:
     int direction_zero_all;
     double direction_filtered_short; //-1..1; 0 input for when softmax==0   
     double direction_filtered_long;   
-    double profit_accumulated;
+    double profit_accumulated_all;
+    double profit_short;
+    double profit_long;
     int non_zero_predictions;
     int epoch_counter;  //the number of training epochs so far 
 public:

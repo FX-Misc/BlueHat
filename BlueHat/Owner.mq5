@@ -183,6 +183,8 @@ bool Owner::CreateDebugDB(DEBUG_MODE debug_m)
     db.AddDBGTBLItem("DirShort", false);
     db.AddDBGTBLItem("DirLong", false);
     db.AddDBGTBLItem("DirAll", false);
+    db.AddDBGTBLItem("ProfitShort", false);
+    db.AddDBGTBLItem("ProfitLong", false);
     db.AddDBGTBLItem("ProfitAll", false);
     if(debug_m==DEBUG_VERBOSE)
         for(int i=0; i<features.Count(); i++)
@@ -220,6 +222,8 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
     db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
     db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
     db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
+    db.Insert("ProfitShort", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_SHORT), false);
+    db.Insert("ProfitLong", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG), false);
     db.Insert("ProfitAll", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME), false);
     if(debug_m==DEBUG_VERBOSE)
         for(int i=0; i<features.Count(); i++)
