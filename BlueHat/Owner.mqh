@@ -32,6 +32,9 @@ private:
     CXArrayList<Axon*> *axonsL1;
     CXArrayList<Axon*> *axonsL2;
     CXArrayList<Axon*> *axonsL3;
+    Axon* bestL1;
+    Axon* bestL2;
+    Axon* bestL3;
 public:
     Owner();
     ~Owner();
@@ -48,5 +51,7 @@ public:
     trade_advice_t GetAdvice();
     bool CreateDebugDB(DEBUG_MODE debug_m);
     bool CreateStateDB();
+    void UpdateAxonStats();
+    string GetAxonsReport();
 //    trade_advice_t Go1Bar(int index, int history_index, bool logging);
 };
