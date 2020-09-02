@@ -33,7 +33,7 @@ Owner::~Owner()
 
     Print("deleting done");
 }
-void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
+void Owner::CreateNN(evaluation_method_t evm, Market* m)
 {
     FeatureFactory ff;
     AccuracyFactory acf;
@@ -54,6 +54,8 @@ void Owner::CreateNN(evaluation_method_t evm)  //TODO: input file/
             axonsL1.Add( new Axon(ff.FeatureInstance(str), feNo, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
             str = db.ReadNextString(req);
         };
+        for(int i=0; i<features.Count(); i++)
+            features.at(i).market = m;
         db.FinaliseRequest(req);
         Print(features.Count()," features created");
         Print(axonsL1.Count()," Axons(L1) created");
@@ -181,6 +183,9 @@ bool Owner::CreateDebugDB(DEBUG_MODE debug_m)
     db.AddDBGTBLItem("DirShort", false);
     db.AddDBGTBLItem("DirLong", false);
     db.AddDBGTBLItem("DirAll", false);
+    db.AddDBGTBLItem("ProfitShort", false);
+    db.AddDBGTBLItem("ProfitLong", false);
+    db.AddDBGTBLItem("ProfitAll", false);
     if(debug_m==DEBUG_VERBOSE)
         for(int i=0; i<features.Count(); i++)
             db.AddDBGTBLItem(features.at(i).name,false);
@@ -208,6 +213,12 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
 {
     if(debug_m == DEBUG_NONE)
         return;
+    if(debug_m == DEBUG_INTERVAL_10)
+        if(index%10 != 0)
+            return;
+    if(debug_m == DEBUG_INTERVAL_100)
+        if(index%100 != 0)
+            return;
     db.Insert("ID", (double)index, false);    
     db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), false);
@@ -217,6 +228,9 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
     db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
     db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
     db.Insert("DirAll", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
+    db.Insert("ProfitShort", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_SHORT), false);
+    db.Insert("ProfitLong", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG), false);
+    db.Insert("ProfitAll", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME), false);
     if(debug_m==DEBUG_VERBOSE)
         for(int i=0; i<features.Count(); i++)
             db.Insert(features.at(i).name, features.at(i).GetNode(), false);
@@ -235,4 +249,36 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
     db.Insert("diff_raw", diff_raw1, false);
     db.Insert("close_raw", close1, false);
     db.Insert("reserve", 0, true);
+}
+void Owner::UpdateAxonStats()
+{
+    bestL1=axonsL1.at(0);
+    for(int i=0; i<axonsL1.Count(); i++)
+    {
+        axonsL1.at(i).UpdateAve();
+        if(axonsL1.at(i).GetAve() > bestL1.GetAve())
+            bestL1=axonsL1.at(i);
+    }
+    bestL2=axonsL2.at(0);
+    for(int i=0; i<axonsL2.Count(); i++)
+    {
+        axonsL2.at(i).UpdateAve();
+        if(axonsL2.at(i).GetAve() > bestL2.GetAve())
+            bestL2=axonsL2.at(i);
+    }
+    bestL3=axonsL3.at(0);
+    for(int i=0; i<axonsL3.Count(); i++)
+    {
+        axonsL3.at(i).UpdateAve();
+        if(axonsL3.at(i).GetAve() > bestL3.GetAve())
+            bestL3=axonsL3.at(i);
+    }
+    
+}
+string Owner::GetAxonsReport()
+{
+    string temp = bestL1.pnode.name + "=" + DoubleToString(bestL1.GetAve(),2);
+    temp += "  "+ bestL2.pnode.name + "=" + DoubleToString(bestL2.GetAve(),2);
+    temp += "  "+ bestL3.pnode.name + "=" + DoubleToString(bestL3.GetAve(),2);
+    return temp;
 }

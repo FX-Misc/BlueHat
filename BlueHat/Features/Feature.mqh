@@ -1,5 +1,6 @@
 //NOTE: only for testing the NN performance. Not to be used in real training
 #include "../INode.mqh"
+#include "../Markets/Market.mqh"
 class Feature : public INode
 {
 protected:
@@ -11,5 +12,7 @@ public:
     //TODO: indicators to be created in the feature, send back the handle, receive the value by Update
     //or: get the index by Update and calculate the indicator[index+1]                         
     double GetNode(void);
+    
+    Market* market;
 
 };

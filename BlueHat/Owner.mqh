@@ -32,6 +32,9 @@ private:
     CXArrayList<Axon*> *axonsL1;
     CXArrayList<Axon*> *axonsL2;
     CXArrayList<Axon*> *axonsL3;
+    Axon* bestL1;
+    Axon* bestL2;
+    Axon* bestL3;
 public:
     Owner();
     ~Owner();
@@ -41,12 +44,14 @@ public:
     Evaluator* eval;
     IAccuracy* acc;
     QualityMetrics* quality;
-    void CreateNN(evaluation_method_t evm);//the database file as input?
+    void CreateNN(evaluation_method_t evm, Market* m);//the database file as input?
     void UpdateInput(const double& c[], const double& d[], int len);
     void SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, double diff_raw1, double close1);
     void Train1Epoch(double desired);
     trade_advice_t GetAdvice();
     bool CreateDebugDB(DEBUG_MODE debug_m);
     bool CreateStateDB();
+    void UpdateAxonStats();
+    string GetAxonsReport();
 //    trade_advice_t Go1Bar(int index, int history_index, bool logging);
 };

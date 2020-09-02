@@ -15,6 +15,8 @@ private:
     double growth_rate;  //should be greater than 0
     double min;  //the floor of the Axon, typically 0.001   
     double max;  //the ceiling of the Axon, typically 10
+    double hist_sum;
+    double hist_cnt;
 public:
     INode* pnode;
     Axon(INode* pn, int node_id, double deg_r, double gr_r, double m, double M);
@@ -26,5 +28,6 @@ public:
     void GainDegrade();
     double GetGainedValueN() const;
     double GetGain();
-    
+    double GetAve();    
+    void UpdateAve();    
 };

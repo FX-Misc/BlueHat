@@ -12,6 +12,10 @@ QualityMetrics::QualityMetrics()
     direction_zero_all = 0;
     direction_filtered_short = 0;
     direction_filtered_long = 0;   
+    profit_accumulated_all = 0;
+    profit_short = 0;
+    profit_long = 0;
+    non_zero_predictions = 0;
     epoch_counter = 0;
 }
 double QualityMetrics::GetQuality(quality_method_t method, quality_period_t period) const
@@ -40,11 +44,23 @@ double QualityMetrics::GetQuality(quality_method_t method, quality_period_t peri
             default:
                 assert(false,"invalid quality period");
         }
+    else if(method==QUALITY_METHOD_PROFIT)
+        switch(period)
+        {
+            case QUALITY_PERIOD_SHORT:
+                return profit_short;
+            case QUALITY_PERIOD_LONG:
+                return profit_long;
+            case QUALITY_PERIOD_ALLTIME:
+                return profit_accumulated_all;
+            default:
+                assert(false,"invalid quality period");
+        }
     else
         assert(false,"invalid quality method");
     return 0;    
 }
-void QualityMetrics::UpdateMetrics(double desired, double value)
+void QualityMetrics::UpdateMetrics(double desired, double value, double diff_raw)
 {
     epoch_counter++;
     if(FLOAT_SIGN(desired)==FLOAT_SIGN(value))
@@ -78,4 +94,24 @@ void QualityMetrics::UpdateMetrics(double desired, double value)
     zerodiff_filtered_short = FILTER(zerodiff_filtered_short, diff_zero, METRIC_FILTER_SHORT);
     zerodiff_filtered_long = FILTER(zerodiff_filtered_long, diff_zero, METRIC_FILTER_LONG);
     sum_zerodiff_all_time += diff_zero;
+    
+    non_zero_predictions++;
+    if(value>MIN_SOFTMAX_FOR_TRADE)
+    {
+        profit_accumulated_all += (+diff_raw);
+        profit_short = FILTER(profit_short, +diff_raw, METRIC_FILTER_SHORT);
+        profit_long = FILTER(profit_long, +diff_raw, METRIC_FILTER_LONG);
+    }
+    else if(value<-MIN_SOFTMAX_FOR_TRADE)
+    {    
+        profit_accumulated_all += (-diff_raw);
+        profit_short = FILTER(profit_short, -diff_raw, METRIC_FILTER_SHORT);
+        profit_long = FILTER(profit_long, -diff_raw, METRIC_FILTER_LONG);
+    }
+    else
+    {
+        non_zero_predictions--; //revert it, as softmax was neutral; no trade recommendation
+        profit_short = FILTER(profit_short, 0, METRIC_FILTER_SHORT);
+        profit_long = FILTER(profit_long, 0, METRIC_FILTER_LONG);
+    }
 }    

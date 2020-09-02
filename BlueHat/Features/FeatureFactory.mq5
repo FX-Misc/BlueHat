@@ -23,6 +23,15 @@ INode* FeatureFactory::FeatureInstance(string name)
         feature = FeatureSlope12::Instance();
     else if(name=="feRepeatW5")
         feature = FeatureRepeatW5::Instance();
+        
+    else if(name=="fiIMAFast")
+        feature = FeatureIMAFast::Instance();
+    else if(name=="fiMACD")
+        feature = FeatureMACD::Instance();
+    else if(name=="fiMACDbin")
+        feature = FeatureMACDBinary::Instance();
+    else if(name=="fiMACDdig")
+        feature = FeatureMACDDigital::Instance();
     else
         feature = NULL;
     assert(feature != NULL, "");
