@@ -61,13 +61,13 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
                     break;
                 case 2:   //frozen Axon
                     name = tempstr[0];
-                    freeze = false;
+                    freeze = true;
                     init = StringToDouble(tempstr[1]);
                     break;
                 case 3:   //active Axon, but with init value
                     assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
                     name = tempstr[0];
-                    freeze = true;
+                    freeze = false;
                     init = StringToDouble(tempstr[2]);
                     break;
                  default:
@@ -141,13 +141,13 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
                     break;
                 case 2:   //frozen Axon
                     name = tempstr[0];
-                    freeze = false;
+                    freeze = true;
                     init = StringToDouble(tempstr[1]);
                     break;
                 case 3:   //active Axon, but with init value
                     assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
                     name = tempstr[0];
-                    freeze = true;
+                    freeze = false;
                     init = StringToDouble(tempstr[2]);
                     break;
                  default:
@@ -197,7 +197,7 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
 //==================AxonsL3
     {
         for(int i=0; i<neuronsL2.Count(); i++)
-            axonsL3.Add( new Axon(neuronsL2.at(i), i, true, AXON_FLOOR, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+            axonsL3.Add( new Axon(neuronsL2.at(i), i, false, AXON_FLOOR, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
         Print(axonsL3.Count()," Axons(L3) created");
     }
 //==================Softmax
