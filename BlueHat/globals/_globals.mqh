@@ -19,7 +19,7 @@ enum
     CMP_NEAR,
     CMP_BIGGER
 };
-enum
+enum SIGN_T
 {
     SIGN_POSITIVE=1,
     SIGN_ZERO=0,

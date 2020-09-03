@@ -18,6 +18,7 @@ void OnStart()
     Print("Hi there");
     assert(1>0,"test");
 
+//Print(MathPow(0.000000000001,(double)1/4));
     MarketFactory mf;
     Market* market = mf.CreateMarket(market_type);
     market.Initialise(depth); //0 for full history

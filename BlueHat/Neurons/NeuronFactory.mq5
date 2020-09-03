@@ -5,8 +5,8 @@ Neuron* NeuronFactory::CreateNeuron(string type, string nname)
     INode* neuron;
     if(type=="neSum")
         neuron = new NeuronSUM(nname);
-    else if(type=="neSum")
-        neuron = new NeuronSUM(nname);
+    else if(type=="neANDVeto")
+        neuron = new NeuronANDVeto(nname);
     else
         neuron = NULL;
     assert(neuron != NULL, "CreateNeuron failed to create");
