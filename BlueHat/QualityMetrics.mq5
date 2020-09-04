@@ -116,7 +116,8 @@ void QualityMetrics::UpdateMetrics(double desired, double value, double ticks_ra
     else
     {
         non_zero_predictions--; //revert it, as softmax was neutral; no trade recommendation
-        profit_short = FILTER(profit_short, 0, METRIC_FILTER_SHORT);
-        profit_long = FILTER(profit_long, 0, METRIC_FILTER_LONG);
+//comment out to consider only trade bars. uncomment to insert 0 in non-trade bars
+//        profit_short = FILTER(profit_short, 0, METRIC_FILTER_SHORT);
+//        profit_long = FILTER(profit_long, 0, METRIC_FILTER_LONG);
     }
 }    
