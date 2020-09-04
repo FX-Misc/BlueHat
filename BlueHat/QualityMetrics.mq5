@@ -17,6 +17,7 @@ QualityMetrics::QualityMetrics()
     profit_long = 0;
     non_zero_predictions = 0;
     epoch_counter = 0;
+    profit_ave_ticks = 0;
 }
 double QualityMetrics::GetQuality(quality_method_t method, quality_period_t period) const
 { //-1(min)..-(bad)..0(neutral)..+(good)..1(max)
@@ -40,7 +41,7 @@ double QualityMetrics::GetQuality(quality_method_t method, quality_period_t peri
             case QUALITY_PERIOD_LONG:
                 return direction_filtered_long;
             case QUALITY_PERIOD_ALLTIME:
-                return (double)(direction_correct_all - direction_incorrect_all)/(direction_correct_all + direction_incorrect_all+1);
+                return 100*(double)direction_correct_all/(direction_correct_all + direction_incorrect_all+1);
             default:
                 assert(false,"invalid quality period");
         }
@@ -53,6 +54,8 @@ double QualityMetrics::GetQuality(quality_method_t method, quality_period_t peri
                 return profit_long;
             case QUALITY_PERIOD_ALLTIME:
                 return profit_accumulated_all;
+            case QUALITY_PERIOD_AVEALL:
+                return profit_ave_ticks;
             default:
                 assert(false,"invalid quality period");
         }
@@ -60,7 +63,7 @@ double QualityMetrics::GetQuality(quality_method_t method, quality_period_t peri
         assert(false,"invalid quality method");
     return 0;    
 }
-void QualityMetrics::UpdateMetrics(double desired, double value, double diff_raw)
+void QualityMetrics::UpdateMetrics(double desired, double value, double ticks_raw)
 {
     epoch_counter++;
     if(FLOAT_SIGN(desired)==FLOAT_SIGN(value))
@@ -96,18 +99,19 @@ void QualityMetrics::UpdateMetrics(double desired, double value, double diff_raw
     sum_zerodiff_all_time += diff_zero;
     
     non_zero_predictions++;
-//    double diff_ticks = 
     if(value>MIN_SOFTMAX_FOR_TRADE)
     {
-        profit_accumulated_all += (+diff_raw);
-        profit_short = FILTER(profit_short, +diff_raw, METRIC_FILTER_SHORT);
-        profit_long = FILTER(profit_long, +diff_raw, METRIC_FILTER_LONG);
+        profit_accumulated_all += (+ticks_raw);
+        profit_short = FILTER(profit_short, +ticks_raw, METRIC_FILTER_SHORT);
+        profit_long = FILTER(profit_long, +ticks_raw, METRIC_FILTER_LONG);
+        profit_ave_ticks = profit_accumulated_all / non_zero_predictions;
     }
     else if(value<-MIN_SOFTMAX_FOR_TRADE)
     {    
-        profit_accumulated_all += (-diff_raw);
-        profit_short = FILTER(profit_short, -diff_raw, METRIC_FILTER_SHORT);
-        profit_long = FILTER(profit_long, -diff_raw, METRIC_FILTER_LONG);
+        profit_accumulated_all += (-ticks_raw);
+        profit_short = FILTER(profit_short, -ticks_raw, METRIC_FILTER_SHORT);
+        profit_long = FILTER(profit_long, -ticks_raw, METRIC_FILTER_LONG);
+        profit_ave_ticks = profit_accumulated_all / non_zero_predictions;
     }
     else
     {

@@ -12,6 +12,7 @@ enum quality_period_t
     QUALITY_PERIOD_SHORT,  
     QUALITY_PERIOD_LONG,  
     QUALITY_PERIOD_ALLTIME,  
+    QUALITY_PERIOD_AVEALL,  
 };
 class QualityMetrics
 {
@@ -30,6 +31,7 @@ private:
     double profit_accumulated_all;
     double profit_short;
     double profit_long;
+    double profit_ave_ticks;
     int non_zero_predictions;
     int epoch_counter;  //the number of training epochs so far 
 public:
