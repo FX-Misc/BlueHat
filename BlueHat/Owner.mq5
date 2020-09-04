@@ -59,15 +59,15 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
                     freeze = false;
                     init = AXON_FLOOR;
                     break;
-                case 2:   //frozen Axon
-                    name = tempstr[0];
-                    freeze = true;
-                    init = StringToDouble(tempstr[1]);
-                    break;
-                case 3:   //active Axon, but with init value
-                    assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
+                case 2:   //active Axon, but with init value
                     name = tempstr[0];
                     freeze = false;
+                    init = StringToDouble(tempstr[1]);
+                    break;
+                case 3:   //frozen Axon
+                    assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
+                    name = tempstr[0];
+                    freeze = true;
                     init = StringToDouble(tempstr[2]);
                     break;
                  default:
