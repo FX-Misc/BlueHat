@@ -96,6 +96,7 @@ void QualityMetrics::UpdateMetrics(double desired, double value, double diff_raw
     sum_zerodiff_all_time += diff_zero;
     
     non_zero_predictions++;
+//    double diff_ticks = 
     if(value>MIN_SOFTMAX_FOR_TRADE)
     {
         profit_accumulated_all += (+diff_raw);

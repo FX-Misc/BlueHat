@@ -3,6 +3,7 @@
 #include "../../BlueHat/Markets/MarketFactory.mqh"
 #include "../../BlueHat/globals/_globals.mqh"
 
+ 
 #property script_show_inputs
 input markets_t market_type=MARKET_SCRIPT_REAL;
 input DEBUG_MODE debug_mode=DEBUG_NORMAL;
@@ -18,7 +19,6 @@ void OnStart()
     Print("Hi there");
     assert(1>0,"test");
 
-//Print(MathPow(0.000000000001,(double)1/4));
     MarketFactory mf;
     Market* market = mf.CreateMarket(market_type);
     market.Initialise(depth); //0 for full history
