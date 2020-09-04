@@ -1,4 +1,5 @@
 #include "../globals/_globals.mqh"
+#include <Trade\SymbolInfo.mqh>
 class Market
 {
 protected:
@@ -9,6 +10,7 @@ public:
     double diff_raw[];
     double diff_norm[];
     int oldest_available;  //oldest index that has enough history behind itself
+    int tick_convert_factor;    //multiply diff by this to convert to ticks. a pip = 10 ticks
     double diff_norm_factor; //A factor which maps strong diffs to around 1 by multiplication
                                 //SOFT_NORMAL is applied after this multiplication
 public:

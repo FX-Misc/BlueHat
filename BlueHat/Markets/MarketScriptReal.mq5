@@ -8,12 +8,17 @@ void MarketScriptReal::Initialise(int max_history)
     ArrayResize(diff_raw, TIMESERIES_DEPTH);
     ArrayResize(diff_norm, TIMESERIES_DEPTH);
         
-    int max = (max_history==0)? iBars(ChartSymbol(),ChartPeriod()) : max_history;
+    CSymbolInfo info;
+    info.Name(ChartSymbol());
+    info.Select();
+    tick_convert_factor = (int)MathRound(1/info.TickSize());
+
+    int max = (max_history==0)? iBars(ChartSymbol(),ChartPeriod()) : MathMin(max_history,iBars(ChartSymbol(),ChartPeriod()));
     Print("--bars in history:",max); 
     CopyClose(ChartSymbol(),ChartPeriod(),0,max,history);
     oldest_available = ArraySize(history) - TIMESERIES_DEPTH;
-    diff_norm_factor = 1000;    //TODO: calculate based on the reverse of a typical strong diff, 1000 for eurusd/1h as a sample 
-    Print("market init for ",ChartSymbol(),". oldest avail sample=",oldest_available," + depth=",TIMESERIES_DEPTH," norm_factor=",diff_norm_factor);
+    diff_norm_factor = CalculateDiffNormFactor();
+    Print("market init for ",ChartSymbol(),". oldest avail sample=",oldest_available," + depth=",TIMESERIES_DEPTH," norm_factor=",diff_norm_factor," tick_convert=",tick_convert_factor);
 }
 
 void MarketScriptReal::UpdateBuffers(int index)
@@ -35,4 +40,13 @@ void MarketScriptReal::UpdateBuffers(int index)
 void MarketScriptReal::GetIndicators(int hndl, int ind_buff_no, double& buf0[])
 {
     assert( CopyBuffer(hndl,ind_buff_no,current_index,TIMESERIES_DEPTH,buf0) >0, "indicator CopyBuffer not successfull");
+}
+double MarketScriptReal::CalculateDiffNormFactor()
+{
+    int len=MathMin(ArraySize(history),1000);
+    double temp=0;
+    for(int i=1; i<len-1; i++) 
+        temp += MathAbs(history[i]-history[i+1]);
+    temp = temp/len;    //average of diffs
+    return 0.2/temp;
 }
