@@ -340,3 +340,13 @@ string Owner::GetAxonsReport()
     temp += "  "+ bestL3.pnode.name + "=" + DoubleToString(bestL3.GetAve(),2);
     return temp;
 }
+void Owner::ResetAxons(void)
+{
+    for(int i=0; i<axonsL1.Count(); i++)
+        axonsL1.at(i).ResetGain();
+    for(int i=0; i<axonsL2.Count(); i++)
+        axonsL2.at(i).ResetGain();
+    for(int i=0; i<axonsL3.Count(); i++)
+        axonsL3.at(i).ResetGain();
+
+}

@@ -53,5 +53,6 @@ public:
     bool CreateStateDB();
     void UpdateAxonStats();
     string GetAxonsReport();
+    void ResetAxons();
 //    trade_advice_t Go1Bar(int index, int history_index, bool logging);
 };

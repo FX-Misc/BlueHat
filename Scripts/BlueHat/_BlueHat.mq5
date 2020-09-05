@@ -6,7 +6,7 @@
  
 #property script_show_inputs
 input markets_t market_type=MARKET_SCRIPT_REAL;
-input DEBUG_MODE debug_mode=DEBUG_NORMAL;
+input DEBUG_MODE debug_mode=DEBUG_NONE;
 input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
@@ -37,6 +37,8 @@ void OnStart()
     int len_div_10=(market.oldest_available-1)/10;
     for(int i=market.oldest_available-1; i>=0; i--)
     {
+        if(i%400==0)//Temporary: reset axons priodically
+            owner.ResetAxons();
         market.UpdateBuffers(i);
         //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
         //Note: index+1 is the last completed Bar, so the one that we need

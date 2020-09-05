@@ -31,6 +31,10 @@ double Axon::GetGain()
 {
     return gain;
 }
+void Axon::ResetGain()
+{
+    gain = min;
+}
 double Axon::GetAve()
 {
     return hist_sum/hist_cnt;

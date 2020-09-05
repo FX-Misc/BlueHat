@@ -1,6 +1,6 @@
 #define TIMESERIES_DEPTH (10+1) //+1 is for useless sample of 0. number of bars available to features; must be at least equal to the length od indicators
 
-#define MIN_SOFTMAX_FOR_TRADE 0.0005    //!!important; the lower, the more trades on less margin
+#define MIN_SOFTMAX_FOR_TRADE 0.0001    //!!important; 0.001 the lower, the more trades on less margin
 enum DEBUG_MODE
 {
     DEBUG_NONE,

@@ -28,6 +28,7 @@ public:
     void GainDegrade();
     double GetGainedValueN() const;
     double GetGain();
+    void ResetGain();
     double GetAve();    
     void UpdateAve();    
 };
