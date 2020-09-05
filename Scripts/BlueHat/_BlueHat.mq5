@@ -10,8 +10,6 @@ input DEBUG_MODE debug_mode=DEBUG_NONE;
 input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
-#include <Generic\HashSet.mqh>
-
 void OnStart()
 {
     double desired;

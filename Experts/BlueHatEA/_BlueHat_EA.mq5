@@ -1,42 +1,31 @@
-//+------------------------------------------------------------------+
-//|                                                  _BlueHat_EA.mq5 |
-//|                        Copyright 2020, MetaQuotes Software Corp. |
-//|                                             https://www.mql5.com |
-//+------------------------------------------------------------------+
-#property copyright "Copyright 2020, MetaQuotes Software Corp."
-#property link      "https://www.mql5.com"
-#property version   "1.00"
-//+------------------------------------------------------------------+
-//| Expert initialization function                                   |
+#include "../../BlueHat/Owner.mqh"
+#include "../../BlueHat/Markets/Market.mqh"
+#include "../../BlueHat/Markets/MarketFactory.mqh"
+#include "../../BlueHat/globals/_globals.mqh"
+
+//#property version   "1.00"
 //+------------------------------------------------------------------+
 int OnInit()
 {
-    Print("Init");
+    Print("Hello from EA");
+    MarketFactory mf();
+    //mf.CreateMarket(0);
+    //Owner owner();
     return(INIT_SUCCEEDED);
 }
-//+------------------------------------------------------------------+
-//| Expert deinitialization function                                 |
-//+------------------------------------------------------------------+
 void OnDeinit(const int reason)
 {
     Print("DeInit");
 }
 //+------------------------------------------------------------------+
-//| Expert tick function                                             |
-//+------------------------------------------------------------------+
 void OnTick()
 {
 }
-//+------------------------------------------------------------------+
-//| Trade function                                                   |
 //+------------------------------------------------------------------+
 void OnTrade()
 {
     Print("Trade event");   
 }
-//+------------------------------------------------------------------+
-//| Tester function                                                  |
-//+------------------------------------------------------------------+
 double OnTester()
 {
     Print("Tester finished");
