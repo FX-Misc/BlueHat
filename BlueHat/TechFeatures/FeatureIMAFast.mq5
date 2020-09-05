@@ -20,7 +20,7 @@ Feature* FeatureIMAFast::Instance()
 void FeatureIMAFast::Update(const double& raw_close[], const double& norm_d[], int len)
 {
 //    int temp;
-    market.GetIndicators(IMA_handle, 0, IMA);
+//    market.GetIndicators(IMA_handle, 0, IMA);
     updated_value = IMA[1];
 }
 
