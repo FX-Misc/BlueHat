@@ -15,7 +15,8 @@ void MarketScriptReal::Initialise(int max_history)
 
     int max = (max_history==0)? iBars(ChartSymbol(),ChartPeriod()) : MathMin(max_history,iBars(ChartSymbol(),ChartPeriod()));
     Print("--bars in history:",max); 
-    CopyClose(ChartSymbol(),ChartPeriod(),0,max,history);
+    int cpy_res=CopyClose(ChartSymbol(),ChartPeriod(),0,max,history);
+    Print("history copied:",cpy_res);
     oldest_available = ArraySize(history) - TIMESERIES_DEPTH;
     diff_norm_factor = CalculateDiffNormFactor();
     Print("market init for ",ChartSymbol(),". oldest avail sample=",oldest_available," + depth=",TIMESERIES_DEPTH," norm_factor=",diff_norm_factor," tick_convert=",tick_convert_factor);
@@ -39,7 +40,9 @@ void MarketScriptReal::UpdateBuffers(int index)
 
 void MarketScriptReal::GetIndicators(int hndl, int ind_buff_no, double& buf0[])
 {
-    assert( CopyBuffer(hndl,ind_buff_no,current_index,TIMESERIES_DEPTH,buf0) >0, "indicator CopyBuffer not successfull");
+    int cpy_res=CopyBuffer(hndl,ind_buff_no,current_index,TIMESERIES_DEPTH,buf0);
+    Print("copy ind buf:",cpy_res, " hndl:",hndl," current_index:",current_index," ind_buff_no:",ind_buff_no);
+    assert(  cpy_res>0, "indicator CopyBuffer not successfull");
 }
 double MarketScriptReal::CalculateDiffNormFactor()
 {

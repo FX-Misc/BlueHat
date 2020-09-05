@@ -5,17 +5,20 @@
 
 //#property version   "1.00"
 input markets_t market_type=MARKET_SCRIPT_REAL;
-input DEBUG_MODE debug_mode=DEBUG_NONE;
-input int depth=1000;
+input DEBUG_MODE debug_mode=DEBUG_NORMAL;
+input int depth=100;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 //+------------------------------------------------------------------+
 MarketFactory mf;
 double ea_desired;
 Owner owner;
 Market* market;
+datetime lastbar_timeopen;
+double ea_return;
 int OnInit()
 {
     Print("Hello from EA");
+    ea_return = 0;
     market = mf.CreateMarket(market_type);
     market.Initialise(depth); //0 for full history
         
@@ -79,7 +82,11 @@ void OnDeinit(const int reason)
 //+------------------------------------------------------------------+
 void OnTick()
 {
-    Print("tick");
+    if(isNewBar())
+    {
+        Print("tick on ",lastbar_timeopen);
+        ea_return++;
+    }
 }
 //+------------------------------------------------------------------+
 void OnTrade()
@@ -89,8 +96,39 @@ void OnTrade()
 double OnTester()
 {
     Print("Tester finished");
-    double ret=0.0;
-
-    return(ret);
+    return(ea_return);
 }
 //+------------------------------------------------------------------+
+bool isNewBar(const bool print_log=true)
+{
+    static datetime bartime=0; // store open time of the current bar
+    //--- get open time of the zero bar
+    datetime currbar_time=iTime(_Symbol,_Period,0);
+    //--- if open time changes, a new bar has arrived
+    if(bartime!=currbar_time)
+    {
+        bartime=currbar_time;
+        lastbar_timeopen=bartime;
+        //--- display data on open time of a new bar in the log      
+
+        //!!log for testing
+        if(!(MQLInfoInteger(MQL_OPTIMIZATION)||MQLInfoInteger(MQL_TESTER)))
+        {
+            //--- display a message with a new bar open time
+            PrintFormat("%s: new bar on %s %s opened at %s",__FUNCTION__,_Symbol,
+                     StringSubstr(EnumToString(_Period),7),
+                     TimeToString(TimeCurrent(),TIME_SECONDS));
+            //--- get data on the last tick
+            MqlTick last_tick;
+            if(!SymbolInfoTick(Symbol(),last_tick))
+                Print("SymbolInfoTick() failed, error = ",GetLastError());
+            //--- display the last tick time up to milliseconds
+            PrintFormat("Last tick was at %s.%03d",
+                     TimeToString(last_tick.time,TIME_SECONDS),last_tick.time_msc%1000);
+        }
+        //--- we have a new bar
+        return (true);
+    }
+    //--- no new bar
+    return (false);
+}

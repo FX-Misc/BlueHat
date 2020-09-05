@@ -21,6 +21,7 @@ Feature* FeatureMACDBinary::Instance()
 }
 void FeatureMACDBinary::Update(const double& raw_close[], const double& norm_d[], int len)
 {
+    Print("MACDhndl:",handle);
     market.GetIndicators(handle, 0, macd_main); //the histogram (A)
     market.GetIndicators(handle, 1, macd_signal);   
     int score=0;
