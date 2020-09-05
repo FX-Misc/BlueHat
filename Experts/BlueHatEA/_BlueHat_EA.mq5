@@ -85,6 +85,8 @@ void OnTick()
     if(isNewBar())
     {
         Print("tick on ",lastbar_timeopen);
+        ClosePositionsByBars(0);
+        Buy(1);
         ea_return++;
     }
 }
@@ -132,3 +134,76 @@ bool isNewBar(const bool print_log=true)
     //--- no new bar
     return (false);
 }
+void ClosePositionsByBars(int holdtimebars,ulong deviation=10,ulong  magicnumber=0)
+  {
+   int total=PositionsTotal(); // number of open positions   
+//--- iterate over open positions
+   for(int i=total-1; i>=0; i--)
+     {
+      //--- position parameters
+      ulong  position_ticket=PositionGetTicket(i);                                      // position ticket
+      string position_symbol=PositionGetString(POSITION_SYMBOL);                        // symbol 
+      ulong  magic=PositionGetInteger(POSITION_MAGIC);                                  // position MagicNumber
+      datetime position_open=(datetime)PositionGetInteger(POSITION_TIME);               // position open time
+      int bars=iBarShift(_Symbol,PERIOD_CURRENT,position_open)+1;                       // how many bars ago a position was opened
+ 
+      //--- if a position's lifetime is already large, while MagicNumber and a symbol match
+      if(bars>holdtimebars && magic==magicnumber && position_symbol==_Symbol)
+        {
+         int    digits=(int)SymbolInfoInteger(position_symbol,SYMBOL_DIGITS);           // number of decimal places
+         double volume=PositionGetDouble(POSITION_VOLUME);                              // position volume
+         ENUM_POSITION_TYPE type=(ENUM_POSITION_TYPE)PositionGetInteger(POSITION_TYPE); // position type
+         string str_type=StringSubstr(EnumToString(type),14);
+         StringToLower(str_type); // lower the text case for correct message formatting
+         PrintFormat("Close position #%d %s %s %.2f",
+                     position_ticket,position_symbol,str_type,volume);
+         //--- set an order type and sending a trade request
+         if(type==POSITION_TYPE_BUY)
+            MarketOrder(ORDER_TYPE_SELL,volume,deviation,magicnumber,position_ticket);
+         else
+            MarketOrder(ORDER_TYPE_BUY,volume,deviation,magicnumber,position_ticket);
+        }
+     }
+  }
+bool Buy(double volume,ulong deviation=10,ulong  magicnumber=0)
+  {
+//--- buy at a market price
+   return (MarketOrder(ORDER_TYPE_BUY,volume,deviation,magicnumber));
+  }
+//+------------------------------------------------------------------+
+//| Sell at a market price with a specified volume                   |
+//+------------------------------------------------------------------+
+bool Sell(double volume,ulong deviation=10,ulong  magicnumber=0)
+  {
+//--- sell at a market price
+   return (MarketOrder(ORDER_TYPE_SELL,volume,deviation,magicnumber));
+  }
+bool MarketOrder(ENUM_ORDER_TYPE type,double volume,ulong slip,ulong magicnumber,ulong pos_ticket=0)
+  {
+//--- declaring and initializing structures
+   MqlTradeRequest request={0};
+   MqlTradeResult  result={0};
+   double price=SymbolInfoDouble(Symbol(),SYMBOL_BID);
+   if(type==ORDER_TYPE_BUY)
+      price=SymbolInfoDouble(Symbol(),SYMBOL_ASK);
+//--- request parameters
+   request.action   =TRADE_ACTION_DEAL;                     // trading operation type
+   request.position =pos_ticket;                            // position ticket if closing
+   request.symbol   =Symbol();                              // symbol
+   request.volume   =volume;                                // volume 
+   request.type     =type;                                  // order type
+   request.price    =price;                                 // trade price
+   request.deviation=slip;                                  // allowable deviation from the price
+   request.magic    =magicnumber;                           // order MagicNumber
+//--- send a request
+   if(!OrderSend(request,result))
+     {
+      //--- display data on failure
+      PrintFormat("OrderSend %s %s %.2f at %.5f error %d",
+                  request.symbol,EnumToString(type),volume,request.price,GetLastError());
+      return (false);
+     }
+//--- inform of a successful operation
+   PrintFormat("retcode=%u  deal=%I64u  order=%I64u",result.retcode,result.deal,result.order);
+   return (true);
+  }
