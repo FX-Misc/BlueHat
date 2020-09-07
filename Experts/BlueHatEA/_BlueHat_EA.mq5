@@ -86,18 +86,47 @@ void OnTick()
     {
         Print("tick on ",lastbar_timeopen);
         ClosePositionsByBars(0);
-        Buy(1);
+
+
+//        if(i%400==0)//Temporary: reset axons priodically
+//            owner.ResetAxons();
+        market.UpdateBuffers(0);
+        //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
+        //Note: index+1 is the last completed Bar, so the one that we need
+        //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
+        ea_desired = market.diff_norm[1];
+        owner.Train1Epoch(ea_desired);
+        owner.quality.UpdateMetrics(ea_desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
+        owner.UpdateAxonStats();
+        owner.SaveDebugInfo(debug_mode, 0, ea_desired, market.diff_raw[1], market.close[1]);
+//        if( len_div_10 > 0)
+//            if( (i%len_div_10) == 0)
+//                print_progress(&owner, 10*(i/len_div_10));
+        owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+        //owner.GetAdvice();
+        //trade here
+        double soft=owner.softmax.GetNode();
+        Print("soft=",soft, "dir:",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG),5));
+        if(soft>0.001)
+            Buy(0.1);
+        else if(soft<-0.001)
+            Sell(0.1);
+
+
         ea_return++;
     }
 }
 //+------------------------------------------------------------------+
 void OnTrade()
 {
-    Print("Trade event");   
+//    Print("Trade event");   
 }
 double OnTester()
 {
     Print("Tester finished");
+    owner.db.CloseDB();
+    delete market;
+    Print("DeInit");
     return(ea_return);
 }
 //+------------------------------------------------------------------+
