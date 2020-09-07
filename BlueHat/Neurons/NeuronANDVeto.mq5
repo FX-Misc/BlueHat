@@ -23,7 +23,7 @@ double NeuronANDVeto::GetNode()
     ret=MathAbs(ret);
     double nret = MathPow(ret, (double)1/axons.Count());
     nret=(double)common_sign*nret;
-    return nret;
+    return EMPOWER2(nret);
 }
 
 void NeuronANDVeto::AddAxon(Axon* ax)

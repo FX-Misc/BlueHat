@@ -28,6 +28,6 @@ void FeatureMACDDigital::Update(const double& raw_close[], const double& norm_d[
     score += (macd_main[1]>macd_signal[1])? +2:-2;
     score += (macd_main[1]>macd_main[2])? +4:-4;
     score += (macd_main[1]>0)? +1:-1;
-    updated_value = (double)score/55;
+    updated_value = (double)score/11;
 }
 

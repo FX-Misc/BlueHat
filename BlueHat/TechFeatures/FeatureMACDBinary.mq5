@@ -29,9 +29,9 @@ void FeatureMACDBinary::Update(const double& raw_close[], const double& norm_d[]
     score += (macd_main[1]>macd_main[2])? +4:-4;
     score += (macd_main[1]>0)? +1:-1;
     if(score>=10-1)
-        updated_value = +0.1;
+        updated_value = +0.5;
     else if(score<=-10+1)
-        updated_value = -0.1;
+        updated_value = -0.5;
     else
         updated_value = 0;
 }

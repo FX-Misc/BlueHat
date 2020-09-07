@@ -18,7 +18,8 @@ double NeuronSwitchCompare::GetNode()
     if(S<T)
         return 0;
     else
-        return SIGN(A)*MathSqrt(MathSqrt(MathAbs(A*(S-T))));
+        return EMPOWER4(A*(S-T));
+        //return SIGN(A)*MathSqrt(MathSqrt(MathAbs(A*(S-T))));
 }
 
 void NeuronSwitchCompare::AddAxon(Axon* ax)

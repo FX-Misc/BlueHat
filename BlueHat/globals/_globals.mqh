@@ -28,6 +28,9 @@ enum SIGN_T
 #define FLOAT_CMP(a,b) ( ((a)>(b)+(1e-20)) ? CMP_BIGGER :  (((a)<(b)-(1e-20))?CMP_SMALLER : CMP_NEAR) )
 #define FLOAT_SIGN(a) ( ((a)>0+(1e-20)) ? SIGN_POSITIVE :  (((a)<0-(1e-20))?SIGN_NEGATIVE : SIGN_ZERO) )
 #define SIGN(a) (( (a)>0 ) ? SIGN_POSITIVE :  (((a)<0)?SIGN_NEGATIVE : SIGN_ZERO) )
+#define EMPOWER2(a) (SIGN(a)*MathSqrt(MathAbs(a)))
+#define EMPOWER4(a) (SIGN(a)*MathSqrt(MathSqrt(MathAbs(a))))
+#define EMPOWER8(a) (SIGN(a)*MathSqrt(MathSqrt(MathSqrt(MathAbs(a)))))
 
 #define FILTER(OLD,NEW,COEF) ( (double)( (OLD)*(COEF) + (NEW) )/( (COEF)+1 ) )
 
@@ -36,5 +39,6 @@ enum SIGN_T
 //#define CAP(a,min,max) ((a)>(max)?((max)-(double)(1e-20)) : ((a)<(min)?((min)+(double)(1e-20)):(a)) )
 #define CAP(a,min,max) (MathMax( MathMin((a),(max)) , (min) ))
 
-#define SOFT_NORMAL(a) ((double)MathArctan((double)(a)*2)*(double)0.635)
-//-1000-> -0.99714 -10-> -0.96573 -1-> -0.70304 -0.5-> -0.49873 -0-> 0.0 0.1-> 0.12535 0.70304 -0.96573 
+#define SOFT_NORMAL(a) ((double)MathArctan((double)(a)*10)*(double)0.635)
+//for (2)*10:
+//for (a)*2:   //-1000-> -0.99714 -10-> -0.96573 -1-> -0.70304 -0.5-> -0.49873 -0-> 0.0 0.1-> 0.12535 0.70304 -0.96573 
