@@ -10,8 +10,6 @@ input DEBUG_MODE debug_mode=DEBUG_NONE;
 input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
-#include <Generic\HashSet.mqh>
-
 void OnStart()
 {
     double desired;
@@ -37,15 +35,15 @@ void OnStart()
     int len_div_10=(market.oldest_available-1)/10;
     for(int i=market.oldest_available-1; i>=0; i--)
     {
-        if(i%400==0)//Temporary: reset axons priodically
-            owner.ResetAxons();
+//        if(i%400==0)
+//            owner.ResetAxons();
         market.UpdateBuffers(i);
         //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = market.diff_norm[1];
-        owner.Train1Epoch(desired);
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
+        owner.Train1Epoch(desired);
         owner.UpdateAxonStats();
         owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1]);
         if( len_div_10 > 0)
