@@ -46,7 +46,7 @@ public:
     QualityMetrics* quality;
     void CreateNN(evaluation_method_t evm, Market* m);//the database file as input?
     void UpdateInput(const double& c[], const double& d[], int len);
-    void SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, double diff_raw1, double close1);
+    void SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, double diff_raw1, double close1, datetime time1);
     void Train1Epoch(double desired);
     trade_advice_t GetAdvice();
     bool CreateDebugDB(DEBUG_MODE debug_m);

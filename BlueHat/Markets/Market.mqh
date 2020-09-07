@@ -6,7 +6,9 @@ protected:
     int current_index;
 public:
     double history[];
+    datetime history_times[];
     double close[];
+    datetime times[];
     double diff_raw[];
     double diff_norm[];
     int oldest_available;  //oldest index that has enough history behind itself

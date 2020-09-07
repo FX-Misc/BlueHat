@@ -139,15 +139,15 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
                     freeze = false;
                     init = AXON_FLOOR;
                     break;
-                case 2:   //frozen Axon
-                    name = tempstr[0];
-                    freeze = true;
-                    init = StringToDouble(tempstr[1]);
-                    break;
-                case 3:   //active Axon, but with init value
-                    assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
+                case 2:   ////active Axon, but with init value
                     name = tempstr[0];
                     freeze = false;
+                    init = StringToDouble(tempstr[1]);
+                    break;
+                case 3:   //frozen Axon
+                    assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
+                    name = tempstr[0];
+                    freeze = true;
                     init = StringToDouble(tempstr[2]);
                     break;
                  default:
@@ -231,6 +231,7 @@ bool Owner::CreateDebugDB(DEBUG_MODE debug_m)
 {
     if(debug_m == DEBUG_NONE)
         return true;
+    db.AddDBGTBLItem("time", false);
     db.AddDBGTBLItem("desired", false);
     db.AddDBGTBLItem("softmax",false);
     db.AddDBGTBLItem("DiffShort", false);
@@ -266,7 +267,7 @@ bool Owner::CreateStateDB()
 {
     return true;
 }
-void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, double diff_raw1, double close1)
+void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, double diff_raw1, double close1, datetime time1)
 {
     if(debug_m == DEBUG_NONE)
         return;
@@ -277,6 +278,7 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
         if(index%100 != 0)
             return;
     db.Insert("ID", (double)index, false);    
+    db.Insert("time", (double)time1, false);
     db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), false);
     db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
