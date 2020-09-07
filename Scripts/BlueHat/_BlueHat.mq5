@@ -6,8 +6,8 @@
  
 #property script_show_inputs
 input markets_t market_type=MARKET_SCRIPT_REAL;
-input DEBUG_MODE debug_mode=DEBUG_NONE;
-input int depth=1000;
+input DEBUG_MODE debug_mode=DEBUG_VERBOSE;
+input int depth=100;
 input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
 
 void OnStart()
@@ -63,14 +63,11 @@ void print_progress(Owner* owner, int progress)
 {
     Print("..",progress,"%");
     Print(owner.GetAxonsReport());
-    Print("Quality metrics, profit= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_SHORT),1)," ",
+    Print("Quality metrics, profit= ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG),1)," ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME),1)," ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_AVEALL),1));
-    Print("Quality metrics, Diff= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT),5)," ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG),5)," ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME),4));
-    Print("Quality metrics, Direction= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT),5)," ",
+    Print("Quality metrics, Direction= ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG),5)," ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME),1),"%");
 }

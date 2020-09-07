@@ -7,6 +7,8 @@ Neuron* NeuronFactory::CreateNeuron(string type, string nname)
         neuron = new NeuronSUM(nname);
     else if(type=="neANDVeto")
         neuron = new NeuronANDVeto(nname);
+    else if(type=="neSWCmp")
+        neuron = new NeuronSwitchCompare(nname);
     else
         neuron = NULL;
     assert(neuron != NULL, "CreateNeuron failed to create");
