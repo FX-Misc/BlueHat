@@ -13,6 +13,8 @@ Neuron* NeuronFactory::CreateNeuron(string type, string nname)
         neuron = new NeuronORSumP(nname);
     else if(type=="ndNORsum")
         neuron = new NeuronNORSumN(nname);
+    else if(type=="neSumDir")
+        neuron = new NeuronSumDir(nname);
     else
         neuron = NULL;
     assert(neuron != NULL, "CreateNeuron failed to create");
