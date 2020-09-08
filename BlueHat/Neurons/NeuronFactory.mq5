@@ -9,9 +9,9 @@ Neuron* NeuronFactory::CreateNeuron(string type, string nname)
         neuron = new NeuronANDVeto(nname);
     else if(type=="neSWCmp")
         neuron = new NeuronSwitchCompare(nname);
-    else if(type=="neORsum")
+    else if(type=="ndORsum")
         neuron = new NeuronORSumP(nname);
-    else if(type=="neNORsum")
+    else if(type=="ndNORsum")
         neuron = new NeuronNORSumN(nname);
     else
         neuron = NULL;
