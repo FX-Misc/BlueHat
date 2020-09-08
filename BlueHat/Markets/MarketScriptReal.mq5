@@ -36,7 +36,7 @@ void MarketScriptReal::UpdateBuffers(int index)
     
     for(int i=0; i<TIMESERIES_DEPTH; i++)
     {
-        diff_raw[i] = close[i]-close[i+1];
+        diff_raw[i] = -(close[i]-close[i+1]);
         diff_norm[i] = SOFT_NORMAL(diff_raw[i] * diff_norm_factor);
     }
 }
@@ -44,6 +44,9 @@ void MarketScriptReal::UpdateBuffers(int index)
 void MarketScriptReal::GetIndicators(int hndl, int ind_buff_no, double& buf0[])
 {
     assert( CopyBuffer(hndl,ind_buff_no,current_index,TIMESERIES_DEPTH,buf0) >0, "indicator CopyBuffer not successfull");
+        for(int i=0; i<TIMESERIES_DEPTH; i++)
+            buf0[i]=-buf0[i];
+
 }
 double MarketScriptReal::CalculateDiffNormFactor()
 {

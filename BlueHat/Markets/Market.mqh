@@ -4,8 +4,8 @@ class Market
 {
 protected:
     int current_index;
-public:
     double history[];
+public:
     datetime history_times[];
     double close[];
     datetime times[];

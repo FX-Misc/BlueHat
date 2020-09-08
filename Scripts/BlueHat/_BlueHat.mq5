@@ -22,7 +22,7 @@ void OnStart()
     market.Initialise(depth); //0 for full history
         
     market.UpdateBuffers(0);
-    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
+//    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     Owner owner();
     owner.db.OpenDB();
