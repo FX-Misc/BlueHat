@@ -118,7 +118,7 @@ string DataBase::ReadNextString(int request)
         Print("DB: Read failed");
         return DB_ERROR_STR;
     }
-    if(str=="-")
+    if(str=="_")
         return DB_END_STR;
     return str;
 }
