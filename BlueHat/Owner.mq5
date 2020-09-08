@@ -48,6 +48,12 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
         while(str!=DB_END_STR)
         {
             assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+            bool neg=false;
+            if(str[0]=='-')
+            {   //negate the axon
+                str=StringSubstr(str,1);
+                neg=true;
+            }
             string tempstr[3],name;
             bool freeze;
             double init;
@@ -79,7 +85,7 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
             features.AddIfNotFound(ff.FeatureInstance(name));
             int feNo = features.IndexOf(ff.FeatureInstance(name));
             assert(feNo>=0 && feNo<features.Count(), "wrong feature no");
-            axonsL1.Add( new Axon(ff.FeatureInstance(name), feNo, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+            axonsL1.Add( new Axon(ff.FeatureInstance(name), feNo, neg, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
             str = db.ReadNextString(req);
         };
         for(int i=0; i<features.Count(); i++)
@@ -128,6 +134,12 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
         while(str!=DB_END_STR)
         {
             assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+            bool neg=false;
+            if(str[0]=='-')
+            {   //negate the axon
+                str=StringSubstr(str,1);
+                neg=true;
+            }
             string tempstr[3],name;
             bool freeze;
             double init;
@@ -158,7 +170,7 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
             }
             ne = nf.FindNeuronByName(name, &neuronsL1, index);
             assert(index!=-1 && ne!=NULL,"neuron not found in NN");
-            axonsL2.Add(new Axon(ne, index, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING));
+            axonsL2.Add(new Axon(ne, index, neg, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING));
 
             str = db.ReadNextString(req);
         };
@@ -197,7 +209,7 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
 //==================AxonsL3
     {
         for(int i=0; i<neuronsL2.Count(); i++)
-            axonsL3.Add( new Axon(neuronsL2.at(i), i, false, AXON_FLOOR, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+            axonsL3.Add( new Axon(neuronsL2.at(i), i, false, false, AXON_FLOOR, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
         Print(axonsL3.Count()," Axons(L3) created");
     }
 //==================Softmax
