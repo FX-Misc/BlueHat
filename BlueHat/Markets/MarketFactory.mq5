@@ -1,12 +1,12 @@
 #include "MarketFactory.mqh"
-Market* MarketFactory::CreateMarket(markets_t type)
+Market* MarketFactory::CreateMarket(markets_t type, bool correct_sign)
 {
     switch(type)
     {
         case MARKET_RANDOM:
             return new MarketRandom();
         case MARKET_SCRIPT_REAL:
-            return new MarketScriptReal();
+            return new MarketScriptReal(correct_sign);
         case MARKET_PATTERN_SAW:
             return new MarketPatternSaw();
         case MARKET_PATTERN_SINE:

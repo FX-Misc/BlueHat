@@ -18,7 +18,7 @@ void OnStart()
     assert(1>0,"test");
 
     MarketFactory mf;
-    Market* market = mf.CreateMarket(market_type);
+    Market* market = mf.CreateMarket(market_type, true);//!!
     market.Initialise(depth); //0 for full history
         
     market.UpdateBuffers(0);
