@@ -337,9 +337,9 @@ void Owner::UpdateAxonStats()
 }
 string Owner::GetAxonsReport()
 {
-    string temp = bestL1.pnode.name + "=" + DoubleToString(bestL1.GetAve(),2);
-    temp += "  "+ bestL2.pnode.name + "=" + DoubleToString(bestL2.GetAve(),2);
-    temp += "  "+ bestL3.pnode.name + "=" + DoubleToString(bestL3.GetAve(),2);
+    string temp = bestL1.pnode.name + IntegerToString(bestL1.node_id)+"=" + DoubleToString(bestL1.GetAve(),2);
+    temp += "  "+ bestL2.pnode.name + IntegerToString(bestL2.node_id)+"=" + DoubleToString(bestL2.GetAve(),2);
+    temp += "  "+ bestL3.pnode.name + IntegerToString(bestL3.node_id)+"=" + DoubleToString(bestL3.GetAve(),2);
     return temp;
 }
 void Owner::ResetAxons(void)

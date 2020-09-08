@@ -9,6 +9,10 @@ Neuron* NeuronFactory::CreateNeuron(string type, string nname)
         neuron = new NeuronANDVeto(nname);
     else if(type=="neSWCmp")
         neuron = new NeuronSwitchCompare(nname);
+    else if(type=="neORsum")
+        neuron = new NeuronORSumP(nname);
+    else if(type=="neNORsum")
+        neuron = new NeuronNORSumN(nname);
     else
         neuron = NULL;
     assert(neuron != NULL, "CreateNeuron failed to create");

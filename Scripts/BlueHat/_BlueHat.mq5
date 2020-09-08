@@ -8,7 +8,7 @@
 input markets_t market_type=MARKET_SCRIPT_REAL;
 input DEBUG_MODE debug_mode=DEBUG_VERBOSE;
 input int depth=100;
-input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
+input evaluation_method_t evaluation_method = METHOD_DIRECTION;
 
 void OnStart()
 {
