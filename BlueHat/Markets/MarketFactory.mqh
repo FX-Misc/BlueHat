@@ -14,5 +14,5 @@ enum markets_t
 class MarketFactory
 {
 public:
-    Market* CreateMarket(markets_t type);
+    Market* CreateMarket(markets_t type, bool correct_sign);
 };

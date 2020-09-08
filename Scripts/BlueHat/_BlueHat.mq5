@@ -8,7 +8,7 @@
 input markets_t market_type=MARKET_SCRIPT_REAL;
 input DEBUG_MODE debug_mode=DEBUG_VERBOSE;
 input int depth=100;
-input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
+input evaluation_method_t evaluation_method = METHOD_DIRECTION;
 
 void OnStart()
 {
@@ -18,11 +18,11 @@ void OnStart()
     assert(1>0,"test");
 
     MarketFactory mf;
-    Market* market = mf.CreateMarket(market_type);
+    Market* market = mf.CreateMarket(market_type, true);//!!
     market.Initialise(depth); //0 for full history
         
     market.UpdateBuffers(0);
-    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
+//    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     Owner owner();
     owner.db.OpenDB();
