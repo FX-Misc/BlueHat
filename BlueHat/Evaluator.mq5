@@ -1,11 +1,8 @@
 #include "Evaluator.mqh"
-Evaluator::Evaluator(IAccuracy* acc) : accuracy_calculator(acc)
+evaluate_score_t Evaluator::EvaluateTrial(double desired, double base_value, double trial_value, IAccuracy* acc)
 {
-}
-evaluate_score_t Evaluator::EvaluateTrial(double desired, double base_value, double trial_value)
-{
-    double base_accuracy = accuracy_calculator.CalculateAccuracy(desired, base_value);
-    double trial_accuracy = accuracy_calculator.CalculateAccuracy(desired, trial_value);
+    double base_accuracy = acc.CalculateAccuracy(desired, base_value);
+    double trial_accuracy = acc.CalculateAccuracy(desired, trial_value);
     
     switch(FLOAT_CMP(trial_accuracy,base_accuracy))
     {

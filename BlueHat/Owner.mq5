@@ -28,15 +28,15 @@ Owner::~Owner()
     delete axonsL2; 
     delete axonsL3; 
     delete eval;
-    delete acc;
+    delete accDir;
+    delete accAnalog;
     delete quality;
 
     Print("deleting done");
 }
-void Owner::CreateNN(evaluation_method_t evm, Market* m)
+void Owner::CreateNN(Market* m)
 {
     FeatureFactory ff;
-    AccuracyFactory acf;
     NeuronFactory nf;
     
 //==================Features & AxonsL1
@@ -219,8 +219,9 @@ void Owner::CreateNN(evaluation_method_t evm, Market* m)
             softmax.AddAxon(axonsL3.at(i));
     }
 //==================Others
-    acc = acf.CreateAccuracy(evm);
-    eval = new Evaluator(acc);
+    accDir = new AccuracyDirection();
+    accAnalog = new AccuracyAnalog();
+    eval = new Evaluator();
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2, axonsL3);
     quality = new QualityMetrics();
 
@@ -231,9 +232,23 @@ void Owner::UpdateInput(const double& c[], const double& d[], int len)
     for(int i=0; i<features.Count(); i++)
         ((Feature*)(features.at(i))).Update(c, d, len);
 }
-void Owner::Train1Epoch(double desired)
+void Owner::Train1Epoch(double desired, evaluation_method_t evm)
 {
-    trainer.Go1Epoch(desired);
+    switch(evm)
+    {
+        case METHOD_DIRECTION:
+            trainer.Go1Epoch(desired,accDir);
+            break;
+        case METHOD_ANALOG_DISTANCE:
+            trainer.Go1Epoch(desired,accAnalog);
+            break;
+        case METHOD_ALL:
+            trainer.Go1Epoch(desired,accDir);
+            trainer.Go1Epoch(desired,accAnalog);
+            break;
+        default:
+            assert(false,"unknown accuracy method");
+    }
 }
 trade_advice_t Owner::GetAdvice()
 {

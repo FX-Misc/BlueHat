@@ -6,7 +6,7 @@ Trainer::~Trainer()
 Trainer::Trainer(INode* psm, Evaluator* peval, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2, CXArrayList<Axon*> *pL3) : pSoftMax(psm), axonsL1(pL1), axonsL2(pL2), axonsL3(pL3), eval(peval)
 {
 }
-void Trainer::Go1Epoch(double new_norm_diff)
+void Trainer::Go1Epoch(double new_norm_diff, IAccuracy* acc)
 {
     double base_value;
 
@@ -15,7 +15,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
         {
             base_value = GetCurrentOutputN();
             axonsL1.at(i).GainGrow(); //trial grow
-            switch( eval.EvaluateTrial( new_norm_diff, base_value, GetCurrentOutputN() ) )
+            switch( eval.EvaluateTrial( new_norm_diff, base_value, GetCurrentOutputN(), acc ) )
             {
                 case SCORE_GOOD:    //all good, positive change
                     axonsL1.at(i).grow_temp_flag = FLAG_GROW;
@@ -35,7 +35,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
         {
             base_value = GetCurrentOutputN();
             axonsL2.at(i).GainGrow(); //trial grow
-            switch( eval.EvaluateTrial(new_norm_diff, base_value, GetCurrentOutputN() ) )
+            switch( eval.EvaluateTrial(new_norm_diff, base_value, GetCurrentOutputN(), acc ) )
             {
                 case SCORE_GOOD:    //all good, positive change
                     axonsL2.at(i).grow_temp_flag = FLAG_GROW;
@@ -55,7 +55,7 @@ void Trainer::Go1Epoch(double new_norm_diff)
         {
             base_value = GetCurrentOutputN();
             axonsL3.at(i).GainGrow(); //trial grow
-            switch( eval.EvaluateTrial(new_norm_diff, base_value, GetCurrentOutputN() ) )
+            switch( eval.EvaluateTrial(new_norm_diff, base_value, GetCurrentOutputN(), acc ) )
             {
                 case SCORE_GOOD:    //all good, positive change
                     axonsL3.at(i).grow_temp_flag = FLAG_GROW;

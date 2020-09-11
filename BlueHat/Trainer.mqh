@@ -13,6 +13,6 @@ private:
 public:
     Trainer(INode* psm, Evaluator* peval, CXArrayList<Axon*> *pL1, CXArrayList<Axon*> *pL2, CXArrayList<Axon*> *pL3);
     ~Trainer();
-    void Go1Epoch(double new_norm_diff);
+    void Go1Epoch(double new_norm_diff, IAccuracy* acc);
     double GetCurrentOutputN() const;
 };
