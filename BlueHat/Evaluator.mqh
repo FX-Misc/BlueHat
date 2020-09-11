@@ -8,9 +8,6 @@ enum evaluate_score_t
 };
 class Evaluator
 {
-private:
-    IAccuracy* accuracy_calculator;
 public:
-    Evaluator(IAccuracy* acc);
-    evaluate_score_t EvaluateTrial(double desired, double base_value, double trial_value);
+    evaluate_score_t EvaluateTrial(double desired, double base_value, double trial_value, IAccuracy* acc);
 };

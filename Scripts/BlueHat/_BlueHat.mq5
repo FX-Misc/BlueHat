@@ -26,7 +26,7 @@ void OnStart()
 //    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     owner.db.OpenDB();
-    owner.CreateNN(evaluation_method, market);
+    owner.CreateNN(market);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
@@ -43,7 +43,7 @@ void OnStart()
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = market.diff_norm[1];
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
-        owner.Train1Epoch(desired);
+        owner.Train1Epoch(desired, evaluation_method);
         owner.UpdateAxonStats();
         owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1], market.times[1]);
         if( len_div_10 > 0)
