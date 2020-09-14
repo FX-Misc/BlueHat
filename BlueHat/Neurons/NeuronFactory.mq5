@@ -15,6 +15,12 @@ Neuron* NeuronFactory::CreateNeuron(string type, string nname)
         neuron = new NeuronNORSumN(nname);
     else if(type=="neSumDir")
         neuron = new NeuronSumDir(nname);
+    else if(type=="neSWCombine")
+        neuron = new NeuronSwitchCombine(nname);
+    else if(type=="neSWHard")
+        neuron = new NeuronSwitchHard(nname);
+    else if(type=="neVoter")
+        neuron = new NeuronVoter(nname);
     else
         neuron = NULL;
     assert(neuron != NULL, "CreateNeuron failed to create");

@@ -17,7 +17,7 @@ private:
     double min;  //the floor of the Axon, typically 0.001   
     double max;  //the ceiling of the Axon, typically 10
     double hist_sum;
-    double hist_cnt;
+    int hist_cnt;
 public:
     INode* pnode;
     Axon(INode* pn, int node_id, bool neg, bool f, double init, double deg_r, double gr_r, double m, double M);
