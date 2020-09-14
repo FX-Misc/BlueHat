@@ -23,7 +23,7 @@ double NeuronVoter::GetNode()
                 assert(false,"unknown sign");
                 return 0;
         }
-    return (p-n)/10;
+    return ((double)p-n)/10;
 }
 
 void NeuronVoter::AddAxon(Axon* ax)
