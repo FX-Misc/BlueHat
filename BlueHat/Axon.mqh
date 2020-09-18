@@ -32,6 +32,7 @@ public:
     double GetGainedValueN() const;
     double GetGain();
     void ResetGain();
+    double GetProfit();    
     double GetAve();    
     void UpdateAve();    
 };

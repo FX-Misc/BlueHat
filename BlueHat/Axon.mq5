@@ -53,3 +53,7 @@ void Axon::RecordProfit(double profit)
 {
     profit_accumulated += profit;
 }
+double Axon::GetProfit(void)
+{
+    return profit_accumulated;
+}
