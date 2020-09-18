@@ -232,19 +232,23 @@ void Owner::UpdateInput(const double& c[], const double& d[], int len)
     for(int i=0; i<features.Count(); i++)
         ((Feature*)(features.at(i))).Update(c, d, len);
 }
-void Owner::Train1Epoch(double desired, evaluation_method_t evm)
+void Owner::Train1Epoch(double desired, double desired_scaled, evaluation_method_t evm)
 {
     switch(evm)
     {
         case METHOD_DIRECTION:
             trainer.Go1Epoch(desired,accDir);
+            trainer.ApplyAxonChanges(true, desired_scaled);
             break;
         case METHOD_ANALOG_DISTANCE:
             trainer.Go1Epoch(desired,accAnalog);
+            trainer.ApplyAxonChanges(false, 0);
             break;
         case METHOD_ALL:
             trainer.Go1Epoch(desired,accDir);
+            trainer.ApplyAxonChanges(true, desired_scaled);
             trainer.Go1Epoch(desired,accAnalog);
+            trainer.ApplyAxonChanges(false, 0);
             break;
         default:
             assert(false,"unknown accuracy method");

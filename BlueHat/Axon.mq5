@@ -4,6 +4,7 @@ Axon::Axon(INode* pn, int n_id, bool neg, bool f, double init, double deg_r, dou
     gain = init;
     hist_sum = 0;
     hist_cnt = 1;
+    profit_accumulated = 0;
 }
 void Axon::GainGrow(void)
 {
@@ -47,4 +48,8 @@ void Axon::UpdateAve()
 {
     hist_cnt++;
     hist_sum += gain;
+}
+void Axon::RecordProfit(double profit)
+{
+    profit_accumulated += profit;
 }

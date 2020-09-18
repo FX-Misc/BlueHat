@@ -15,4 +15,5 @@ public:
     ~Trainer();
     void Go1Epoch(double new_norm_diff, IAccuracy* acc);
     double GetCurrentOutputN() const;
+    void ApplyAxonChanges(bool update_profit, double desired_scaled);
 };
