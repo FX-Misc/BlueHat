@@ -102,12 +102,12 @@ void Trainer::ApplyAxonChanges(bool update_profit, double desired_scaled)
                 case FLAG_GROW:
                     axonsL2.at(i).GainGrow();
                     if(update_profit)
-                        axonsL1.at(i).RecordProfit(MathAbs(desired_scaled));
+                        axonsL2.at(i).RecordProfit(MathAbs(desired_scaled));
                     break;
                 case FLAG_DEGROW:
                     axonsL2.at(i).GainDeGrow();
                     if(update_profit)
-                        axonsL1.at(i).RecordProfit(-MathAbs(desired_scaled));
+                        axonsL2.at(i).RecordProfit(-MathAbs(desired_scaled));
                     break;
                 case FLAG_KEEP:
                     break;
@@ -122,12 +122,12 @@ void Trainer::ApplyAxonChanges(bool update_profit, double desired_scaled)
                 case FLAG_GROW:
                     axonsL3.at(i).GainGrow();
                     if(update_profit)
-                        axonsL1.at(i).RecordProfit(MathAbs(desired_scaled));
+                        axonsL3.at(i).RecordProfit(MathAbs(desired_scaled));
                     break;
                 case FLAG_DEGROW:
                     axonsL3.at(i).GainDeGrow();
                     if(update_profit)
-                        axonsL1.at(i).RecordProfit(-MathAbs(desired_scaled));
+                        axonsL3.at(i).RecordProfit(-MathAbs(desired_scaled));
                     break;
                 case FLAG_KEEP:
                     break;
