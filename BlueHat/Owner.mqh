@@ -42,8 +42,11 @@ private:
     CXArrayList<Axon*> *axonsL2;
     CXArrayList<Axon*> *axonsL3;
     Axon* bestL1;
+    Axon* bestL1Profit;
     Axon* bestL2;
+    Axon* bestL2Profit;
     Axon* bestL3;
+    Axon* bestL3Profit;
 public:
     Owner();
     ~Owner();
