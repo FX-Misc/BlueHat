@@ -12,7 +12,7 @@ input evaluation_method_t evaluation_method = METHOD_DIRECTION;
 
 void OnStart()
 {
-    double desired;
+    double desired,desired_scaled;
     
     Print("Hi there");
     assert(1>0,"test");
@@ -42,8 +42,9 @@ void OnStart()
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = market.diff_norm[1];
+        desired_scaled = market.diff_raw[1] * market.diff_norm_factor;
         owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
-        owner.Train1Epoch(desired, evaluation_method);
+        owner.Train1Epoch(desired, desired_scaled, evaluation_method);
         owner.UpdateAxonStats();
         owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1], market.times[1]);
         if( len_div_10 > 0)

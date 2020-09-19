@@ -42,8 +42,11 @@ private:
     CXArrayList<Axon*> *axonsL2;
     CXArrayList<Axon*> *axonsL3;
     Axon* bestL1;
+    Axon* bestL1Profit;
     Axon* bestL2;
+    Axon* bestL2Profit;
     Axon* bestL3;
+    Axon* bestL3Profit;
 public:
     Owner();
     ~Owner();
@@ -57,7 +60,7 @@ public:
     void CreateNN(Market* m);
     void UpdateInput(const double& c[], const double& d[], int len);
     void SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, double diff_raw1, double close1, datetime time1);
-    void Train1Epoch(double desired, evaluation_method_t evm);
+    void Train1Epoch(double desired, double desired_scaled, evaluation_method_t evm);
     trade_advice_t GetAdvice();
     bool CreateDebugDB(DEBUG_MODE debug_m);
     bool CreateStateDB();

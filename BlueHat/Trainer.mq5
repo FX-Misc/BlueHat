@@ -69,8 +69,10 @@ void Trainer::Go1Epoch(double new_norm_diff, IAccuracy* acc)
             }
             axonsL3.at(i).GainDeGrow();
         }
-     
-    //fixing the changes
+}
+void Trainer::ApplyAxonChanges(bool update_profit, double desired_scaled)
+{   //fixing the changes  
+    
     for(int i=0; i<axonsL1.Count(); i++)
         if(!axonsL1.at(i).freeze)
         {
@@ -79,9 +81,13 @@ void Trainer::Go1Epoch(double new_norm_diff, IAccuracy* acc)
             {
                 case FLAG_GROW:
                     axonsL1.at(i).GainGrow();
+                    if(update_profit)
+                        axonsL1.at(i).RecordProfit(MathAbs(desired_scaled));
                     break;
                 case FLAG_DEGROW:
                     axonsL1.at(i).GainDeGrow();
+                    if(update_profit)
+                        axonsL1.at(i).RecordProfit(-MathAbs(desired_scaled));
                     break;
                 case FLAG_KEEP:
                     break;
@@ -95,9 +101,13 @@ void Trainer::Go1Epoch(double new_norm_diff, IAccuracy* acc)
             {
                 case FLAG_GROW:
                     axonsL2.at(i).GainGrow();
+                    if(update_profit)
+                        axonsL2.at(i).RecordProfit(MathAbs(desired_scaled));
                     break;
                 case FLAG_DEGROW:
                     axonsL2.at(i).GainDeGrow();
+                    if(update_profit)
+                        axonsL2.at(i).RecordProfit(-MathAbs(desired_scaled));
                     break;
                 case FLAG_KEEP:
                     break;
@@ -111,9 +121,13 @@ void Trainer::Go1Epoch(double new_norm_diff, IAccuracy* acc)
             {
                 case FLAG_GROW:
                     axonsL3.at(i).GainGrow();
+                    if(update_profit)
+                        axonsL3.at(i).RecordProfit(MathAbs(desired_scaled));
                     break;
                 case FLAG_DEGROW:
                     axonsL3.at(i).GainDeGrow();
+                    if(update_profit)
+                        axonsL3.at(i).RecordProfit(-MathAbs(desired_scaled));
                     break;
                 case FLAG_KEEP:
                     break;

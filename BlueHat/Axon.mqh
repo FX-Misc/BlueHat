@@ -18,6 +18,7 @@ private:
     double max;  //the ceiling of the Axon, typically 10
     double hist_sum;
     int hist_cnt;
+    double profit_accumulated;
 public:
     INode* pnode;
     Axon(INode* pn, int node_id, bool neg, bool f, double init, double deg_r, double gr_r, double m, double M);
@@ -27,9 +28,11 @@ public:
     void GainGrow();
     void GainDeGrow();
     void GainDegrade();
+    void RecordProfit(double profit);
     double GetGainedValueN() const;
     double GetGain();
     void ResetGain();
+    double GetProfit();    
     double GetAve();    
     void UpdateAve();    
 };
