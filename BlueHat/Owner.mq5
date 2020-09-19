@@ -265,14 +265,20 @@ bool Owner::CreateDebugDB(DEBUG_MODE debug_m)
     db.AddDBGTBLItem("time", false);
     db.AddDBGTBLItem("desired", false);
     db.AddDBGTBLItem("softmax",false);
-    db.AddDBGTBLItem("DiffShort", false);
-    db.AddDBGTBLItem("DiffLong", false);
-    db.AddDBGTBLItem("DiffAll", false);
-    db.AddDBGTBLItem("DirShort", false);
-    db.AddDBGTBLItem("DirLong", false);
+    if(debug_m==DEBUG_VERBOSE)
+    {
+        db.AddDBGTBLItem("DiffShort", false);
+        db.AddDBGTBLItem("DiffLong", false);
+        db.AddDBGTBLItem("DiffAll", false);
+        db.AddDBGTBLItem("DirShort", false);
+        db.AddDBGTBLItem("DirLong", false);
+    }
     db.AddDBGTBLItem("Dirpc", false);
-    db.AddDBGTBLItem("ProfitShort", false);
-    db.AddDBGTBLItem("ProfitLong", false);
+    if(debug_m==DEBUG_VERBOSE)
+    {
+        db.AddDBGTBLItem("ProfitShort", false);
+        db.AddDBGTBLItem("ProfitLong", false);
+    }
     db.AddDBGTBLItem("ProfitAll", false);
     db.AddDBGTBLItem("ProfitAve", false);
     if(debug_m==DEBUG_VERBOSE)
@@ -281,7 +287,7 @@ bool Owner::CreateDebugDB(DEBUG_MODE debug_m)
     for(int i=0; i<axonsL1.Count(); i++)
     {
         db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name,false);
-        if(debug_m==DEBUG_VERBOSE)
+        if(debug_m==DEBUG_VERBOSE || debug_m==DEBUG_INTERVAL_100)
             db.AddDBGTBLItem("X"+IntegerToString(i,2,'0')+"p",false);
     }
     if(debug_m==DEBUG_VERBOSE)
@@ -290,7 +296,7 @@ bool Owner::CreateDebugDB(DEBUG_MODE debug_m)
     for(int i=0; i<axonsL2.Count(); i++)
     {
         db.AddDBGTBLItem("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name,false);
-        if(debug_m==DEBUG_VERBOSE)
+        if(debug_m==DEBUG_VERBOSE || debug_m==DEBUG_INTERVAL_100)
             db.AddDBGTBLItem("y"+IntegerToString(i,2,'0')+"p",false);
     }
     if(debug_m==DEBUG_VERBOSE)
@@ -299,7 +305,7 @@ bool Owner::CreateDebugDB(DEBUG_MODE debug_m)
     for(int i=0; i<axonsL3.Count(); i++)
     {
         db.AddDBGTBLItem("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name,false);
-        if(debug_m==DEBUG_VERBOSE)
+        if(debug_m==DEBUG_VERBOSE || debug_m==DEBUG_INTERVAL_100)
             db.AddDBGTBLItem("Z"+IntegerToString(i,2,'0')+"p",false);
     }
     db.AddDBGTBLItem("diff_raw", false);
@@ -324,14 +330,20 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
     db.Insert("time", (double)time1, false);
     db.Insert("desired", desired_in, false);
     db.Insert("softmax", softmax.GetNode(), false);
-    db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
-    db.Insert("DiffLong", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG), false);
-    db.Insert("DiffAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
-    db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
-    db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
+    if(debug_m==DEBUG_VERBOSE)
+    {
+        db.Insert("DiffShort", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT), false);
+        db.Insert("DiffLong", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG), false);
+        db.Insert("DiffAll", quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME), false);
+        db.Insert("DirShort", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT), false);
+        db.Insert("DirLong", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG), false);
+    }
     db.Insert("Dirpc", quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME), false);
-    db.Insert("ProfitShort", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_SHORT), false);
-    db.Insert("ProfitLong", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG), false);
+    if(debug_m==DEBUG_VERBOSE)
+    {
+        db.Insert("ProfitShort", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_SHORT), false);
+        db.Insert("ProfitLong", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG), false);
+    }
     db.Insert("ProfitAll", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME), false);
     db.Insert("ProfitAve", quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_AVEALL), false);
     if(debug_m==DEBUG_VERBOSE)
@@ -340,7 +352,7 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
     for(int i=0; i<axonsL1.Count(); i++)
     {
         db.Insert("X"+IntegerToString(i,2,'0')+"_"+axonsL1.at(i).pnode.name, axonsL1.at(i).GetGain(), false);
-        if(debug_m==DEBUG_VERBOSE)
+        if(debug_m==DEBUG_VERBOSE || debug_m==DEBUG_INTERVAL_100)
             db.Insert("X"+IntegerToString(i,2,'0')+"p", axonsL1.at(i).GetProfit(), false);
     }
     if(debug_m==DEBUG_VERBOSE)
@@ -349,7 +361,7 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
     for(int i=0; i<axonsL2.Count(); i++)
     {
         db.Insert("Y"+IntegerToString(i,2,'0')+"_"+axonsL2.at(i).pnode.name, axonsL2.at(i).GetGain(), false);
-        if(debug_m==DEBUG_VERBOSE)
+        if(debug_m==DEBUG_VERBOSE || debug_m==DEBUG_INTERVAL_100)
             db.Insert("Y"+IntegerToString(i,2,'0')+"p", axonsL2.at(i).GetProfit(), false);
     }
     if(debug_m==DEBUG_VERBOSE)
@@ -358,7 +370,7 @@ void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double desired_in, doub
     for(int i=0; i<axonsL3.Count(); i++)
     {
         db.Insert("Z"+IntegerToString(i,2,'0')+"_"+axonsL3.at(i).pnode.name, axonsL3.at(i).GetGain(), false);
-        if(debug_m==DEBUG_VERBOSE)
+        if(debug_m==DEBUG_VERBOSE || debug_m==DEBUG_INTERVAL_100)
             db.Insert("Z"+IntegerToString(i,2,'0')+"p", axonsL3.at(i).GetProfit(), false);
     }
     db.Insert("diff_raw", diff_raw1, false);
