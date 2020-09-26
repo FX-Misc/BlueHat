@@ -1,11 +1,17 @@
 #include "INode.mqh"
 #include "globals/_globals.mqh"
+#include "globals/assert.mqh"
 
 enum flag_grow_t
 {
     FLAG_GROW,
     FLAG_DEGROW,
     FLAG_KEEP
+};
+enum axon_value_t
+{
+    AXON_METHOD_GAIN,
+    AXON_METHOD_MIX
 };
 class Axon
 {
@@ -19,9 +25,10 @@ private:
     double hist_sum;
     int hist_cnt;
     double profit_accumulated;
+    axon_value_t value_method;
 public:
     INode* pnode;
-    Axon(INode* pn, int node_id, bool neg, bool f, double init, double deg_r, double gr_r, double m, double M);
+    Axon(INode* pn, int node_id, bool neg, bool f, double init, double deg_r, double gr_r, double m, double M, axon_value_t method);
     int node_id;
     bool freeze;    //It will be used later, to disbale useless Axons on-the-go rather than after manual analysis
     flag_grow_t grow_temp_flag;    //a notepad for triner, to mark the axons to grow after all evaluations
