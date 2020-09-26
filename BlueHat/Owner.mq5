@@ -34,7 +34,7 @@ Owner::~Owner()
 
     Print("deleting done");
 }
-void Owner::CreateNN(Market* m)
+void Owner::CreateNN(Market* m, axon_value_t axon_method)
 {
     FeatureFactory ff;
     NeuronFactory nf;
@@ -85,7 +85,7 @@ void Owner::CreateNN(Market* m)
             features.AddIfNotFound(ff.FeatureInstance(name));
             int feNo = features.IndexOf(ff.FeatureInstance(name));
             assert(feNo>=0 && feNo<features.Count(), "wrong feature no");
-            axonsL1.Add( new Axon(ff.FeatureInstance(name), feNo, neg, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+            axonsL1.Add( new Axon(ff.FeatureInstance(name), feNo, neg, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING, axon_method) );
             str = db.ReadNextString(req);
         };
         for(int i=0; i<features.Count(); i++)
@@ -170,7 +170,7 @@ void Owner::CreateNN(Market* m)
             }
             ne = nf.FindNeuronByName(name, &neuronsL1, index);
             assert(index!=-1 && ne!=NULL,"neuron not found in NN");
-            axonsL2.Add(new Axon(ne, index, neg, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING));
+            axonsL2.Add(new Axon(ne, index, neg, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING, axon_method));
 
             str = db.ReadNextString(req);
         };
@@ -209,7 +209,7 @@ void Owner::CreateNN(Market* m)
 //==================AxonsL3
     {
         for(int i=0; i<neuronsL2.Count(); i++)
-            axonsL3.Add( new Axon(neuronsL2.at(i), i, false, false, AXON_FLOOR, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING) );
+            axonsL3.Add( new Axon(neuronsL2.at(i), i, false, false, AXON_FLOOR, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING, axon_method) );
         Print(axonsL3.Count()," Axons(L3) created");
     }
 //==================Softmax

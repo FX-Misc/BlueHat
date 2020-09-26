@@ -9,6 +9,7 @@ input markets_t market_type=MARKET_SCRIPT_REAL;
 input DEBUG_MODE debug_mode=DEBUG_VERBOSE;
 input int depth=100;
 input evaluation_method_t evaluation_method = METHOD_DIRECTION;
+input axon_value_t axon_value_method = AXON_METHOD_GAIN;
 
 void OnStart()
 {
@@ -26,7 +27,7 @@ void OnStart()
 //    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     owner.db.OpenDB();
-    owner.CreateNN(market);
+    owner.CreateNN(market, axon_value_method);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
