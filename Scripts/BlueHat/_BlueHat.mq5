@@ -5,9 +5,11 @@
 
  
 #property script_show_inputs
+input bool skip_1st_monday=true;
+input bool skip_1st_morning=true;
 input markets_t market_type=MARKET_SCRIPT_REAL;
 input DEBUG_MODE debug_mode=DEBUG_VERBOSE;
-input int depth=100;
+input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_DIRECTION;
 input axon_value_t axon_value_method = AXON_METHOD_GAIN;
 
@@ -44,8 +46,11 @@ void OnStart()
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = market.diff_norm[1];
         desired_scaled = market.diff_raw[1] * market.diff_norm_factor;
-        owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
-        owner.Train1Epoch(desired, desired_scaled, evaluation_method);
+        if(!early_morning_skip(market.times[1], skip_1st_monday, skip_1st_morning))
+        {
+            owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
+            owner.Train1Epoch(desired, desired_scaled, evaluation_method);
+        }
         owner.UpdateAxonStats();
         owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1], market.times[1]);
         if( len_div_10 > 0)
@@ -72,6 +77,18 @@ void print_progress(Owner* owner, int progress)
     Print("Quality metrics, Direction= ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG),5)," ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME),1),"%");
+}
+bool early_morning_skip(datetime t, bool skip_monday, bool skip_morning)
+{
+    MqlDateTime dt;
+    TimeToStruct(t, dt);
+    if(skip_morning)
+        if(dt.hour==0 && dt.min==0)
+            return true;
+    if(skip_monday)
+        if(dt.day_of_week==1 && dt.hour==0 && dt.min==0)
+            return true;
+    return false;
 }
 //snippet
 /*
