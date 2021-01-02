@@ -5,9 +5,11 @@ class Market
 protected:
     int current_index;
     double history[];
+    double history_open[];
 public:
     datetime history_times[];
     double close[];
+    double open[];
     datetime times[];
     double diff_raw[];
     double diff_norm[];
