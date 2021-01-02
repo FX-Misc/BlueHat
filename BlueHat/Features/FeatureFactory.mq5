@@ -23,6 +23,8 @@ INode* FeatureFactory::FeatureInstance(string name)
         feature = FeatureSlope12::Instance();
     else if(name=="feRepeatW5")
         feature = FeatureRepeatW5::Instance();
+    else if(name=="feReverse5ave")
+        feature = FeatureReverse5ave::Instance();
         
     else if(name=="fiIMAFast")
         feature = FeatureIMAFast::Instance();

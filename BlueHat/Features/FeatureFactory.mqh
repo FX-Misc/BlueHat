@@ -5,7 +5,8 @@
 #include "/FeatureBiasZero.mqh"
 #include "/FeatureRepeatLast.mqh"
 #include "/Feature3LastDiffsMean.mqh"
- 
+#include "/FeatureReverse5ave.mqh"
+
 #include "/../INode.mqh"
 
 class FeatureFactory
