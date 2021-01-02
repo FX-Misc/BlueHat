@@ -34,7 +34,7 @@ Owner::~Owner()
 
     Print("deleting done");
 }
-void Owner::CreateNN(Market* m, axon_value_t axon_method)
+void Owner::CreateNN(Market* m, axon_value_t axon_method, double min_sm)
 {
     FeatureFactory ff;
     NeuronFactory nf;
@@ -223,7 +223,7 @@ void Owner::CreateNN(Market* m, axon_value_t axon_method)
     accAnalog = new AccuracyAnalog();
     eval = new Evaluator();
     trainer = new Trainer(softmax, eval, axonsL1, axonsL2, axonsL3);
-    quality = new QualityMetrics();
+    quality = new QualityMetrics(min_sm);
 
 }
 
