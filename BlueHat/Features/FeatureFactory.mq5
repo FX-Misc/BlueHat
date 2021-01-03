@@ -36,6 +36,8 @@ INode* FeatureFactory::FeatureInstance(string name)
         feature = FeatureMACDDigital::Instance();
     else if(name=="fiRSI7")
         feature = FeatureRSI7::Instance();
+    else if(name=="fiRSIsm")
+        feature = FeatureRSIsmooth::Instance();
     else
         feature = NULL;
     assert(feature != NULL, "");
