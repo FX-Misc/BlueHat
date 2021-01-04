@@ -23,6 +23,8 @@ INode* FeatureFactory::FeatureInstance(string name)
         feature = FeatureSlope12::Instance();
     else if(name=="feRepeatW5")
         feature = FeatureRepeatW5::Instance();
+    else if(name=="feReverse5ave")
+        feature = FeatureReverse5ave::Instance();
         
     else if(name=="fiIMAFast")
         feature = FeatureIMAFast::Instance();
@@ -32,6 +34,10 @@ INode* FeatureFactory::FeatureInstance(string name)
         feature = FeatureMACDBinary::Instance();
     else if(name=="fiMACDdig")
         feature = FeatureMACDDigital::Instance();
+    else if(name=="fiRSI7")
+        feature = FeatureRSI7::Instance();
+    else if(name=="fiRSIsm")
+        feature = FeatureRSIsmooth::Instance();
     else
         feature = NULL;
     assert(feature != NULL, "");
