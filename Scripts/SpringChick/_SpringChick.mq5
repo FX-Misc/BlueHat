@@ -1,9 +1,12 @@
-#include "../../BlueHat/Owner.mqh"
-//#include "../../BlueHat/globals/_globals.mqh"
+#include "./../../SpringChick/Owner.mqh"
+#include "./../../SpringChick/Market.mqh"
+#include "./../../SpringChick/MarketFactory.mqh"
+#include "./../../SpringChick/globals/_globals.mqh"
 
 #property script_show_inputs
 
 input int depth=1000;
+input DEBUG_MODE debug_mode=DEBUG_NONE;//DEBUG_VERBOSE;
 
 void OnStart()
 {
@@ -19,7 +22,7 @@ void OnStart()
     Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     owner.db.OpenDB();
-    owner.CreateNN(market, axon_value_method, min_softmax);
+    owner.CreateNN(market);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
@@ -32,12 +35,12 @@ void OnStart()
         //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
-        desired = market.diff_norm[1];
-        desired_scaled = market.diff_raw[1] * market.diff_norm_factor;
-            owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
-            owner.Train1Epoch(desired, desired_scaled, evaluation_method);
-        owner.UpdateAxonStats();
-        owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1], market.times[1]);
+        //desired = market.diff_norm[1];
+        //desired_scaled = market.diff_raw[1] * market.diff_norm_factor;
+        //    owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
+        //    owner.Train1Epoch(desired, desired_scaled, evaluation_method);
+//        owner.UpdateAxonStats();
+        owner.SaveDebugInfo(debug_mode, i, market.diff_raw[1], market.close[1], market.times[1]);
         if( len_div_10 > 0)
             if( (i%len_div_10) == 0)
                 print_progress(&owner, 10*(i/len_div_10));
@@ -54,13 +57,13 @@ void print_progress(Owner* owner, int progress)
 {
     Print("..",progress,"%");
     Print(owner.GetAxonsReport());
-    Print("Quality metrics, profit= ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG),1)," ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME),1)," ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_AVEALL),1));
-    Print("Quality metrics, Direction= ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG),5)," ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME),1),"%");
+    //Print("Quality metrics, profit= ",
+    //                               DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG),1)," ",
+    //                               DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME),1)," ",
+    //                               DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_AVEALL),1));
+    //Print("Quality metrics, Direction= ",
+    //                               DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG),5)," ",
+    //                               DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME),1),"%");
 }
 //snippet
 /*
