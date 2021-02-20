@@ -1,22 +1,15 @@
-#include "Trainer.mqh"
-#include "DataBase.mqh"
-#include "Evaluator.mqh"
-#include "QualityMetrics.mqh"
-#include "Features/FeatureFactory.mqh"
-#include "Neurons/NeuronFactory.mqh"
-#include "Neuron.mqh"
-#include "/globals/ExtendedArrList.mqh"
-#include "globals/assert.mqh"
-#include "/Accuracy/AccuracyDirection.mqh"
-#include "/Accuracy/AccuracyAnalog.mqh"
-#include "/IAccuracy.mqh"
-
-#define RATE_GROWTH (double)0.01
-#define RATE_DEGRADATION (double)0.999
-#define AXON_FLOOR (double)0.001
-#define AXON_CEILING (double)10
-
-#define MAX_AXONS 50
+//#include "Trainer.mqh"
+//#include "DataBase.mqh"
+//#include "Evaluator.mqh"
+//#include "QualityMetrics.mqh"
+//#include "Features/FeatureFactory.mqh"
+//#include "Neurons/NeuronFactory.mqh"
+//#include "Neuron.mqh"
+//#include "/globals/ExtendedArrList.mqh"
+//#include "globals/assert.mqh"
+//#include "/Accuracy/AccuracyDirection.mqh"
+//#include "/Accuracy/AccuracyAnalog.mqh"
+//#include "/IAccuracy.mqh"
 
 enum evaluation_method_t
 {
