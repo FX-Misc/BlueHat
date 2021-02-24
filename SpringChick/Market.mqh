@@ -2,7 +2,8 @@
 #include <Trade\SymbolInfo.mqh>
 class Market
 {
-protected:
+//protected:
+public:
     int current_index;
     double history[];
     double history_open[];

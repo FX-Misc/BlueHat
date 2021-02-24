@@ -7,9 +7,9 @@ class DataBase
 private:
     int db; //DataBase handle
 public:
-    bool OpenDB();
     bool CloseDB();
     bool AddDBGTBLItem(string name, bool completed);
+    bool OpenDB(void);
     bool Insert(string name, double value, bool completed);
     int CreateRequest(string header);
     void FinaliseRequest(int request);

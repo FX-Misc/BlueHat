@@ -53,10 +53,14 @@ void OnStart()
     delete market;
     Print("Bye");
 }
+Owner::~Owner()
+{
+    Print("deleting done");
+}
 void print_progress(Owner* owner, int progress)
 {
     Print("..",progress,"%");
-    Print(owner.GetAxonsReport());
+//    Print(owner.GetAxonsReport());
     //Print("Quality metrics, profit= ",
     //                               DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG),1)," ",
     //                               DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME),1)," ",
