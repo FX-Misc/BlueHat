@@ -21,7 +21,7 @@ void OnStart()
     market.UpdateBuffers(0);
     Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
-    owner.db.OpenDB();
+//    owner.db.OpenDB();
     owner.CreateNN(market);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
@@ -47,9 +47,9 @@ void OnStart()
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
-    }  
+    };  
         
-    owner.db.CloseDB();
+//    owner.db.CloseDB();
     delete market;
     Print("Bye");
 }
