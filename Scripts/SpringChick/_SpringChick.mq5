@@ -53,10 +53,6 @@ void OnStart()
     delete market;
     Print("Bye");
 }
-Owner::~Owner()
-{
-    Print("deleting done");
-}
 void print_progress(Owner* owner, int progress)
 {
     Print("..",progress,"%");

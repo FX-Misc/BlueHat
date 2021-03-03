@@ -63,6 +63,11 @@ bool Owner::CreateStateDB()
 {
     return true;
 }
+Owner::~Owner()
+{
+    Print("deleting done");
+}
+
 void Owner::SaveDebugInfo(DEBUG_MODE debug_m, int index, double diff_raw1, double close1, datetime time1)
 {
     if(debug_m == DEBUG_NONE)
