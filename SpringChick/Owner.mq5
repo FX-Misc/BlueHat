@@ -1,10 +1,70 @@
 #include "Owner.mqh"
 
-Owner::Owner()
+Owner::Owner(int pLen):patternLen(pLen)
 {
 }
-void Owner::CreateNN(Market* m)
+void Owner::LoadPatterns(Market* m)
 {
+    //for now, start with all possible patterns
+    //later, only "good" patterns can be loaded from db
+    for(int i=0; i<(1<<(patternLen+1)); i++)
+    {
+        Print(i);
+    }
+/*        string str;
+        int req;
+        req = db.CreateRequest("AxonsL1");
+        str = db.ReadNextString(req);
+        while(str!=DB_END_STR)
+        {
+            assert(str!=DB_ERROR_STR,"DB ERROR IN NN");
+            bool neg=false;
+            if(str[0]=='-')
+            {   //negate the axon
+                str=StringSubstr(str,1);
+                neg=true;
+            }
+            string tempstr[3],name;
+            bool freeze;
+            double init;
+            int splitcnt = StringSplit(str,'=',tempstr);
+            switch(splitcnt)
+            {
+                case 1:   //normal Axon
+                    name = tempstr[0];
+                    freeze = false;
+                    init = AXON_FLOOR;
+                    break;
+                case 2:   //active Axon, but with init value
+                    name = tempstr[0];
+                    freeze = false;
+                    init = StringToDouble(tempstr[1]);
+                    break;
+                case 3:   //frozen Axon
+                    assert(tempstr[1]=="F" || tempstr[1]=="f", "Axon is not frozen");
+                    name = tempstr[0];
+                    freeze = true;
+                    init = StringToDouble(tempstr[2]);
+                    break;
+                 default:
+                    freeze = true;
+                    init = 0;
+                    assert(false,"wrong Axon format");
+                    break;
+            }
+            features.AddIfNotFound(ff.FeatureInstance(name));
+            int feNo = features.IndexOf(ff.FeatureInstance(name));
+            assert(feNo>=0 && feNo<features.Count(), "wrong feature no");
+            axonsL1.Add( new Axon(ff.FeatureInstance(name), feNo, neg, freeze, init, RATE_DEGRADATION, RATE_GROWTH, AXON_FLOOR, AXON_CEILING, axon_method) );
+            str = db.ReadNextString(req);
+        };
+        for(int i=0; i<features.Count(); i++)
+            features.at(i).market = m;
+        db.FinaliseRequest(req);
+        Print(features.Count()," features created");
+        Print(axonsL1.Count()," Axons(L1) created");
+    }
+*/
 }
 
 void Owner::UpdateInput(const double& c[], const double& d[], int len)

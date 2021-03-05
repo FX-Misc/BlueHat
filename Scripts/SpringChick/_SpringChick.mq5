@@ -6,6 +6,7 @@
 #property script_show_inputs
 
 input int depth=1000;
+input int PatternLen=3;
 input DEBUG_MODE debug_mode=DEBUG_NONE;//DEBUG_VERBOSE;
 
 void OnStart()
@@ -13,7 +14,7 @@ void OnStart()
     Print("Hi Chick");
     assert(1>0,"test");
 
-    Owner owner();
+    Owner owner(PatternLen);
     MarketFactory mf;
     Market* market = mf.CreateMarket(MARKET_SCRIPT_REAL, true);//!!
     market.Initialise(depth); //0 for full history
@@ -21,8 +22,8 @@ void OnStart()
     market.UpdateBuffers(0);
     Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
-//    owner.db.OpenDB();
-    owner.CreateNN(market);
+    owner.db.OpenDB();
+    owner.LoadPatterns(market);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
@@ -41,9 +42,9 @@ void OnStart()
         //    owner.Train1Epoch(desired, desired_scaled, evaluation_method);
 //        owner.UpdateAxonStats();
         owner.SaveDebugInfo(debug_mode, i, market.diff_raw[1], market.close[1], market.times[1]);
-        if( len_div_10 > 0)
-            if( (i%len_div_10) == 0)
-                print_progress(&owner, 10*(i/len_div_10));
+        //if( len_div_10 > 0)
+        //    if( (i%len_div_10) == 0)
+        //        print_progress(&owner, 10*(i/len_div_10));
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here

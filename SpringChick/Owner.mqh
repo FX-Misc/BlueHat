@@ -30,7 +30,8 @@ class Owner
 //private:
 //    CXArrayList<Axon*> *axonsL3;
 public:
-    Owner();
+    int patternLen;
+    Owner(int patternLen);
     ~Owner();
     DataBase db;
 //    Trainer* trainer;
@@ -38,7 +39,7 @@ public:
     //IAccuracy* accDir;
     //IAccuracy* accAnalog;
     //QualityMetrics* quality;
-    void CreateNN(Market* m);
+    void LoadPatterns(Market* m);
     void UpdateInput(const double& c[], const double& d[], int len);
     void SaveDebugInfo(DEBUG_MODE debug_m, int index, double diff_raw1, double close1, datetime time1);
     //void Train1Epoch(double desired, double desired_scaled, evaluation_method_t evm);
