@@ -11,6 +11,10 @@ void Owner::UpdateInput(const double& c[], const double& d[], const datetime& t[
     TimeToStruct(t[1], ts);
     if(ts.hour==StartHour && ts.min<=30)
     {   //Start of the day
+        for(int i=0; i<patterns.Count(); i++)
+        { 
+            patterns.at(i).giveBar(-1,c[1]-c[2]);
+        }
         barOfDay=0;
     }
     if(barOfDay>=0)

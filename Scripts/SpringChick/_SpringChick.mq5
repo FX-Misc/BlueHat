@@ -5,8 +5,8 @@
 
 #property script_show_inputs
 
-input int depth=1000;
-input int PatternLen=3;
+input int depth=30;
+input int PatternLen=1;
 //M15
 input int MiddayBar=13; 
 input int EnddayBar=23; 
