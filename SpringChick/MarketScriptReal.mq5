@@ -44,8 +44,8 @@ void MarketScriptReal::UpdateBuffers(int index)
     
     for(int i=0; i<TIMESERIES_DEPTH; i++)
     {
-        diff_raw[i] = close[i]-close[i+1];
-//        diff_raw[i] = close[i]-open[i];
+//        diff_raw[i] = close[i]-close[i+1];
+        diff_raw[i] = close[i]-open[i];
         if(!correct_sign)   //reverse inputs for testing
             diff_raw[i] = -diff_raw[i];
         diff_norm[i] = SOFT_NORMAL(diff_raw[i] * diff_norm_factor);
