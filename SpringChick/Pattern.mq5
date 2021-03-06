@@ -30,6 +30,12 @@ Pattern::Pattern(int id)
     QEndday.ProfitShort=0;
     QEndday.count=0;
     QEndday.dirCorrectCnt=0;
+    assert(ID<(1<<(PatternLen+1)) && ID>=0,"invalid ID");
+    openBar = (ID&0x01 == 1);
+    int i;
+    for(i=1;ID>=(1<<i);i++)
+        bars[i-1] = ((ID&(1<<i)) != 0);
+    DecisionBar=i-2;
     status=STATUS_SLEEP;
 }
 

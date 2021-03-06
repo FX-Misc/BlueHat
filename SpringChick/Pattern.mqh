@@ -1,5 +1,6 @@
 //#include "./globals/ExtendedArrList.mqh"
 //#include "./globals/assert.mqh"
+#include "./globals/_globals.mqh"
 
 enum bar_result_t
 {
@@ -30,8 +31,9 @@ struct quality_t
 
 class Pattern
 {
-//private:
-//    CXArrayList<Axon*> *axonsL3;
+private:
+    bool openBar;
+    bool bars[MaxPatternLen];
 public:
     int ID;
     int DecisionBar;
