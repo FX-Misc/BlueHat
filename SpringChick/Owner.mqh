@@ -1,6 +1,6 @@
 #include "Market.mqh"
 #include "DataBase.mqh"
-//#include "Evaluator.mqh"
+#include "Pattern.mqh"
 //#include "QualityMetrics.mqh"
 //#include "Features/FeatureFactory.mqh"
 //#include "Neurons/NeuronFactory.mqh"
@@ -28,8 +28,9 @@ enum trade_advice_t
 class Owner
 {
 //private:
-//    CXArrayList<Axon*> *axonsL3;
+//    
 public:
+    CXArrayList<Pattern*> *patterns;
     int patternLen;
     Owner(int patternLen);
     ~Owner();
@@ -40,7 +41,8 @@ public:
     //IAccuracy* accAnalog;
     //QualityMetrics* quality;
     void LoadPatterns(Market* m);
-    void UpdateInput(const double& c[], const double& d[], int len);
+//    void UpdateInput(const double& c[], const double& d[], int len);
+    void UpdateInput(const double& c[], const double& d[], const datetime& t[]);
     void SaveDebugInfo(DEBUG_MODE debug_m, int index, double diff_raw1, double close1, datetime time1);
     //void Train1Epoch(double desired, double desired_scaled, evaluation_method_t evm);
     //trade_advice_t GetAdvice();

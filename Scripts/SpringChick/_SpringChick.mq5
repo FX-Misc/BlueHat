@@ -7,6 +7,10 @@
 
 input int depth=1000;
 input int PatternLen=3;
+//M15
+input int MiddayBar=13; 
+input int EnddayBar=23; 
+input int StartHour=15; 
 input DEBUG_MODE debug_mode=DEBUG_NONE;//DEBUG_VERBOSE;
 
 void OnStart()
@@ -28,7 +32,8 @@ void OnStart()
     owner.CreateStateDB();
     
     market.UpdateBuffers(market.oldest_available);
-    owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+//    owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+    owner.UpdateInput(market.close, market.diff_raw, market.times);
     int len_div_10=(market.oldest_available-1)/10;
     for(int i=market.oldest_available-1; i>=0; i--)
     {
@@ -45,7 +50,8 @@ void OnStart()
         //if( len_div_10 > 0)
         //    if( (i%len_div_10) == 0)
         //        print_progress(&owner, 10*(i/len_div_10));
-        owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+//        owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+        owner.UpdateInput(market.close, market.diff_raw, market.times);
         //owner.GetAdvice();
         //trade here
     };  

@@ -2,6 +2,26 @@
 
 Owner::Owner(int pLen):patternLen(pLen)
 {
+    patterns = new CXArrayList<Pattern*>;
+}
+void Owner::UpdateInput(const double& c[], const double& d[], const datetime& t[])
+{   //d is diff_raw, despite BlueHat
+    MqlDateTime ts;
+    static int barOfDay=-1;
+    TimeToStruct(t[1], ts);
+    if(ts.hour==StartHour && ts.min<=30)
+    {   //Start of the day
+        barOfDay=0;
+    }
+    if(barOfDay>=0)
+    {
+        for(int i=0; i<patterns.Count(); i++)
+        {
+    
+            patterns.at(i).giveBar(barOfDay,d[1]);
+        }
+        barOfDay++;
+    }
 }
 void Owner::LoadPatterns(Market* m)
 {
@@ -9,7 +29,7 @@ void Owner::LoadPatterns(Market* m)
     //later, only "good" patterns can be loaded from db
     for(int i=0; i<(1<<(patternLen+1)); i++)
     {
-        Print(i);
+        patterns.Add(new Pattern(i));
     }
 /*        string str;
         int req;
@@ -67,9 +87,7 @@ void Owner::LoadPatterns(Market* m)
 */
 }
 
-void Owner::UpdateInput(const double& c[], const double& d[], int len)
-{
-}
+
 //void Owner::Train1Epoch(double desired, double desired_scaled, evaluation_method_t evm)
 //{
 //    switch(evm)
