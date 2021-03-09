@@ -5,7 +5,12 @@
 
 #property script_show_inputs
 
-input int depth=1000;
+input int depth=30;
+input int PatternLen=1;
+//M15
+input int MiddayBar=13; 
+input int EnddayBar=23; 
+input int StartHour=15; 
 input DEBUG_MODE debug_mode=DEBUG_NONE;//DEBUG_VERBOSE;
 
 void OnStart()
@@ -13,7 +18,7 @@ void OnStart()
     Print("Hi Chick");
     assert(1>0,"test");
 
-    Owner owner();
+    Owner owner(PatternLen);
     MarketFactory mf;
     Market* market = mf.CreateMarket(MARKET_SCRIPT_REAL, true);//!!
     market.Initialise(depth); //0 for full history
@@ -21,13 +26,14 @@ void OnStart()
     market.UpdateBuffers(0);
     Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
-//    owner.db.OpenDB();
-    owner.CreateNN(market);
+    owner.db.OpenDB();
+    owner.LoadPatterns(market);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
     market.UpdateBuffers(market.oldest_available);
-    owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+//    owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+    owner.UpdateInput(market.close, market.diff_raw, market.times);
     int len_div_10=(market.oldest_available-1)/10;
     for(int i=market.oldest_available-1; i>=0; i--)
     {
@@ -41,10 +47,11 @@ void OnStart()
         //    owner.Train1Epoch(desired, desired_scaled, evaluation_method);
 //        owner.UpdateAxonStats();
         owner.SaveDebugInfo(debug_mode, i, market.diff_raw[1], market.close[1], market.times[1]);
-        if( len_div_10 > 0)
-            if( (i%len_div_10) == 0)
-                print_progress(&owner, 10*(i/len_div_10));
-        owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+        //if( len_div_10 > 0)
+        //    if( (i%len_div_10) == 0)
+        //        print_progress(&owner, 10*(i/len_div_10));
+//        owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
+        owner.UpdateInput(market.close, market.diff_raw, market.times);
         //owner.GetAdvice();
         //trade here
     };  
