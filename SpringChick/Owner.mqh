@@ -1,6 +1,7 @@
 #include "Market.mqh"
 #include "DataBase.mqh"
 #include "Pattern.mqh"
+#include "Graphics.mqh"
 //#include "QualityMetrics.mqh"
 //#include "Features/FeatureFactory.mqh"
 //#include "Neurons/NeuronFactory.mqh"
@@ -31,6 +32,7 @@ class Owner
 //    
 public:
     CXArrayList<Pattern*> *patterns;
+    Graphics g;
     int patternLen;
     Owner(int patternLen);
     ~Owner();
