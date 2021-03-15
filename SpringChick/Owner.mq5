@@ -11,18 +11,27 @@ void Owner::UpdateInput(const double& c[], const double& d[], const datetime& t[
     TimeToStruct(t[1], ts);
     if(ts.hour==StartHour && ts.min<=30)
     {   //Start of the day
-        for(int i=0; i<patterns.Count(); i++)
+        int i;
+        for(i=0; i<patterns.Count(); i++)
         { 
-            patterns.at(i).giveBar(-1,c[1]-c[2]);
+            patterns.at(i).giveBar(-1,c[1]-c[2]);//!! TODO: use open o[1]-c[2]
         }
         barOfDay=0;
+        g.DisplayVert("start "+i+" patterns", t[1], c[1] );
     }
     if(barOfDay>=0)
     {
         for(int i=0; i<patterns.Count(); i++)
-        {
-            patterns.at(i).giveBar(barOfDay,d[1]);
-        }
+            switch(patterns.at(i).giveBar(barOfDay,d[1]))//!!TODO: c[1]-o[1]
+            {
+                case BAR_ITS_ME_DIRECT:
+                    g.DisplayVert("+"+patterns.at(i).ID, t[1], c[1] );
+                    break;
+                case BAR_ITS_ME_REVERSE:
+                    g.DisplayVert("-"+patterns.at(i).ID, t[1], c[1] );
+                    break;
+            }
+        g.DisplayVert("."+barOfDay+" id"+patterns.at(0).ID+" stat"+patterns.at(0).status,t[1], c[1] );
         barOfDay++;
     }
 }
@@ -30,10 +39,11 @@ void Owner::LoadPatterns(Market* m)
 {
     //for now, start with all possible patterns
     //later, only "good" patterns can be loaded from db
-    for(int i=0; i<(1<<(patternLen+1)); i++)
-    {
-        patterns.Add(new Pattern(i));
-    }
+    //for(int i=0; i<(1<<(patternLen+1)); i++)
+    //{
+    //    patterns.Add(new Pattern(i));
+    //}
+    patterns.Add(new Pattern(2,3));
 /*        string str;
         int req;
         req = db.CreateRequest("AxonsL1");

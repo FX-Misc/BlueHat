@@ -41,7 +41,7 @@ public:
     int DecisionBar;
     quality_t QEndday, QMidday;
     pattern_status_t status;
-    Pattern(int id);
+    Pattern(int id, int len);
     ~Pattern();
     bar_result_t giveBar(int BarNo, double diff);
     void updateMidday(double close);
