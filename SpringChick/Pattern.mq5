@@ -91,6 +91,8 @@ void Pattern::updateEndday(double close)
             //!!TODO: evaluate
             status = STATUS_SLEEP;
             break;
+        case STATUS_SLEEP:
+            break;
         default:
             assert(0,"unexpected status at Endday");
             break;

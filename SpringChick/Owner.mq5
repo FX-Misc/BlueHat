@@ -14,11 +14,19 @@ void Owner::UpdateInput(const double& c[], const double& d[], const datetime& t[
         int i;
         for(i=0; i<patterns.Count(); i++)
         { 
+        g.DisplayVert("!"+i+patterns.at(i).status+"!", t[1], c[1] );
             patterns.at(i).giveBar(-1,c[1]-c[2]);//!! TODO: use open o[1]-c[2]
         }
         barOfDay=0;
         g.DisplayVert("start "+i+" patterns", t[1], c[1] );
     }
+    if(barOfDay==MiddayBar)
+        for(int i=0; i<patterns.Count(); i++)
+            patterns.at(i).updateMidday(c[1]);
+    if(barOfDay==EnddayBar)
+        for(int i=0; i<patterns.Count(); i++)
+            patterns.at(i).updateEndday(c[1]);
+
     if(barOfDay>=0)
     {
         for(int i=0; i<patterns.Count(); i++)
