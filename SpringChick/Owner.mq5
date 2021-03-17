@@ -6,10 +6,11 @@ Owner::Owner(int pLen):patternLen(pLen)
 }
 void Owner::UpdateInput(const double& c[], const double& d[], const datetime& t[])
 {   //d is diff_raw, despite BlueHat
-    MqlDateTime ts;
+    MqlDateTime ts1,ts2;
     static int barOfDay=-1;
-    TimeToStruct(t[1], ts);
-    if(ts.hour==StartHour && ts.min<=30)
+    TimeToStruct(t[1], ts1);
+    TimeToStruct(t[2], ts2);
+    if(ts1.day!=ts2.day)
     {   //Start of the day
         int i;
         for(i=0; i<patterns.Count(); i++)
