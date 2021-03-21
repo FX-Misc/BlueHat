@@ -4,7 +4,7 @@ Owner::Owner(int pLen):patternLen(pLen)
 {
     patterns = new CXArrayList<Pattern*>;
 }
-void Owner::UpdateInput(const double& c[], const double& d[], const datetime& t[])
+void Owner::UpdateInput(const double& c[], const double& d[], const double& o[], const datetime& t[])
 {   //d is diff_raw, despite BlueHat
     MqlDateTime ts1,ts2;
     static int barOfDay=-1;
@@ -14,10 +14,7 @@ void Owner::UpdateInput(const double& c[], const double& d[], const datetime& t[
     {   //Start of the day
         int i;
         for(i=0; i<patterns.Count(); i++)
-        { 
-        g.DisplayVert("!"+i+patterns.at(i).status+"!", t[1], c[1] );
-            patterns.at(i).giveBar(-1,c[1]-c[2]);//!! TODO: use open o[1]-c[2]
-        }
+            patterns.at(i).giveBar(-1,o[1]-c[2]);
         barOfDay=0;
         g.DisplayVert("start "+i+" patterns", t[1], c[1] );
     }
@@ -31,7 +28,7 @@ void Owner::UpdateInput(const double& c[], const double& d[], const datetime& t[
     if(barOfDay>=0)
     {
         for(int i=0; i<patterns.Count(); i++)
-            switch(patterns.at(i).giveBar(barOfDay,d[1]))//!!TODO: c[1]-o[1]
+            switch(patterns.at(i).giveBar(barOfDay,d[1]))
             {
                 case BAR_ITS_ME_DIRECT:
                     g.DisplayVert("+"+patterns.at(i).ID, t[1], c[1] );
@@ -52,7 +49,7 @@ void Owner::LoadPatterns(Market* m)
     //{
     //    patterns.Add(new Pattern(i));
     //}
-    patterns.Add(new Pattern(2,3));
+    patterns.Add(new Pattern(6,2));
 /*        string str;
         int req;
         req = db.CreateRequest("AxonsL1");

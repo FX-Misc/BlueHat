@@ -102,7 +102,7 @@ void Pattern::updateEndday(double close)
 Pattern::Pattern(int id, int len)
 {
     ID=id;
-    DecisionBar = len - 1;
+    DecisionBar = len;
     QMidday.DirectionShort=0;
     QMidday.DirectionLong=0;
     QMidday.ProfitLong=0;
