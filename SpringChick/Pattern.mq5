@@ -117,7 +117,7 @@ Pattern::Pattern(int id, int len)
     QEndday.dirCorrectCnt=0;
     assert(ID<(1<<(PatternLen+1)) && ID>=0,"invalid ID");
     openBar = (ID&0x01 == 1);
-    for(int i=1;i<len;i++)
+    for(int i=1;i<=len;i++)
         bars[i-1] = ((ID&(1<<i)) != 0);
     status=STATUS_SLEEP;
 }

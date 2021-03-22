@@ -49,7 +49,7 @@ void Owner::LoadPatterns(Market* m)
     //{
     //    patterns.Add(new Pattern(i));
     //}
-    patterns.Add(new Pattern(6,2));
+    patterns.Add(new Pattern(6,3));
 /*        string str;
         int req;
         req = db.CreateRequest("AxonsL1");
