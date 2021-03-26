@@ -99,6 +99,22 @@ void Pattern::updateEndday(double close)
     }
 }
 
+string Pattern::IDtoName(int id, bool ob, int decision)
+{
+  string out;
+  if(ob)
+    out="H";
+  else
+    out="X";
+  int i=id/2;
+  for(int j=0;j<decision;j++)
+  {
+     out=out+string(i%2);
+     i/=2;
+  }
+  return(out);
+}
+
 Pattern::Pattern(int id, int len)
 {
     ID=id;
@@ -120,5 +136,6 @@ Pattern::Pattern(int id, int len)
     for(int i=1;i<=len;i++)
         bars[i-1] = ((ID&(1<<i)) != 0);
     status=STATUS_SLEEP;
+    name = IDtoName(ID, openBar, DecisionBar);
 }
 

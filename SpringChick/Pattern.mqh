@@ -37,6 +37,8 @@ private:
     bool openBar;
     bool bars[MaxPatternLen];
 public:
+    string IDtoName(int id, bool ob, int decision);
+    string name;
     int ID;
     int DecisionBar;
     quality_t QEndday, QMidday;
