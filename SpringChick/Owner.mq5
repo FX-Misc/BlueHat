@@ -46,12 +46,15 @@ void Owner::LoadPatterns(Market* m)
     //for now, start with all possible patterns
     //later, only "good" patterns can be loaded from db
     string str="";
-    for(int j=2; j<=patternLen+1; j++)
-        for(int i=0; i<(1<<j); i++)
+    for(int j=2; j<=patternLen; j++)
+    {
+        for(int i=0; i<(1<<(j+1)); i++)
         {
             patterns.Add(new Pattern(i,j));
             str+=":"+patterns.at(patterns.Count()-1).ID+patterns.at(patterns.Count()-1).DecisionBar+patterns.at(patterns.Count()-1).name+"  ";
         }
+        str+="\n";
+    }
     Comment(str);
     //for(int i=0; i<(1<<(patternLen+1)); i++)
     //{
