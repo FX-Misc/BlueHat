@@ -73,18 +73,39 @@ bar_result_t Pattern::giveBar(int BarNo, double diff)
             return BAR_SLEEP;
     }
 }
-
-void Pattern::updateMidday(double close)
+void Pattern::openEval(double open0, bool direct)
 {
+    if(direct)
+    {
+        assert(status==STATUS_ITS_ME_DIRECT,"I am not direct");
+    }
+    else
+    {
+        assert(status==STATUS_ITS_ME_REVERSE,"I am not reverse");
+    }
+    EvalOpenPrice=open0;
+}
+void Pattern::closeEvalMidday(double open0)
+{
+    
     
 }
 
-void Pattern::updateEndday(double close)
+void Pattern::closeEvalEndday(double open0)
 {
+    int direction;
+    double profit;
     switch(status)
     {
         case STATUS_ITS_ME_DIRECT:
-            //!!TODO: evaluate
+            direction = (open0>=EvalOpenPrice)?+1:-1;
+            profit = open0 - EvalOpenPrice;
+            QEndday.count++;
+            QEndday.dirCorrectCnt+=direction;
+            QEndday.ProfitShort = (QEndday.ProfitShort*Pattern::shortP + profit) / (Pattern::shortP+1); 
+            QEndday.ProfitLong = (QEndday.ProfitLong*Pattern::longP + profit) / (Pattern::longP+1); 
+            QEndday.DirectionShort = (QEndday.DirectionShort*Pattern::shortP + direction) / (Pattern::shortP+1); 
+            QEndday.DirectionLong = (QEndday.DirectionLong*Pattern::longP + direction) / (Pattern::longP+1); 
             status = STATUS_SLEEP;
             break;
         case STATUS_ITS_ME_REVERSE:

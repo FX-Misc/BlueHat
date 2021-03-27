@@ -20,10 +20,17 @@ void Owner::UpdateInput(const double& c[], const double& d[], const double& o[],
     }
     if(barOfDay==MiddayBar)
         for(int i=0; i<patterns.Count(); i++)
-            patterns.at(i).updateMidday(c[1]);
+            patterns.at(i).closeEvalMidday(o[0]);
     if(barOfDay==EnddayBar)
         for(int i=0; i<patterns.Count(); i++)
-            patterns.at(i).updateEndday(c[1]);
+        {
+            patterns.at(i).closeEvalEndday(o[0]);
+            g.DisplayVert("="+patterns.at(i).name+" "+
+                patterns.at(i).QEndday.dirCorrectCnt+"/"+patterns.at(i).QEndday.count+" D "+
+                (int)patterns.at(i).QEndday.DirectionShort+","+(int)patterns.at(i).QEndday.DirectionLong+" P "+
+                (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
+                , t[1], c[1]);
+        }
 
     if(barOfDay>=0)
     {
@@ -31,9 +38,11 @@ void Owner::UpdateInput(const double& c[], const double& d[], const double& o[],
             switch(patterns.at(i).giveBar(barOfDay,d[1]))
             {
                 case BAR_ITS_ME_DIRECT:
+                    patterns.at(i).openEval(o[0],true);
                     g.DisplayVert("+"+patterns.at(i).name, t[1], c[1] );
                     break;
                 case BAR_ITS_ME_REVERSE:
+                    patterns.at(i).openEval(o[0],false);
                     g.DisplayVert("-"+patterns.at(i).name, t[1], c[1] );
                     break;
             }
@@ -45,17 +54,21 @@ void Owner::LoadPatterns(Market* m)
 {
     //for now, start with all possible patterns
     //later, only "good" patterns can be loaded from db
-    string str="";
+/*
+//    string str="";
     for(int j=2; j<=patternLen; j++)
     {
         for(int i=0; i<(1<<(j+1)); i++)
         {
             patterns.Add(new Pattern(i,j));
-            str+=":"+patterns.at(patterns.Count()-1).ID+patterns.at(patterns.Count()-1).DecisionBar+patterns.at(patterns.Count()-1).name+"  ";
+//            str+=":"+patterns.at(patterns.Count()-1).ID+patterns.at(patterns.Count()-1).DecisionBar+patterns.at(patterns.Count()-1).name+"  ";
         }
-        str+="\n";
+//        str+="\n";
     }
-    Comment(str);
+//    Comment(str);
+*/
+    patterns.Add(new Pattern(6,2));
+
     //for(int i=0; i<(1<<(patternLen+1)); i++)
     //{
     //    patterns.Add(new Pattern(i,patternLen));

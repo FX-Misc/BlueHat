@@ -36,7 +36,10 @@ class Pattern
 private:
     bool openBar;
     bool bars[MaxPatternLen];
+    double EvalOpenPrice;
 public:
+    static int shortP;
+    static int longP;
     string IDtoName(int id, bool ob, int decision);
     string name;
     int ID;
@@ -46,6 +49,7 @@ public:
     Pattern(int id, int len);
     ~Pattern();
     bar_result_t giveBar(int BarNo, double diff);
-    void updateMidday(double close);
-    void updateEndday(double close);
+    void openEval(double open0, bool direct);
+    void closeEvalMidday(double open0);
+    void closeEvalEndday(double open0);
 };
