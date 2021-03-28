@@ -4,7 +4,12 @@ bar_result_t Pattern::giveBar(int BarNo, double diff)
 {
     if(BarNo==-1)
     {
-        assert(status==STATUS_SLEEP, "status not sleep at the start");
+//        assert(status==STATUS_SLEEP, "status not sleep at the start");
+        if(status!=STATUS_SLEEP)    //Last day was a short day
+        {
+            Print("short day");
+            status=STATUS_SLEEP;
+        }
         if(openBar)
             if(diff>0)
             {

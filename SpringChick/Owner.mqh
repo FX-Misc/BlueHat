@@ -50,5 +50,6 @@ public:
     //trade_advice_t GetAdvice();
     bool CreateDebugDB(DEBUG_MODE debug_m);
     bool CreateStateDB();
+    void report();
 //    trade_advice_t Go1Bar(int index, int history_index, bool logging);
 };

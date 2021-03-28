@@ -25,11 +25,17 @@ void Owner::UpdateInput(const double& c[], const double& d[], const double& o[],
         for(int i=0; i<patterns.Count(); i++)
         {
             patterns.at(i).closeEvalEndday(o[0]);
-            g.DisplayVert("="+patterns.at(i).name+" "+
+            //g.DisplayVert("="+patterns.at(i).name+" "+
+            //    patterns.at(i).QEndday.dirCorrectCnt+"/"+patterns.at(i).QEndday.count+" D "+
+            //    (int)patterns.at(i).QEndday.DirectionShort+","+(int)patterns.at(i).QEndday.DirectionLong+" P "+
+            //    (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
+            //    , t[1], c[1]);
+/*            Print("="+patterns.at(i).name+" "+
                 patterns.at(i).QEndday.dirCorrectCnt+"/"+patterns.at(i).QEndday.count+" D "+
                 (int)patterns.at(i).QEndday.DirectionShort+","+(int)patterns.at(i).QEndday.DirectionLong+" P "+
                 (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
-                , t[1], c[1]);
+                );
+*/
         }
 
     if(barOfDay>=0)
@@ -50,13 +56,29 @@ void Owner::UpdateInput(const double& c[], const double& d[], const double& o[],
         barOfDay++;
     }
 }
+void Owner::report()
+{
+    for(int i=0; i<patterns.Count(); i++)
+    {
+        //g.DisplayVert("="+patterns.at(i).name+" "+
+        //    patterns.at(i).QEndday.dirCorrectCnt+"/"+patterns.at(i).QEndday.count+" D "+
+        //    (int)patterns.at(i).QEndday.DirectionShort+","+(int)patterns.at(i).QEndday.DirectionLong+" P "+
+        //    (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
+        //    , t[1], c[1]);
+        Print("="+patterns.at(i).name+" "+
+            patterns.at(i).QEndday.dirCorrectCnt+"/"+patterns.at(i).QEndday.count+" D "+
+            (int)(patterns.at(i).QEndday.DirectionShort*10)+","+(int)(patterns.at(i).QEndday.DirectionLong*10)+" P "+
+            (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
+            );
+    }
+}
 void Owner::LoadPatterns(Market* m)
 {
     //for now, start with all possible patterns
     //later, only "good" patterns can be loaded from db
-/*
+
 //    string str="";
-    for(int j=2; j<=patternLen; j++)
+    for(int j=1; j<=patternLen; j++)
     {
         for(int i=0; i<(1<<(j+1)); i++)
         {
@@ -66,8 +88,8 @@ void Owner::LoadPatterns(Market* m)
 //        str+="\n";
     }
 //    Comment(str);
-*/
-    patterns.Add(new Pattern(6,2));
+
+//    patterns.Add(new Pattern(6,2));
 
     //for(int i=0; i<(1<<(patternLen+1)); i++)
     //{
