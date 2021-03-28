@@ -8,17 +8,13 @@ enum bar_result_t
     BAR_SLEEP,
     BAR_NOT_ME,
     BAR_ITS_ME_DIRECT,
-    BAR_ITS_ME_REVERSE,
 };
  
 enum pattern_status_t
 {
     STATUS_CANDIDATE_DIRECT,
-    STATUS_CANDIDATE_REVERSE,
-    STATUS_CANDIDATE_EITHER,
     STATUS_SLEEP,
     STATUS_ITS_ME_DIRECT,
-    STATUS_ITS_ME_REVERSE,
 };
 
 struct quality_t
@@ -49,7 +45,7 @@ public:
     Pattern(int id, int len);
     ~Pattern();
     bar_result_t giveBar(int BarNo, double diff);
-    void openEval(double open0, bool direct);
+    void openEval(double open0);
     void closeEvalMidday(double open0);
     void closeEvalEndday(double open0);
 };

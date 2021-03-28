@@ -41,16 +41,10 @@ void Owner::UpdateInput(const double& c[], const double& d[], const double& o[],
     if(barOfDay>=0)
     {
         for(int i=0; i<patterns.Count(); i++)
-            switch(patterns.at(i).giveBar(barOfDay,d[1]))
+            if(patterns.at(i).giveBar(barOfDay,d[1])==BAR_ITS_ME_DIRECT)
             {
-                case BAR_ITS_ME_DIRECT:
-                    patterns.at(i).openEval(o[0],true);
-                    g.DisplayVert("+"+patterns.at(i).name, t[1], c[1] );
-                    break;
-                case BAR_ITS_ME_REVERSE:
-                    patterns.at(i).openEval(o[0],false);
-                    g.DisplayVert("-"+patterns.at(i).name, t[1], c[1] );
-                    break;
+                patterns.at(i).openEval(o[0]);
+                g.DisplayVert("+"+patterns.at(i).name, t[1], c[1] );
             }
  //       g.DisplayVert("."+barOfDay+" id"+patterns.at(0).ID+" stat"+patterns.at(0).status,t[1], c[1] );
         barOfDay++;
