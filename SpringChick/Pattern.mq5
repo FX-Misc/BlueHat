@@ -53,8 +53,26 @@ void Pattern::openEval(double open0)
 }
 void Pattern::closeEvalMidday(double open0)
 {
-    
-    
+    int direction;
+    double profit;
+    switch(status)
+    {
+        case STATUS_ITS_ME_DIRECT:
+            direction = (open0>=EvalOpenPrice)?+1:-1;
+            profit = open0 - EvalOpenPrice;
+            QMidday.count++;
+            QMidday.dirCorrectCnt+=direction;
+            QMidday.ProfitShort = (QMidday.ProfitShort*Pattern::shortP + profit) / (Pattern::shortP+1); 
+            QMidday.ProfitLong = (QMidday.ProfitLong*Pattern::longP + profit) / (Pattern::longP+1); 
+            QMidday.DirectionShort = (QMidday.DirectionShort*Pattern::shortP + direction) / (Pattern::shortP+1); 
+            QMidday.DirectionLong = (QMidday.DirectionLong*Pattern::longP + direction) / (Pattern::longP+1); 
+            break;
+        case STATUS_SLEEP:
+            break;
+        default:
+            assert(0,"unexpected status at Midday");
+            break;
+    }
 }
 
 void Pattern::closeEvalEndday(double open0)
