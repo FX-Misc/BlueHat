@@ -59,15 +59,15 @@ void Owner::report()
         //    (int)patterns.at(i).QEndday.DirectionShort+","+(int)patterns.at(i).QEndday.DirectionLong+" P "+
         //    (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
         //    , t[1], c[1]);
-        Print("=E "+patterns.at(i).name+" "+
-            patterns.at(i).QEndday.dirCorrectCnt+"/"+patterns.at(i).QEndday.count+" D "+
-            (int)(patterns.at(i).QEndday.DirectionShort*10)+","+(int)(patterns.at(i).QEndday.DirectionLong*10)+" P "+
-            (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
-            );
         Print("=M "+patterns.at(i).name+" "+
             patterns.at(i).QMidday.dirCorrectCnt+"/"+patterns.at(i).QMidday.count+" D "+
             (int)(patterns.at(i).QMidday.DirectionShort*10)+","+(int)(patterns.at(i).QMidday.DirectionLong*10)+" P "+
             (int)patterns.at(i).QMidday.ProfitShort+","+(int)patterns.at(i).QMidday.ProfitLong
+            );
+        Print("=E "+patterns.at(i).name+" "+
+            patterns.at(i).QEndday.dirCorrectCnt+"/"+patterns.at(i).QEndday.count+" D "+
+            (int)(patterns.at(i).QEndday.DirectionShort*10)+","+(int)(patterns.at(i).QEndday.DirectionLong*10)+" P "+
+            (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
             );
     }
 }
