@@ -4,9 +4,11 @@ void MarketScriptReal::Initialise(int max_history)
     ArraySetAsSeries(history, true);  //changes the indexing method of the array; the latest as 0
     ArraySetAsSeries(history_open, true);
     ArraySetAsSeries(history_times, true); 
+    ArraySetAsSeries(history_volume, true); 
     ArraySetAsSeries(close, true);  
     ArraySetAsSeries(open, true);  
     ArraySetAsSeries(times, true);  
+    ArraySetAsSeries(volume, true);  
     ArraySetAsSeries(diff_raw, true);  
     ArraySetAsSeries(diff_norm, true);  
     ArrayResize(diff_raw, TIMESERIES_DEPTH);
@@ -22,6 +24,7 @@ void MarketScriptReal::Initialise(int max_history)
     CopyClose(ChartSymbol(),ChartPeriod(),0,max,history);
     CopyOpen(ChartSymbol(),ChartPeriod(),0,max,history_open);
     CopyTime(ChartSymbol(),ChartPeriod(),0,max,history_times);
+    CopyRealVolume(ChartSymbol(),ChartPeriod(),0,max,history_volume);
     oldest_available = ArraySize(history) - TIMESERIES_DEPTH;
     diff_norm_factor = CalculateDiffNormFactor();
     Print("market init for ",ChartSymbol(),". oldest avail sample=",oldest_available," + depth=",TIMESERIES_DEPTH," norm_factor=",diff_norm_factor," tick_convert=",tick_convert_factor);
@@ -33,6 +36,7 @@ void MarketScriptReal::UpdateBuffers(int index)
     ArrayCopy(close,history,0,index,TIMESERIES_DEPTH+1); 
     ArrayCopy(open,history_open,0,index,TIMESERIES_DEPTH+1); 
     ArrayCopy(times,history_times,0,index,TIMESERIES_DEPTH+1); 
+    ArrayCopy(volume,history_volume,0,index,TIMESERIES_DEPTH+1); 
     //close[0] is the uncomplete bar in the main loop of EA, the newest but unused bar in the script
     //close[1] is the desired in the main loop.
     //In features, close[0] is for the cheating only, which is equivalent to close[1] main loop
