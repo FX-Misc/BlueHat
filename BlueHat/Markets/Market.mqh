@@ -1,4 +1,4 @@
-#include "globals/_globals.mqh"
+#include  "../globals/_globals.mqh"
 #include <Trade\SymbolInfo.mqh>
 class Market
 {

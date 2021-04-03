@@ -1,6 +1,6 @@
 //#include "./globals/ExtendedArrList.mqh"
 //#include "./globals/assert.mqh"
-#include "./globals/_globals.mqh"
+#include "../globals/_globals.mqh"
 
 enum bar_result_t
 {

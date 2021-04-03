@@ -1,6 +1,6 @@
-#include "Market.mqh"
+//#include "./Markets/Market.mqh"
 
-#include "Pattern.mqh"
+#include "./Patterns/Pattern.mqh"
 #include "Graphics.mqh"
 #include "./globals/ExtendedArrList.mqh"
 #include "./globals/assert.mqh"
