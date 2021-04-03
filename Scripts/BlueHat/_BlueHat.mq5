@@ -1,10 +1,11 @@
 #include "../../BlueHat/Owner.mqh"
+#include "../../BlueHat/ChickOwner.mqh"
 #include "../../BlueHat/Markets/Market.mqh"
 #include "../../BlueHat/Markets/MarketFactory.mqh"
 #include "../../BlueHat/globals/_globals.mqh"
-
  
 #property script_show_inputs
+
 input bool skip_1st_monday=true;
 input bool skip_1st_morning=true;
 input markets_t market_type=MARKET_SCRIPT_REAL;
@@ -13,6 +14,15 @@ input double min_softmax=0.001;
 input int depth=1000;
 input evaluation_method_t evaluation_method = METHOD_DIRECTION;
 input axon_value_t axon_value_method = AXON_METHOD_GAIN;
+
+input int PatternLen=3;
+input int MiddayBar=6; //6 for M15
+input int EnddayBar=11; 
+input int shortPeriod=5;    //5 normal. 0 only last value
+input int longPeriod=20;     //20 normal. 1 50% last value, 50% history
+
+int   Pattern::shortP=shortPeriod;
+int   Pattern::longP=longPeriod;
 
 void OnStart()
 {
@@ -25,6 +35,8 @@ void OnStart()
     MarketFactory mf;
     Market* market = mf.CreateMarket(market_type, true);//!!
     market.Initialise(depth); //0 for full history
+    ChickOwner chickowner(PatternLen);
+    chickowner.LoadPatterns(market);
         
     market.UpdateBuffers(0);
 //    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
@@ -60,7 +72,9 @@ void OnStart()
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
+        chickowner.UpdateInput(market.close, market.diff_raw, market.open, market.times);
     }  
+    chickowner.report();        
         
     owner.db.CloseDB();
 //    print_progress(&owner,100);
