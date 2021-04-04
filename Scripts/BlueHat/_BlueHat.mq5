@@ -51,7 +51,8 @@ void OnStart()
     int len_div_10=(market.oldest_available-1)/10;
     for(int i=market.oldest_available-1; i>=0; i--)
     {
-//        if(i%400==0)
+
+//        if(i%400==0)//Temporary: reset axons priodically
 //            owner.ResetAxons();
         market.UpdateBuffers(i);
         //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
