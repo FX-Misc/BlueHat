@@ -120,6 +120,7 @@ void OnDeinit(const int reason)
 }
 //+------------------------------------------------------------------+
 bool HistoryDone=false;
+int CurrPos=0;
 void OnTick()
 {
     if(!HistoryDone)
@@ -150,15 +151,30 @@ void OnTick()
 //            if( (i%len_div_10) == 0)
 //                print_progress(&owner, 10*(i/len_div_10));
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
-        //owner.GetAdvice();
-        //trade here
+
+        chickowner.UpdateInput(market.close, market.diff_raw, market.open, market.times);
+#define  TRADEONCHICK
+#ifdef TRADEONNN
         double soft=owner.softmax.GetNode();
         Print("soft=",soft, "dir:",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG),5));
         if(soft>0.001)
             Buy(0.1);
         else if(soft<-0.001)
             Sell(0.1);
-
+#endif
+#ifdef TRADEONCHICK
+        int signal = chickowner.GetRoughSignal(CurrPos);
+        if(signal==1)
+        {
+            Buy(0.1);
+            CurrPos=1;
+        }
+        if(signal==-1)
+        {
+            Sell(0.1);
+            CurrPos=-1;
+        }
+#endif
 
         ea_return++;
     }

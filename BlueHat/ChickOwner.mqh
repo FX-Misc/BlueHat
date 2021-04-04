@@ -28,4 +28,5 @@ public:
     bool CreateDebugDB(DEBUG_MODE debug_m);
     bool CreateStateDB();
     void report();
+    int GetRoughSignal(int currentPos);
 };
