@@ -22,7 +22,6 @@ Feature* FeatureMACD::Instance()
 }
 void FeatureMACD::Update(const double& raw_close[], const double& norm_d[], int len)
 {
-    Print("MACDhndl:",handle);
     market.GetIndicators(handle, 0, macd_main);
     market.GetIndicators(handle, 1, macd_signal);   //the histogram
     updated_value = 10 * market.diff_norm_factor * 2*( macd_signal[1]-macd_signal[2] ) +2*( macd_main[1]-macd_main[2] ) +1*( macd_main[1]-macd_signal[1] );
