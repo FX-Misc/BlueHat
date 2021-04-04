@@ -6,8 +6,8 @@
  
 #property script_show_inputs
 
-input bool skip_1st_monday=true;
-input bool skip_1st_morning=true;
+input bool skip_1st_monday=false;
+input bool skip_1st_morning=false;
 input markets_t market_type=MARKET_SCRIPT_REAL;
 input DEBUG_MODE debug_mode=DEBUG_NONE;//DEBUG_VERBOSE;
 input double min_softmax=0.001;
@@ -18,8 +18,8 @@ input axon_value_t axon_value_method = AXON_METHOD_GAIN;
 input int PatternLen=3;
 input int MiddayBar=6; //6 for M15
 input int EnddayBar=11; 
-input int shortPeriod=5;    //5 normal. 0 only last value
-input int longPeriod=20;     //20 normal. 1 50% last value, 50% history
+input int shortPeriod=5;    //shortPeriod 5 normal. 0 only last value
+input int longPeriod=20;     //longPeriod 20 normal. 1 50-50
 
 int   Pattern::shortP=shortPeriod;
 int   Pattern::longP=longPeriod;
@@ -33,7 +33,7 @@ void OnStart()
 
     Owner owner();
     MarketFactory mf;
-    Market* market = mf.CreateMarket(market_type, true);//!!
+    Market* market = mf.CreateMarket(market_type, true);
     market.Initialise(depth); //0 for full history
     ChickOwner chickowner(PatternLen);
     chickowner.LoadPatterns(market);
@@ -45,7 +45,7 @@ void OnStart()
     owner.CreateNN(market, axon_value_method, min_softmax);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
-    
+    wow
     market.UpdateBuffers(market.oldest_available);
     owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
     int len_div_10=(market.oldest_available-1)/10;

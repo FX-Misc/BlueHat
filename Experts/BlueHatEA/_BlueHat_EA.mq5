@@ -1,16 +1,30 @@
 #include "../../BlueHat/Owner.mqh"
+#include "../../BlueHat/ChickOwner.mqh"
 #include "../../BlueHat/Markets/Market.mqh"
 #include "../../BlueHat/Markets/MarketFactory.mqh"
 #include "../../BlueHat/globals/_globals.mqh"
 
 //#property version   "1.00"
+input bool skip_1st_monday=false;
+input bool skip_1st_morning=false;
 input markets_t market_type=MARKET_SCRIPT_REAL;
-input DEBUG_MODE debug_mode=DEBUG_NORMAL;
-input int depth=100;
-input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
-//+------------------------------------------------------------------+
+input DEBUG_MODE debug_mode=DEBUG_NONE;
+input double min_softmax=0.001;
+input int depth=1000;
+input evaluation_method_t evaluation_method = METHOD_DIRECTION;
+input axon_value_t axon_value_method = AXON_METHOD_GAIN;
+
+input int PatternLen=3;
+input int MiddayBar=6; //6 for M15
+input int EnddayBar=11; 
+input int shortPeriod=5;    //shortPeriod 5 normal. 0 only last value
+input int longPeriod=20;     //longPeriod 20 normal. 1 50-50
+
+int   Pattern::shortP=shortPeriod;
+int   Pattern::longP=longPeriod;
+
 MarketFactory mf;
-double ea_desired;
+double ea_desired,desired_scaled;
 Owner owner;
 Market* market;
 datetime lastbar_timeopen;
@@ -19,14 +33,17 @@ int OnInit()
 {
     Print("Hello from EA");
     ea_return = 0;
-    market = mf.CreateMarket(market_type);
+
+    market = mf.CreateMarket(market_type, true);
     market.Initialise(depth); //0 for full history
+    ChickOwner chickowner(PatternLen);
+    chickowner.LoadPatterns(market);
         
     market.UpdateBuffers(0);
     Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     owner.db.OpenDB();
-    owner.CreateNN(evaluation_method, market);
+    owner.CreateNN(market, axon_value_method, min_softmax);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
@@ -42,17 +59,23 @@ int OnInit()
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         ea_desired = market.diff_norm[1];
-        owner.Train1Epoch(ea_desired);
-        owner.quality.UpdateMetrics(ea_desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
+        desired_scaled = market.diff_raw[1] * market.diff_norm_factor;
+        if(!early_morning_skip(market.times[1], skip_1st_monday, skip_1st_morning))
+        {
+            owner.quality.UpdateMetrics(ea_desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
+            owner.Train1Epoch(ea_desired, desired_scaled, evaluation_method);
+        }
         owner.UpdateAxonStats();
-        owner.SaveDebugInfo(debug_mode, i, ea_desired, market.diff_raw[1], market.close[1]);
+        owner.SaveDebugInfo(debug_mode, i, ea_desired, market.diff_raw[1], market.close[1], market.times[1]);
         if( len_div_10 > 0)
             if( (i%len_div_10) == 0)
                 print_progress(&owner, 10*(i/len_div_10));
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
+        chickowner.UpdateInput(market.close, market.diff_raw, market.open, market.times);
     }  
+    chickowner.report();        
     Print("init done");
     return(INIT_SUCCEEDED);
 }
@@ -95,10 +118,11 @@ void OnTick()
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         ea_desired = market.diff_norm[1];
-        owner.Train1Epoch(ea_desired);
+        desired_scaled = market.diff_raw[1] * market.diff_norm_factor;
+        owner.Train1Epoch(ea_desired, desired_scaled, evaluation_method);
         owner.quality.UpdateMetrics(ea_desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
         owner.UpdateAxonStats();
-        owner.SaveDebugInfo(debug_mode, 0, ea_desired, market.diff_raw[1], market.close[1]);
+        owner.SaveDebugInfo(debug_mode, 0, ea_desired, market.diff_raw[1], market.close[1], market.times[1]);
 //        if( len_div_10 > 0)
 //            if( (i%len_div_10) == 0)
 //                print_progress(&owner, 10*(i/len_div_10));
@@ -236,3 +260,15 @@ bool MarketOrder(ENUM_ORDER_TYPE type,double volume,ulong slip,ulong magicnumber
    PrintFormat("retcode=%u  deal=%I64u  order=%I64u",result.retcode,result.deal,result.order);
    return (true);
   }
+bool early_morning_skip(datetime t, bool skip_monday, bool skip_morning)
+{
+    MqlDateTime dt;
+    TimeToStruct(t, dt);
+    if(skip_morning)
+        if(dt.hour==0 && dt.min==0)
+            return true;
+    if(skip_monday)
+        if(dt.day_of_week==1 && dt.hour==0 && dt.min==0)
+            return true;
+    return false;
+}
