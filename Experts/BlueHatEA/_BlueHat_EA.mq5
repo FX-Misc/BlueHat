@@ -29,6 +29,7 @@ Owner owner;
 Market* market;
 datetime lastbar_timeopen;
 double ea_return;
+ChickOwner* chickowner;
 int OnInit()
 {
     Print("Hello from EA");
@@ -36,17 +37,29 @@ int OnInit()
 
     market = mf.CreateMarket(market_type, true);
     market.Initialise(depth); //0 for full history
-    ChickOwner chickowner(PatternLen);
+    chickowner = new ChickOwner(PatternLen);
     chickowner.LoadPatterns(market);
         
-    market.UpdateBuffers(0);
-    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
+//    market.UpdateBuffers(0);
+//    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     owner.db.OpenDB();
     owner.CreateNN(market, axon_value_method, min_softmax);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
+
+
+
+
+
+    Print("init done");
+    return(INIT_SUCCEEDED);
+}
+void GoThroughHistory()
+{
+    Print("GoThroughHistory");
+
     market.UpdateBuffers(market.oldest_available);
     owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
     int len_div_10=(market.oldest_available-1)/10;
@@ -76,8 +89,11 @@ int OnInit()
         chickowner.UpdateInput(market.close, market.diff_raw, market.open, market.times);
     }  
     chickowner.report();        
-    Print("init done");
-    return(INIT_SUCCEEDED);
+
+
+
+    
+    Print("History done");
 }
 void print_progress(Owner* _owner, int progress)
 {
@@ -103,8 +119,15 @@ void OnDeinit(const int reason)
     Print("DeInit");
 }
 //+------------------------------------------------------------------+
+bool HistoryDone=false;
 void OnTick()
 {
+    if(!HistoryDone)
+    {
+        HistoryDone=true;
+        GoThroughHistory();
+        return;
+    }
     if(isNewBar())
     {
         Print("tick on ",lastbar_timeopen);
