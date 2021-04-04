@@ -17,6 +17,7 @@ enum quality_period_t
 class QualityMetrics
 {
 private:
+    double min_softmax_for_trade;
     double diff_filtered_short;  //0(good)..1
     double diff_filtered_long; 
     double sum_diff_all_time;  
@@ -35,7 +36,7 @@ private:
     int non_zero_predictions;
     int epoch_counter;  //the number of training epochs so far 
 public:
-    QualityMetrics();
+    QualityMetrics(double min_sm);
     double GetQuality(quality_method_t method, quality_period_t period) const; //-1(min)..-(bad)..0(neutral)..+(good)..1(max)
     void UpdateMetrics(double desired, double value, double diff_raw);
 };

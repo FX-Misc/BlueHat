@@ -1,32 +1,48 @@
 #include "../../BlueHat/Owner.mqh"
+#include "../../BlueHat/ChickOwner.mqh"
 #include "../../BlueHat/Markets/Market.mqh"
 #include "../../BlueHat/Markets/MarketFactory.mqh"
 #include "../../BlueHat/globals/_globals.mqh"
-
  
 #property script_show_inputs
+
+input bool skip_1st_monday=true;
+input bool skip_1st_morning=true;
 input markets_t market_type=MARKET_SCRIPT_REAL;
-input DEBUG_MODE debug_mode=DEBUG_NONE;
+input DEBUG_MODE debug_mode=DEBUG_NONE;//DEBUG_VERBOSE;
+input double min_softmax=0.001;
 input int depth=1000;
-input evaluation_method_t evaluation_method = METHOD_ANALOG_DISTANCE;
+input evaluation_method_t evaluation_method = METHOD_DIRECTION;
+input axon_value_t axon_value_method = AXON_METHOD_GAIN;
+
+input int PatternLen=3;
+input int MiddayBar=6; //6 for M15
+input int EnddayBar=11; 
+input int shortPeriod=5;    //5 normal. 0 only last value
+input int longPeriod=20;     //20 normal. 1 50% last value, 50% history
+
+int   Pattern::shortP=shortPeriod;
+int   Pattern::longP=longPeriod;
 
 void OnStart()
 {
-    double desired;
+    double desired,desired_scaled;
     
     Print("Hi there");
     assert(1>0,"test");
 
+    Owner owner();
     MarketFactory mf;
-    Market* market = mf.CreateMarket(market_type);
+    Market* market = mf.CreateMarket(market_type, true);//!!
     market.Initialise(depth); //0 for full history
+    ChickOwner chickowner(PatternLen);
+    chickowner.LoadPatterns(market);
         
     market.UpdateBuffers(0);
-    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
+//    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
-    Owner owner();
     owner.db.OpenDB();
-    owner.CreateNN(evaluation_method, market);
+    owner.CreateNN(market, axon_value_method, min_softmax);
     owner.CreateDebugDB(debug_mode);
     owner.CreateStateDB();
     
@@ -35,24 +51,30 @@ void OnStart()
     int len_div_10=(market.oldest_available-1)/10;
     for(int i=market.oldest_available-1; i>=0; i--)
     {
-//        if(i%400==0)//Temporary: reset axons priodically
+//        if(i%400==0)
 //            owner.ResetAxons();
         market.UpdateBuffers(i);
         //Note: here, close[0] is not used at all just for compatiblity with EA, where close[0] is the uncompleted bar
         //Note: index+1 is the last completed Bar, so the one that we need
         //If not going through the history, do UpdateInput(+2) before the loop; then the loop uses close(+1) as desired to train the 1st time
         desired = market.diff_norm[1];
-        owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
-        owner.Train1Epoch(desired);
+        desired_scaled = market.diff_raw[1] * market.diff_norm_factor;
+        if(!early_morning_skip(market.times[1], skip_1st_monday, skip_1st_morning))
+        {
+            owner.quality.UpdateMetrics(desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
+            owner.Train1Epoch(desired, desired_scaled, evaluation_method);
+        }
         owner.UpdateAxonStats();
-        owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1]);
+        owner.SaveDebugInfo(debug_mode, i, desired, market.diff_raw[1], market.close[1], market.times[1]);
         if( len_div_10 > 0)
             if( (i%len_div_10) == 0)
                 print_progress(&owner, 10*(i/len_div_10));
         owner.UpdateInput(market.close, market.diff_norm, TIMESERIES_DEPTH);
         //owner.GetAdvice();
         //trade here
+        chickowner.UpdateInput(market.close, market.diff_raw, market.open, market.times);
     }  
+    chickowner.report();        
         
     owner.db.CloseDB();
 //    print_progress(&owner,100);
@@ -63,16 +85,25 @@ void print_progress(Owner* owner, int progress)
 {
     Print("..",progress,"%");
     Print(owner.GetAxonsReport());
-    Print("Quality metrics, profit= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_SHORT),1)," ",
+    Print("Quality metrics, profit= ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_LONG),1)," ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_ALLTIME),1)," ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_PROFIT,QUALITY_PERIOD_AVEALL),1));
-    Print("Quality metrics, Diff= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_SHORT),5)," ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_LONG),5)," ",
-                                   DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIFF,QUALITY_PERIOD_ALLTIME),4));
-    Print("Quality metrics, Direction= ",DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_SHORT),5)," ",
+    Print("Quality metrics, Direction= ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_LONG),5)," ",
                                    DoubleToString(owner.quality.GetQuality(QUALITY_METHOD_DIRECTION,QUALITY_PERIOD_ALLTIME),1),"%");
+}
+bool early_morning_skip(datetime t, bool skip_monday, bool skip_morning)
+{
+    MqlDateTime dt;
+    TimeToStruct(t, dt);
+    if(skip_morning)
+        if(dt.hour==0 && dt.min==0)
+            return true;
+    if(skip_monday)
+        if(dt.day_of_week==1 && dt.hour==0 && dt.min==0)
+            return true;
+    return false;
 }
 //snippet
 /*

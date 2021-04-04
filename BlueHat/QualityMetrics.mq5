@@ -1,5 +1,5 @@
 #include "QualityMetrics.mqh"
-QualityMetrics::QualityMetrics()
+QualityMetrics::QualityMetrics(double min_sm):min_softmax_for_trade(min_sm)
 {
     diff_filtered_short = 0;
     diff_filtered_long = 0;
@@ -98,7 +98,7 @@ void QualityMetrics::UpdateMetrics(double desired, double value, double ticks_ra
     zerodiff_filtered_long = FILTER(zerodiff_filtered_long, diff_zero, METRIC_FILTER_LONG);
     sum_zerodiff_all_time += diff_zero;
     
-    if(value>MIN_SOFTMAX_FOR_TRADE)
+    if(value>min_softmax_for_trade)
     {
         non_zero_predictions++;
         profit_accumulated_all += (+ticks_raw);
@@ -106,7 +106,7 @@ void QualityMetrics::UpdateMetrics(double desired, double value, double ticks_ra
         profit_long = FILTER(profit_long, +ticks_raw, METRIC_FILTER_LONG);
         profit_ave_ticks = profit_accumulated_all / non_zero_predictions;
     }
-    else if(value<-MIN_SOFTMAX_FOR_TRADE)
+    else if(value<-min_softmax_for_trade)
     {    
         non_zero_predictions++;
         profit_accumulated_all -= ticks_raw;

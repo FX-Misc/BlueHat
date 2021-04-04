@@ -67,12 +67,17 @@ bool DataBase::OpenDB(void)
 bool DataBase::AddDBGTBLItem(string name, bool completed)
 {
     static string str1="CREATE TABLE DEBUG( ID INT PRIMARY KEY     NOT NULL";
-    
+ 
+    string type;
+    if(name=="time")
+        type=" TEXT";
+    else
+        type=" REAL";
     if(!completed)
-        str1+=","+name+" REAL";
+        str1+=","+name+type;
     else
     {
-        str1+=","+name+" REAL);";
+        str1+=","+name+type+");";
         if(!DatabaseExecute(db,str1))
         {
             Print("DB: create table DEBUG failed with code ", GetLastError());
@@ -113,7 +118,7 @@ string DataBase::ReadNextString(int request)
         Print("DB: Read failed");
         return DB_ERROR_STR;
     }
-    if(str=="-")
+    if(str=="_")
         return DB_END_STR;
     return str;
 }
@@ -127,6 +132,8 @@ bool DataBase::Insert(string name, double value, bool completed)
     string number_str="";
     if(name=="ID")
         number_str=IntegerToString((int)value);
+    else if(name=="time")
+        number_str="'"+TimeToString((datetime)value)+"'";
     else
         number_str=DoubleToString(value);
         

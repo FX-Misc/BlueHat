@@ -7,6 +7,20 @@ Neuron* NeuronFactory::CreateNeuron(string type, string nname)
         neuron = new NeuronSUM(nname);
     else if(type=="neANDVeto")
         neuron = new NeuronANDVeto(nname);
+    else if(type=="neSWCmp")
+        neuron = new NeuronSwitchCompare(nname);
+    else if(type=="ndORsum")
+        neuron = new NeuronORSumP(nname);
+    else if(type=="ndNORsum")
+        neuron = new NeuronNORSumN(nname);
+    else if(type=="neSumDir")
+        neuron = new NeuronSumDir(nname);
+    else if(type=="neSWCombine")
+        neuron = new NeuronSwitchCombine(nname);
+    else if(type=="neSWHard")
+        neuron = new NeuronSwitchHard(nname);
+    else if(type=="neVoter")
+        neuron = new NeuronVoter(nname);
     else
         neuron = NULL;
     assert(neuron != NULL, "CreateNeuron failed to create");

@@ -15,6 +15,6 @@ Feature* FeatureBiasPositive::Instance()
 }
 void FeatureBiasPositive::Update(const double& raw_close[], const double& norm_d[], int len)
 {
-    updated_value = (double)0.5;
+    updated_value = (double)0.1;
 }
 
