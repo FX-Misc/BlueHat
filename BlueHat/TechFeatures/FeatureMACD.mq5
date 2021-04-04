@@ -9,6 +9,7 @@ FeatureMACD::FeatureMACD(void)
     ArraySetAsSeries(macd_signal,true);
     handle = iMACD(NULL,0,12,26,9,PRICE_CLOSE);
     assert(handle>=0,"IMA failed to init");
+    Print("MACD inited:",handle);
 }
 FeatureMACD::~FeatureMACD(void)
 {
