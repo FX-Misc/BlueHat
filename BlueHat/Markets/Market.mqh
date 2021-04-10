@@ -9,10 +9,10 @@ public:
     double history_open[];
 public:
     datetime history_times[];
-    datetime history_volume[];
+    long history_volume[];
     double close[];
     double open[];
-    double volume[];
+    long volume[];
     datetime times[];
     double diff_raw[];
     double diff_norm[];

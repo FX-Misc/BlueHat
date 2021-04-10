@@ -38,7 +38,9 @@ void OnStart()
     ChickOwner chickowner(PatternLen);
     chickowner.LoadPatterns(market);
         
-    market.UpdateBuffers(0);
+//!!    market.UpdateBuffers(0);
+//Not sure what is this line for. removed cause not compatible with EA market
+
 //    Print("his01:",market.history[0], " ", market.history[1],"close01:",market.close[0], " ", market.close[1]);
 
     owner.db.OpenDB();
