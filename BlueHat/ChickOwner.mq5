@@ -17,12 +17,7 @@ void ChickOwner::UpdateInput(const double& c[], const double& d[], const double&
             patterns.at(i).giveBar(-1,o[1]-c[2]);
         barOfDay=0;
         g.DisplayVert("start "+i+" patterns", t[1], c[1] );
-        Print("newday");
     }
-//    else
-        //g.DisplayVert(".", t[1], c[1] );
-  //      Print("_");
-    Print("in ", barOfDay, " t " ,ts1.min, " " , ts2.min);
     if(barOfDay==MiddayBar)
         for(int i=0; i<patterns.Count(); i++)
             patterns.at(i).closeEvalMidday(o[0]);
@@ -100,16 +95,17 @@ void ChickOwner::LoadPatterns(Market* m)
     //for now, start with all possible patterns
     //later, only "good" patterns can be loaded from db
 
-////    string str="";
-//    for(int j=1; j<=patternLen; j++)
-//    {
-//        for(int i=0; i<(1<<(j+1)); i++)
-//        {
-//            patterns.Add(new Pattern(i,j));
-//        }
-////        str+="\n";
-//    }
-patterns.Add(new Pattern(2,1));
+//    string str="";
+    for(int j=1; j<=patternLen; j++)
+    {
+        for(int i=0; i<(1<<(j+1)); i++)
+        {
+            patterns.Add(new Pattern(i,j));
+//            str+=":"+patterns.at(patterns.Count()-1).ID+patterns.at(patterns.Count()-1).DecisionBar+patterns.at(patterns.Count()-1).name+"  ";
+        }
+//        str+="\n";
+    }
+
 }
 
 ChickOwner::~ChickOwner()
