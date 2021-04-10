@@ -131,7 +131,7 @@ void OnTick()
     }
     if(isNewBar())
     {
-        Print("tick on ",lastbar_timeopen);
+//        Print("tick on ",lastbar_timeopen);
         ClosePositionsByBars(0);
 
 
@@ -146,7 +146,7 @@ void OnTick()
         owner.Train1Epoch(ea_desired, ea_desired_scaled, evaluation_method);
         owner.quality.UpdateMetrics(ea_desired, owner.softmax.GetNode(), market.tick_convert_factor * market.diff_raw[1]);
         owner.UpdateAxonStats();
-        owner.SaveDebugInfo(debug_mode, 0, ea_desired, market.diff_raw[1], market.close[1], market.times[1]);
+//!!        owner.SaveDebugInfo(debug_mode, 0, ea_desired, market.diff_raw[1], market.close[1], market.times[1]);
 //        if( len_div_10 > 0)
 //            if( (i%len_div_10) == 0)
 //                print_progress(&owner, 10*(i/len_div_10));
@@ -186,6 +186,7 @@ void OnTrade()
 }
 double OnTester()
 {
+    chickowner.report();
     Print("Tester finished");
     owner.db.CloseDB();
     delete market;
