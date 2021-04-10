@@ -168,12 +168,12 @@ void OnTick()
         if(signal==1)
         {
             Buy(0.1);
-            CurrPos=1;
+            CurrPos++;
         }
         if(signal==-1)
         {
             Sell(0.1);
-            CurrPos=-1;
+            CurrPos--;
         }
 #endif
 

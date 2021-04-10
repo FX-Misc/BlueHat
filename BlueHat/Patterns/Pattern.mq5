@@ -28,13 +28,15 @@ bar_result_t Pattern::giveBar(int BarNo, double diff)
             return BAR_SLEEP;
             break;
         case STATUS_CANDIDATE_DIRECT:
-            if(BarNo == DecisionBar)
-            {
-                status = STATUS_ITS_ME_DIRECT;
-                return BAR_ITS_ME_DIRECT;
-            }
             if( (bars[BarNo]&&d) || (!bars[BarNo]&&!d) )
+            {
+                if(BarNo == DecisionBar-1)
+                {
+                    status = STATUS_ITS_ME_DIRECT;
+                    return BAR_ITS_ME_DIRECT;
+                }
                 return BAR_MORE_PLZ;
+            }
             else
             {
                 status = STATUS_SLEEP;
