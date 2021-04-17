@@ -2,6 +2,7 @@
 
 #include "./Patterns/Pattern.mqh"
 #include "Graphics.mqh"
+#include "ChickSignal.mqh"
 #include "./globals/ExtendedArrList.mqh"
 #include "./globals/assert.mqh"
 
@@ -22,6 +23,7 @@ public:
     int patternLen;
     ChickOwner(int patternLen);
     ~ChickOwner();
+    ChickSignal *signal;
     void LoadPatterns(Market* m);
     void UpdateInput(const double& c[], const double& d[], const double& o[], const datetime& t[]);
     void SaveDebugInfo(DEBUG_MODE debug_m, int index, double diff_raw1, double close1, datetime time1);

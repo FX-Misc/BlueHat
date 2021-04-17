@@ -119,6 +119,10 @@ void OnDeinit(const int reason)
     Print("DeInit");
 }
 //+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
+//+------------------------------------------------------------------+
 bool HistoryDone=false;
 int CurrPos=0;
 void OnTick()
@@ -163,17 +167,12 @@ void OnTick()
             Sell(0.1);
 #endif
 #ifdef TRADEONCHICK
-        int signal = chickowner.GetRoughSignal(CurrPos);
-        if(signal==1)
-        {
-            Buy(0.1);
-            CurrPos++;
-        }
-        if(signal==-1)
-        {
-            Sell(0.1);
-            CurrPos--;
-        }
+        int signal = chickowner.signal.GetIncSignal();
+        if(signal>CurrPos)
+            Buy(signal-CurrPos);
+        else 
+        if(signal<CurrPos)
+            Sell(CurrPos-signal);
 #endif
 
         ea_return++;
@@ -259,18 +258,34 @@ void ClosePositionsByBars(int holdtimebars,ulong deviation=10,ulong  magicnumber
      }
   }
 bool Buy(double volume,ulong deviation=10,ulong  magicnumber=0)
-  {
-//--- buy at a market price
-   return (MarketOrder(ORDER_TYPE_BUY,volume,deviation,magicnumber));
-  }
+{
+    if(MarketOrder(ORDER_TYPE_BUY,volume,deviation,magicnumber))
+    {
+        CurrPos+=volume;
+        return true;
+    }
+    else
+    {
+        Print("BUY ERROR!");
+        return false;
+    }
+}
 //+------------------------------------------------------------------+
 //| Sell at a market price with a specified volume                   |
 //+------------------------------------------------------------------+
 bool Sell(double volume,ulong deviation=10,ulong  magicnumber=0)
-  {
-//--- sell at a market price
-   return (MarketOrder(ORDER_TYPE_SELL,volume,deviation,magicnumber));
-  }
+{
+    if(MarketOrder(ORDER_TYPE_SELL,volume,deviation,magicnumber))
+    {
+        CurrPos-=volume;
+        return true;
+    }
+    else
+    {
+        Print("BUY ERROR!");
+        return false;
+    }
+}
 bool MarketOrder(ENUM_ORDER_TYPE type,double volume,ulong slip,ulong magicnumber,ulong pos_ticket=0)
   {
 //--- declaring and initializing structures
