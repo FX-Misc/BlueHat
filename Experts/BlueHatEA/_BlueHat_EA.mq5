@@ -136,7 +136,7 @@ void OnTick()
     if(isNewBar())
     {
 //        Print("tick on ",lastbar_timeopen);
-        ClosePositionsByBars(0);
+//        ClosePositionsByBars(0);
 
 
 //        if(i%400==0)//Temporary: reset axons priodically

@@ -50,6 +50,7 @@ void ChickOwner::UpdateInput(const double& c[], const double& d[], const double&
  //       g.DisplayVert("."+barOfDay+" id"+patterns.at(0).ID+" stat"+patterns.at(0).status,t[1], c[1] );
         barOfDay++;
     }
+//g.DisplayVert("s"+signal.GetIncSignal(), t[1], c[1] );
 }
 void ChickOwner::report()
 {
@@ -60,12 +61,12 @@ void ChickOwner::report()
         //    (int)patterns.at(i).QEndday.DirectionShort+","+(int)patterns.at(i).QEndday.DirectionLong+" P "+
         //    (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
         //    , t[1], c[1]);
-        Print("=M "+patterns.at(i).name+" "+
+        Print("=M "+patterns.at(i).name+" "+ 
             patterns.at(i).QMidday.dirCorrectCnt+"/"+patterns.at(i).QMidday.count+" D "+
             (int)(patterns.at(i).QMidday.DirectionShort*10)+","+(int)(patterns.at(i).QMidday.DirectionLong*10)+" P "+
             (int)patterns.at(i).QMidday.ProfitShort+","+(int)patterns.at(i).QMidday.ProfitLong
             );
-        Print("=E "+patterns.at(i).name+" "+
+        Print("=E "+"("+patterns.at(i).ID+","+patterns.at(i).DecisionBar+")"+
             patterns.at(i).QEndday.dirCorrectCnt+"/"+patterns.at(i).QEndday.count+" D "+
             (int)(patterns.at(i).QEndday.DirectionShort*10)+","+(int)(patterns.at(i).QEndday.DirectionLong*10)+" P "+
             (int)patterns.at(i).QEndday.ProfitShort+","+(int)patterns.at(i).QEndday.ProfitLong
@@ -78,7 +79,9 @@ void ChickOwner::LoadPatterns(Market* m)
     //for now, start with all possible patterns
     //later, only "good" patterns can be loaded from db
 
-//    string str="";
+//#define ALLPATTERNS
+#ifdef ALLPATTERNS
+    string str="";
     for(int j=1; j<=patternLen; j++)
     {
         for(int i=0; i<(1<<(j+1)); i++)
@@ -88,7 +91,9 @@ void ChickOwner::LoadPatterns(Market* m)
         }
 //        str+="\n";
     }
-
+#else 
+patterns.Add(new Pattern(0,3));
+#endif 
 }
 
 ChickOwner::~ChickOwner()
