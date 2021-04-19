@@ -79,21 +79,23 @@ void ChickOwner::LoadPatterns(Market* m)
     //for now, start with all possible patterns
     //later, only "good" patterns can be loaded from db
 
-#define ALLPATTERNS
-#ifdef ALLPATTERNS
-    string str="";
-    for(int j=1; j<=patternLen; j++)
+    if(AllPatterns)
     {
-        for(int i=0; i<(1<<(j+1)); i++)
+        string str="";
+     //   for(int j=1; j<=patternLen; j++)
+        for(int j=1; j<=patternLen; j++)
         {
-            patterns.Add(new Pattern(i,j));
-//            str+=":"+patterns.at(patterns.Count()-1).ID+patterns.at(patterns.Count()-1).DecisionBar+patterns.at(patterns.Count()-1).name+"  ";
+            for(int i=0; i<(1<<(j+1)); i++)
+            {
+                patterns.Add(new Pattern(i,j));
+    //            str+=":"+patterns.at(patterns.Count()-1).ID+patterns.at(patterns.Count()-1).DecisionBar+patterns.at(patterns.Count()-1).name+"  ";
+            }
+    //        str+="\n";
         }
-//        str+="\n";
     }
-#else 
-patterns.Add(new Pattern(0,3));
-#endif 
+    else
+        patterns.Add(new Pattern(PatternID,PatternLen));
+
 }
 
 ChickOwner::~ChickOwner()

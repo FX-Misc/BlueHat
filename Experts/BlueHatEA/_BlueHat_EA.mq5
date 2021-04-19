@@ -15,7 +15,9 @@ input evaluation_method_t evaluation_method = METHOD_DIRECTION;
 input axon_value_t axon_value_method = AXON_METHOD_GAIN;
 
 input int PatternLen=3;
-input int MiddayBar=6; //6 for M15
+input bool AllPatterns=true;
+input int PatternID=3;
+input int MiddayBar=6; 
 input int EnddayBar=11; 
 input int shortPeriod=5;    //shortPeriod 5 normal. 0 only last value
 input int longPeriod=20;     //longPeriod 20 normal. 1 50-50
