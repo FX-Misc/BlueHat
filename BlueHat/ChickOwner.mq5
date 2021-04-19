@@ -94,7 +94,35 @@ void ChickOwner::LoadPatterns(Market* m)
         }
     }
     else
-        patterns.Add(new Pattern(PatternID,PatternLen));
+        if(PatternLen>0)
+            patterns.Add(new Pattern(PatternID,PatternLen));
+        else
+        {
+            //goog 2020
+            //patterns.Add(new Pattern(23,4));
+            //patterns.Add(new Pattern(19,4));
+            //patterns.Add(new Pattern(9,4));
+            //patterns.Add(new Pattern(8,4));
+            //patterns.Add(new Pattern(1,4));
+            //patterns.Add(new Pattern(12,3));
+            //patterns.Add(new Pattern(8,3));
+            //patterns.Add(new Pattern(7,3));
+            //msft 2019
+            //patterns.Add(new Pattern(27,4));
+            //patterns.Add(new Pattern(19,4));
+            //patterns.Add(new Pattern(15,4));
+            //patterns.Add(new Pattern(05,4));
+            //patterns.Add(new Pattern(03,4));
+            //patterns.Add(new Pattern(15,3));
+            //patterns.Add(new Pattern(15,3));
+            //patterns.Add(new Pattern(15,3));
+            //patterns.Add(new Pattern(10,3));
+            patterns.Add(new Pattern(6,3));
+            patterns.Add(new Pattern(3,3));
+            patterns.Add(new Pattern(1,3));
+            patterns.Add(new Pattern(7,2));
+//            patterns.Add(new Pattern(5,2));
+        }
 
 }
 
