@@ -9,15 +9,15 @@ int ChickSignal::GetAllSignal()
             //double now=1;//patterns.at(0).QMidday.Direction+Shortpatterns.at(0).QMidday.DirectionLong+patterns.at(0).QEndday.ProfitShort+patterns.at(0).QEndday.ProfitLong;
             if( patterns.at(i).QEndday.ProfitShort>0 &&
                 patterns.at(i).QEndday.ProfitLong>0 &&
-                patterns.at(i).QEndday.DirectionLong>0 &&
-                patterns.at(i).QEndday.DirectionLong>0 
+                patterns.at(i).QEndday.DirectionShort*10>0 &&
+                patterns.at(i).QEndday.DirectionLong*10>0 
                 )
                 mood=mood+1;
             else
             if( patterns.at(i).QEndday.ProfitShort<0 &&
                 patterns.at(i).QEndday.ProfitLong<0 &&
-                patterns.at(i).QEndday.DirectionLong<0 &&
-                patterns.at(i).QEndday.DirectionLong<0 
+                patterns.at(i).QEndday.DirectionShort*10<0 &&
+                patterns.at(i).QEndday.DirectionLong*10<0 
                 )
                 mood=mood-1;
         }
