@@ -167,7 +167,7 @@ void OnTick()
             Sell(0.1);
 #endif
 #ifdef TRADEONCHICK
-        int signal = chickowner.signal.GetIncSignal();
+        int signal = chickowner.signal.GetAllSignal();
         if(signal>CurrPos)
             Buy(signal-CurrPos);
         else 

@@ -79,7 +79,7 @@ void ChickOwner::LoadPatterns(Market* m)
     //for now, start with all possible patterns
     //later, only "good" patterns can be loaded from db
 
-//#define ALLPATTERNS
+#define ALLPATTERNS
 #ifdef ALLPATTERNS
     string str="";
     for(int j=1; j<=patternLen; j++)

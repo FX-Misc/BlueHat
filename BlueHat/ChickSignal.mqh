@@ -6,5 +6,6 @@ private:
 public:
     ChickSignal(CXArrayList<Pattern*> *p);
     int GetIncSignal();
+    int GetAllSignal();
     ~ChickSignal();
 };
